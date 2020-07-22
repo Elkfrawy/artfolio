@@ -23,6 +23,8 @@
   "homepage": "https://github.com/Elkfrawy/artfolio#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "express-handlebars": "^5.1.0"
+    "express-handlebars": "^5.1.0",
+    "mongodb": "^3.5.9",
+    "uuid": "^8.2.0"
   }
 }

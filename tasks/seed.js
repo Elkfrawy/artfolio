@@ -29,4 +29,52 @@ async function main() {
     birthday: '01/01/1990',
     biography: 'Interested in color pencil',
   };
+
+  let jackInfo = {
+    firstName: 'Jack',
+    lastName: 'Yang',
+    email: 'yyang105@stevens.edu',
+    gender: 'Male',
+    Address: {
+      streetAddress: '20 10st Stt',
+      city: 'Hoboken',
+      state: 'NJ',
+      zipCode: '07030',
+      country: 'United States',
+    },
+
+    birthday: '01/01/1998',
+    biography: 'Interested in design',
+  };
+
+  let aymanInfo = {
+    firstName: 'Ayman',
+    lastName: 'Elkfrawy',
+    email: 'Aelkfraw@stevens.edu',
+    gender: 'Male',
+    Address: {
+      streetAddress: '20 15st Stt',
+      city: 'Hoboken',
+      state: 'NJ',
+      zipCode: '07030',
+      country: 'United States',
+    },
+
+    birthday: '01/01/1988',
+    biography: 'Interested in oil painting',
+  };
+
+  await users.createUser(mirandaInfo);
+  await users.createUser(jackInfo);
+  await users.createUser(aymanInfo);
+
+  console.log('Done seeding database');
+  await db.serverConfig.close();
 }
+
+main().catch((error) => {
+  console.error(error);
+  return dbConnection().then((db) => {
+    return db.serverConfig.close();
+  });
+});

@@ -14,6 +14,7 @@ module.exports = async () => {
   if (!_connection) {
     _connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
     _db = await _connection.db(mongoConfig.database);
   }

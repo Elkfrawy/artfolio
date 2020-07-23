@@ -6,6 +6,7 @@ Artfolio
 const mongoCollections = require('../config/mongoCollections');
 const ObjectID = require('mongodb').ObjectID;
 const users = mongoCollections.users;
+const { v4: uuidv4 } = require('uuid');
 
 function validateEmail(inputEmail) {
   let mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -15,19 +16,14 @@ function validateEmail(inputEmail) {
 module.exports = {
   async getAllUsers() {
     const userCollection = await users();
-    const userList = await userCollection
-      .find({}, { userArtworks: 0, userComments: 0 })
-      .toArray();
+    const userList = await userCollection.find({}, { userArtworks: 0, userComments: 0 }).toArray();
     if (!userList) throw 'No user available yet';
     return userList;
   },
 
   async getUserById(id) {
     const userCollection = await users();
-    const user = await userCollection.findOne(
-      { _id: id },
-      { userArtworks: 0, userComments: 0 }
-    );
+    const user = await userCollection.findOne({ _id: id }, { userArtworks: 0, userComments: 0 });
     if (!user) throw 'User not found';
     return user;
   },
@@ -35,10 +31,7 @@ module.exports = {
   async getUserByEmail(email) {
     const userCollection = await users();
     validateEmail(email);
-    const user = await userCollection.findOne(
-      { email: email.toLowerCase() },
-      { userArtworks: 0, userComments: 0 }
-    );
+    const user = await userCollection.findOne({ email: email.toLowerCase() }, { userArtworks: 0, userComments: 0 });
     if (!user) throw 'User not found';
     return user;
   },
@@ -56,10 +49,7 @@ module.exports = {
 
     if (name.firstName && !name.lastName) {
       const userList = await userCollection
-        .find(
-          { firstName: name.firstName },
-          { userArtworks: 0, userComments: 0 }
-        )
+        .find({ firstName: name.firstName }, { userArtworks: 0, userComments: 0 })
         .toArray();
       if (!userList) throw 'No user available yet';
       return userList;
@@ -67,10 +57,7 @@ module.exports = {
 
     if (name.firstName && name.lastName) {
       const userList = await userCollection
-        .find(
-          { firstName: name.firstName, lastName: name.lastName },
-          { userArtworks: 0, userComments: 0 }
-        )
+        .find({ firstName: name.firstName, lastName: name.lastName }, { userArtworks: 0, userComments: 0 })
         .toArray();
       if (!userList) throw 'No user available yet';
       return userList;
@@ -153,13 +140,9 @@ module.exports = {
     }
 
     const userCollection = await users();
-    const updatedUserInfo = await userCollection.updateOne(
-      { _id: id },
-      { $set: updatedUser }
-    );
+    const updatedUserInfo = await userCollection.updateOne({ _id: id }, { $set: updatedUser });
 
-    if (updatedUserInfo.matchedCount && !updatedUserInfo.modifiedCount)
-      throw 'Failed to update user';
+    if (updatedUserInfo.matchedCount && !updatedUserInfo.modifiedCount) throw 'Failed to update user';
 
     return await this.getUserById(id);
   },
@@ -174,6 +157,7 @@ module.exports = {
     validateEmail(user.email);
 
     const newUser = {};
+    newUser._id = uuidv4();
     newUser.firstName = user.firstName;
     newUser.lastName = user.lastName;
     newUser.email = user.email.toLowerCase();
@@ -231,8 +215,7 @@ module.exports = {
     newUser.userComments = [];
 
     const insertNewUserInfo = await userCollection.insertOne(newUser);
-    if (insertNewUserInfo.insertedCount === 0)
-      throw 'Failed to create new user.';
+    if (insertNewUserInfo.insertedCount === 0) throw 'Failed to create new user.';
     return this.getUserById(insertNewUserInfo.insertedId);
   },
 

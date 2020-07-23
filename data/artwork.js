@@ -2,6 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const artworks = mongoCollections.artworks;
 const users = require('./users');
 const { v4: uuidv4 } = require('uuid');
+const validators = require('./validators');
 
 //pictures and comments collection?
 
@@ -52,7 +53,7 @@ let exportFunctions = {
       postDate: postDate, //getDatePosted
       createDate: createDate,
       numberOfViews: 0,
-      LastView: postDate, //to be changed later with functions i.e. getLastViewDate()
+      lastView: postDate, //to be changed later with functions i.e. getLastViewDate()
       pictures: {
         //id:
         //title:
@@ -120,6 +121,34 @@ let exportFunctions = {
     // addArtworkToUser
 
     return true;
+  },
+
+  async getArtworksByCategory(category) {
+    if (!validators.isNonEmptyString(category)) throw 'You must provide a category';
+    const artworksCollection = await artworks();
+    return await artworksCollection.find({ category }).toArray();
+  },
+
+  async getArtworksByUserId(userId) {
+    if (!validators.isNonEmptyString(category)) throw 'You must provide a user ID';
+
+    const artworksCollection = await artworks();
+    return await artworksCollection.find({ userId }).toArray();
+  },
+
+  async getArtworksByViews(skips = 0, count = 10) {
+    const artworksCollection = await artworks();
+    return await artworksCollection.find({}).skip(skips).limit(count).sort({ numberOfViews: -1 }).toArray();
+  },
+
+  async getRecentArtworks(skips = 0, count = 10) {
+    const artworksCollection = await artworks();
+    return await artworksCollection.find({}).skip(skips).limit(count).sort({ postDate: -1 }).toArray();
+  },
+
+  async getRecentlyVisitedArtworks(skips = 0, count = 10) {
+    const artworksCollection = await artworks();
+    return await artworksCollection.find({}).skip(skips).limit(count).sort({ lastView: -1 }).toArray();
   },
 };
 module.exports = exportFunctions;

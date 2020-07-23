@@ -64,9 +64,23 @@ async function main() {
     biography: 'Interested in oil painting',
   };
 
-  await users.createUser(mirandaInfo);
-  await users.createUser(jackInfo);
-  await users.createUser(aymanInfo);
+  mirandaInfo = await users.createUser(mirandaInfo);
+  jackInfo = await users.createUser(jackInfo);
+  aymanInfo = await users.createUser(aymanInfo);
+
+  await artwork.createArtwork(
+    'First artwork',
+    'drawing',
+    aymanInfo._id,
+    'This is my first artwork ever!',
+    Date.now,
+    Date.now
+  );
+
+  await artwork.createArtwork('Web design', 'web', aymanInfo._id, 'Just a simple web site design!', Date.now, Date.now);
+
+  drawingArtworks = await artwork.getArtworksByCategory('web');
+  console.log(drawingArtworks);
 
   console.log('Done seeding database');
   await db.serverConfig.close();

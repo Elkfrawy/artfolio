@@ -1,5 +1,5 @@
-const artwork = require('./artwork');
+const artworks = require('./artworks');
 
 module.exports = {
-  artwork,
+  artworks,
 };

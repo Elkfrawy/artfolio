@@ -1,6 +1,7 @@
 // const mongoCollections = require('../config/mongoCollections');
 const models = require('../models');
 const validators = require('./validators');
+const users = require('./users');
 
 module.exports = {
   async createArtwork(title, description, category, createDate, userId, pictures) {
@@ -66,6 +67,38 @@ module.exports = {
 
   async getRecentlyAddedArtworks() {
     return await genericGetWithSort(skips, count, { postDate: -1 });
+  },
+
+  async createComment(userId, artworkId, comment) {
+    if (!validators.isNonEmptyString(userId)) throw 'Please provide userId for the comment';
+    if (!validators.isNonEmptyString(artworkId)) throw 'Please provide an artworkId for the comment';
+    if (!validators.isNonEmptyString(comment)) throw 'Please provide the comment string';
+
+    const user = await users.getUserById(userId);
+    const artwork = await getArtworkById(artworkId);
+
+    let comment = new models.Comment({
+      userId,
+      username: user.firstName + ' ' + user.lastName,
+      comment,
+    });
+    artwork.comments.push(comment);
+    await artwork.save();
+
+    return comment;
+  },
+
+  async deleteComment(artworkId, commentId) {
+    if (!validators.isNonEmptyString(artworkId)) throw 'Please provide artworkId for the comment to delete';
+    if (!validators.isNonEmptyString(commentId)) throw 'Please provide the commentId to delete';
+
+    const artwork = getArtworkById(artworkId);
+    const comment = artwork.comments.id(commentId);
+    if (comment) {
+      comment.remove();
+    } else {
+      throw "Didn't find a comment with the given ID to delete";
+    }
   },
 };
 

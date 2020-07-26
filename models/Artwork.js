@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
-
-const commentSchema = new mongoose.Schema({
-  userId: { type: String, required: true },
-  comment: { type: String, required: true },
-  _id: { type: String, default: uuidv4 },
-});
+const comment = require('./Comment');
 
 const ArtworkSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -14,7 +9,7 @@ const ArtworkSchema = new mongoose.Schema({
   postDate: { type: Date, default: Date.now },
   category: { type: String, required: true },
   pictures: { type: Array, default: [] },
-  comments: [commentSchema],
+  comments: [comment.schema],
   userId: { type: String, required: true },
   username: { type: String, required: true },
   numberOfViews: { type: Number, default: 0 },

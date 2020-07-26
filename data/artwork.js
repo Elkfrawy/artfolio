@@ -3,7 +3,6 @@ const artworks = mongoCollections.artworks;
 const users = require('./users');
 const uuid = require('uuid/v4');
 
-//pictures and comments collection?
 
 let exportFunctions ={
 
@@ -32,7 +31,7 @@ let exportFunctions ={
         return artworksList;
     },
 
-    async createArtwork(title, category, userId, description, postDate, createDate){
+    async createArtwork(title, category, userId, description, createDate){
     if (!title) throw 'You must provide a title';
     if (!category) throw 'You must provide a category';
     if (!userId) throw 'You must provide a userId';
@@ -41,27 +40,26 @@ let exportFunctions ={
     if (!createDate) throw 'You must provide a createDate';
 
     const artworksCollection = await artworks();
-    const userName = await users.getUserById(userId); 
+    const userObj = await users.getUserById(userId); 
+    const userName = [userObj.firstName, userObj.lastName];
 
     const newArtwork = {
         _id: uuid(),  
         title: title,
         category: category, 
         name: userName,
-        userId: userId, // name and user id are duplicated  
+        userId: userId,
         description: description,
-        postDate: postDate,     //getDatePosted
+        postDate: Date.now(),   
         createDate: createDate,
         numberOfViews: 0,       
-        LastView: postDate,     //to be changed later with functions i.e. getLastViewDate()
-        pictures:{
-            //id: 
-            //title: 
+        lastView: postDate,     //to be changed later with functions i.e. getLastViewDate()
+        pictures:[ 
             //content: getPicturesByArtWorkId(_id); 
-        },
-        comments:{
+        ],
+        comments:[
             //content: getCommentsByArtworkId(_id)
-        }
+        ]
     };
     const insertInfo = await artworksCollection.insertOne(newArtwork);
     if (insertInfo.insertedCount === 0) throw 'Could not add artwork';
@@ -93,10 +91,10 @@ let exportFunctions ={
     if (updatedArtwork.numberOfViews) {
         updatedArtworksData.numberOfViews = updatedArtwork.numberOfViews;
     }
-    if (updatedArtwork.LastView) {
-        updatedArtworksData.LastView = updatedArtwork.LastView;
+    if (updatedArtwork.lastView) {
+        updatedArtworksData.lastView = updatedArtwork.lastView;
     }
-    //pictures & comments
+    
     
 
     await artworksCollection.updateOne({ _id: id }, { $set: updatedArtworksData });
@@ -124,5 +122,8 @@ let exportFunctions ={
 
         return true;
     },
+    
+    //Functions to add pictures & comments to artwork
+    
     };
     module.exports = exportFunctions;

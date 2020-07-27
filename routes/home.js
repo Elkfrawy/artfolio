@@ -3,7 +3,11 @@ const router = express.Router();
 const data = require('../data');
 
 router.get('/', async (req, res) => {
-  res.render('home/home', { title: 'Artfolio, share your art portfolio with the world!' });
+  const artworks = await data.artworks.getArtworksByUsername('ayman');
+  res.render('home/home', {
+    title: 'Artfolio, share your art portfolio with the world!',
+    artworks,
+  });
 });
 
 module.exports = router;

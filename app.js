@@ -5,12 +5,17 @@ const configRoutes = require('./routes');
 const static = express.static(path.join(__dirname, 'public'));
 const ehb = require('express-handlebars');
 const { stat } = require('fs');
+const mongooseConnection = require('./config/mongoConnection');
+const Handlebars = require('handlebars');
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+
+const dbConnection = mongooseConnection();
 
 app.use(express.json());
 app.use('/public', static);
 app.use(express.urlencoded({ extended: true }));
 
-app.engine('handlebars', ehb({ defaultLayout: 'main' }));
+app.engine('handlebars', ehb({ defaultLayout: 'main', handlebars: allowInsecurePrototypeAccess(Handlebars) }));
 app.set('view engine', 'handlebars');
 
 configRoutes(app);

@@ -8,19 +8,19 @@ async function main() {
   await conn.dropDatabase();
 
   try {
-    let firstArtwork = await artworks.createArtwork(
-      'My first artwork',
-      'This was my first artwork ever!',
-      'drawing',
-      Date.now(),
-      '23523523',
-      []
-    );
+    // let firstArtwork = await artworks.createArtwork(
+    //   'My first artwork',
+    //   'This was my first artwork ever!',
+    //   'drawing',
+    //   Date.now(),
+    //   '23523523',
+    //   []
+    // );
 
-    await artworks.updateArtwork(firstArtwork._id, { title: 'A new title!' });
+    // await artworks.updateArtwork(firstArtwork._id, { title: 'A new title!' });
 
-    const artworksResult = await artworks.getArtworksByKeyword('bla');
-    console.log(artworksResult[0].title);
+    // const artworksResult = await artworks.getArtworksByKeyword('bla');
+    // console.log(artworksResult[0].title);
 
     let mirandaInfo = {
       firstName: 'Miranda',
@@ -37,6 +37,7 @@ async function main() {
       hashedPassword: '111111',
       birthday: '01/01/1990',
       biography: 'Interested in color pencil',
+      websiteUrl: 'www.stevens.edu',
     };
 
     let jackInfo = {

@@ -1,0 +1,17 @@
+<section>
+    <h1>All Artists</h1>
+    {{#each users}}
+    <section>
+        <h2><a href="/users/{{_id}}">{{firstName}} {{lastName}}</a></h2>
+        <ul>
+            <li>{{email}}</li>
+            {{#if biography.length}}
+            <li>{{biography}}</li>
+            {{/if}}
+            {{#if websiteUrl.length}}
+            <li><a href={{user.websiteUrl}}>Personal Website</a></li>
+            {{/if}}
+        </ul>
+    </section>
+    {{/each}}
+</section>

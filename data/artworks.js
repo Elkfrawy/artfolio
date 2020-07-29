@@ -4,7 +4,14 @@ const validators = require('./validators');
 const users = require('./users');
 
 module.exports = {
-  async createArtwork(title, description, category, createDate, userId, pictures) {
+  async createArtwork(
+    title,
+    description,
+    category,
+    createDate,
+    userId,
+    pictures
+  ) {
     // ** TODO get the user and set their username here
     let username = 'Ayman Elkfrawy';
     const newArtwork = new models.Artwork({
@@ -40,21 +47,31 @@ module.exports = {
   },
 
   async getArtworksByKeyword(keyword) {
-    if (!validators.isNonEmptyString(keyword)) throw 'Please provide a keyword to search by';
+    if (!validators.isNonEmptyString(keyword))
+      throw 'Please provide a keyword to search by';
     return await models.Artwork.find({
-      $or: [{ title: new RegExp(keyword, 'i') }, { description: new RegExp(keyword, 'i') }],
+      $or: [
+        { title: new RegExp(keyword, 'i') },
+        { description: new RegExp(keyword, 'i') },
+      ],
     }).exec();
   },
 
   async getArtworksByCategory(category) {
-    if (!validators.isNonEmptyString(category)) throw 'Please provide a category to search by';
-    return await models.Artwork.find({ category: new RegExp(category, 'i') }).exec();
+    if (!validators.isNonEmptyString(category))
+      throw 'Please provide a category to search by';
+    return await models.Artwork.find({
+      category: new RegExp(category, 'i'),
+    }).exec();
   },
 
   async getArtworksByUsername(username) {
-    if (!validators.isNonEmptyString(username)) throw 'Please provide a username to search by';
+    if (!validators.isNonEmptyString(username))
+      throw 'Please provide a username to search by';
 
-    return await models.Artwork.find({ username: new RegExp(username, 'i') }).exec();
+    return await models.Artwork.find({
+      username: new RegExp(username, 'i'),
+    }).exec();
   },
 
   async getArtworksByViews(skips = 0, count = 10) {
@@ -70,14 +87,17 @@ module.exports = {
   },
 
   async createComment(userId, artworkId, comment) {
-    if (!validators.isNonEmptyString(userId)) throw 'Please provide userId for the comment';
-    if (!validators.isNonEmptyString(artworkId)) throw 'Please provide an artworkId for the comment';
-    if (!validators.isNonEmptyString(comment)) throw 'Please provide the comment string';
+    if (!validators.isNonEmptyString(userId))
+      throw 'Please provide userId for the comment';
+    if (!validators.isNonEmptyString(artworkId))
+      throw 'Please provide an artworkId for the comment';
+    if (!validators.isNonEmptyString(comment))
+      throw 'Please provide the comment string';
 
     const user = await users.getUserById(userId);
     const artwork = await getArtworkById(artworkId);
 
-    let comment = new models.Comment({
+    comment = new models.Comment({
       userId,
       username: user.firstName + ' ' + user.lastName,
       comment,
@@ -89,8 +109,10 @@ module.exports = {
   },
 
   async deleteComment(artworkId, commentId) {
-    if (!validators.isNonEmptyString(artworkId)) throw 'Please provide artworkId for the comment to delete';
-    if (!validators.isNonEmptyString(commentId)) throw 'Please provide the commentId to delete';
+    if (!validators.isNonEmptyString(artworkId))
+      throw 'Please provide artworkId for the comment to delete';
+    if (!validators.isNonEmptyString(commentId))
+      throw 'Please provide the commentId to delete';
 
     const artwork = getArtworkById(artworkId);
     const comment = artwork.comments.id(commentId);
@@ -111,8 +133,10 @@ async function saveSafely(document) {
 }
 
 async function genericGetWithSort(skips = 0, count = 0, sorting) {
-  if (!validators.isPositiveNumber(skips)) throw 'Skips must be positive number';
-  if (!validators.isPositiveNumber(skips)) throw 'Counts must be positive number';
+  if (!validators.isPositiveNumber(skips))
+    throw 'Skips must be positive number';
+  if (!validators.isPositiveNumber(skips))
+    throw 'Counts must be positive number';
 
   return await models.Artwork.find({}).sort(sorting).skip(skips).limit(count);
 }

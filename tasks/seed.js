@@ -37,7 +37,7 @@ async function main() {
       hashedPassword: '111111',
       birthday: '01/01/1990',
       biography: 'Interested in color pencil',
-      websiteUrl: 'www.stevens.edu',
+      websiteUrl: 'https://www.stevens.edu',
     };
 
     let jackInfo = {

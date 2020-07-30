@@ -4,9 +4,31 @@ const validators = require('./validators');
 const users = require('./users');
 
 module.exports = {
+  async getArtworkById(id) {
+    if (!validators.isNonEmptyString(id)) throw 'Id is not valid';
+    const artWork = await models.Artwork.findById(id).exec();
+    if (!artWork) throw `There is no artWork with that ID: ${id}`;
+    return artWork;
+  },
+
+  async getArtWorksByUserId(userId) {
+    if (!validators.isValidUserId(userId)) throw 'userId is not valid';
+    return await models.Artwork.find({ userId: userId }).exec();
+  },
+
+  async getAllArtWorks() {
+    return await models.Artwork.find({}).exec();
+  },
+
   async createArtwork(title, description, category, createDate, userId, pictures) {
-    // ** TODO get the user and set their username here
-    let username = 'Ayman Elkfrawy';
+    if (!title) throw 'You must provide a title';
+    if (!category) throw 'You must provide a category';
+    if (!userId) throw 'You must provide a userId';
+    if (!description) throw 'You must provide a description';
+    if (!createDate) throw 'You must provide a createDate';
+
+    const userObj = await users.getUserById(userId);
+    const username = userObj.firstName + ' ' + userObj.lastName;
     const newArtwork = new models.Artwork({
       title,
       description,
@@ -15,7 +37,7 @@ module.exports = {
       username,
       userId,
       pictures,
-    }); // Other attributes will set to the default value
+    });
 
     const createdArtwork = await saveSafely(newArtwork);
     return createdArtwork;
@@ -31,12 +53,28 @@ module.exports = {
     if (artwork.title) {
       oldArtwork.title = artwork.title;
     }
+    if (artwork.category) {
+      oldArtwork.category = artwork.category;
+    }
     if (artwork.description) {
       oldArtwork.description = artwork.description;
     }
-    // *** TODO check all other fields
-
+    if (artwork.createDate) {
+      oldArtwork.createDate = artwork.createDate;
+    }
+    if (artwork.numberOfViews) {
+      oldArtwork.numberOfViews = artwork.numberOfViews;
+    }
+    if (artwork.lastView) {
+      oldArtwork.lastView = artwork.lastView;
+    }
     return await saveSafely(oldArtwork); // Save the the changes
+  },
+
+  async deleteArtwork(id) {
+    if (!validators.isNonEmptyString(id)) throw 'Please provide an id to delete';
+    const deletedArtwork = await models.Artwork.findByIdAndDelete(id).exec();
+    return deletedArtwork;
   },
 
   async getArtworksByKeyword(keyword) {
@@ -69,10 +107,10 @@ module.exports = {
     return await genericGetWithSort(skips, count, { postDate: -1 });
   },
 
-  async createComment(userId, artworkId, comment) {
+  async createComment(userId, artworkId, commentText) {
     if (!validators.isNonEmptyString(userId)) throw 'Please provide userId for the comment';
     if (!validators.isNonEmptyString(artworkId)) throw 'Please provide an artworkId for the comment';
-    if (!validators.isNonEmptyString(comment)) throw 'Please provide the comment string';
+    if (!validators.isNonEmptyString(commentText)) throw 'Please provide the comment string';
 
     const user = await users.getUserById(userId);
     const artwork = await getArtworkById(artworkId);
@@ -80,7 +118,7 @@ module.exports = {
     let comment = new models.Comment({
       userId,
       username: user.firstName + ' ' + user.lastName,
-      comment,
+      comment: commentText,
     });
     artwork.comments.push(comment);
     await artwork.save();

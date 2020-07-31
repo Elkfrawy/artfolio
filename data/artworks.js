@@ -115,7 +115,7 @@ module.exports = {
     const user = await users.getUserById(userId);
     const artwork = await getArtworkById(artworkId);
 
-    comment = new models.Comment({
+    let comment = new models.Comment({
       userId,
       username: user.firstName + ' ' + user.lastName,
       comment: commentText,

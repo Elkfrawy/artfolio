@@ -16,4 +16,15 @@ module.exports = {
   isValidUserId(userId) {
     return typeof userId == 'string' && userId;
   },
+  isArrayOfStrings(sArray) {
+    if (!Array.isArray(sArray)) return false;
+
+    for (let i = 0; i < sArray.length; i++) {
+      if (typeof sArray[i] !== 'string') {
+        return false;
+      }
+    }
+
+    return true;
+  },
 };

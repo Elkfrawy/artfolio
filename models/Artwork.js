@@ -9,7 +9,6 @@ const ArtworkSchema = new mongoose.Schema({
   createDate: { type: Date, required: true },
   postDate: { type: Date, default: Date.now },
   category: { type: String, required: true },
-  picturesIds: [String],
   comments: [comment.schema],
   userId: { type: String, required: true },
   username: { type: String, required: true },

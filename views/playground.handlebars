@@ -4,18 +4,40 @@
   <p>{{description}}</p>
 {{/each}}
 
-
-<form action="/users/" method="POST" enctype="multipart/form-data">
+<p>First, add user</p>
+<form action="/playground/user/" method="POST" enctype="multipart/form-data">
   <input type="text" name="firstName" placeholder="First name" id="">
   <input type="text" name="lastName" placeholder="Last name" id="">
   <input type="text" name="email" placeholder="Email" id="">
   <input type="text" name="password" placeholder="Password" id="">
-  <input type="file" name="image" id="image">
+  <input type="file" name="image" id="image" accept="image/*">
 
   <button type="submit">Submit</button>
 </form>
 
+<br>
+
 {{#if user.userPictureId}}
   <h3>Uploaded image</h3>
    <img src="/pictures/content/{{user.userPictureId}}"> 
+{{/if}}
+
+<p>Then, add an artwork</p>
+
+<form action="/playground/artwork/" method="POST" enctype="multipart/form-data">
+  <input type="text" name="title" placeholder="Title" id="">
+  <input type="text" name="category" placeholder="Category" id="">
+  <input type="text" name="description" placeholder="Description" id="">
+  <input type="date" name="createDate" placeholder="Creation date" id="">
+  <input type="file" name="image" id="image" accept="image/*" multiple>
+  <input type="text" name="userId", value="{{user._id}}" hidden>
+  <button type="submit">Submit</button>
+</form>
+
+{{#if pics}}
+  <h3>Uploaded artwork images</h3>
+  {{#each pics}}
+    <img src="/pictures/content/{{_id}}"> 
+    <br>
+  {{/each}}
 {{/if}}

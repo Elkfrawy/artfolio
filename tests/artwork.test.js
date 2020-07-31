@@ -34,7 +34,6 @@ test('Create new Artwork', async () => {
   expect(savedArtwork.description).toEqual(artwork.description);
   expect(savedArtwork.category).toEqual(artwork.category);
   expect(savedArtwork.createDate).toEqual(artwork.createDate);
-  expect(savedArtwork.pictures.length).toEqual(0);
 });
 
 describe('Test getArtworks queries', () => {

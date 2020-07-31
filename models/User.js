@@ -13,8 +13,6 @@ const UserSchema = new mongoose.Schema({
   websiteUrl: { type: String },
   hashedPassword: { type: String, required: true },
   userPictureId: { type: String },
-  userArtworks: { type: Array, default: [] },
-  userComments: { type: Array, default: [] },
   _id: { type: String, default: uuidv4 },
 });
 

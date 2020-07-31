@@ -3,16 +3,20 @@ const router = express.Router();
 const data = require('../data');
 const upload = require('../config/upload');
 var path = require('path');
-
-router.get('/:id', async (req, res) => {
-  const picture = await data.pictures.getPictureById(req.params.id);
-  res.json(picture);
-});
+const validators = require('../data/validators');
 
 router.get('/content/:id', async (req, res) => {
-  const picture = await data.pictures.getPictureById(req.params.id);
-  res.contentType(picture.contentType);
-  res.send(picture.data);
+  if (!validators.isNonEmptyString(req.params.id)) {
+    res.status(400, { errors: ['Must provide non-empty string for picture id'] });
+    return;
+  }
+  try {
+    const picture = await data.pictures.getPictureById(req.params.id);
+    res.contentType(picture.contentType);
+    res.send(picture.data);
+  } catch (e) {
+    res.status(400).json({ error: e });
+  }
 });
 
 module.exports = router;

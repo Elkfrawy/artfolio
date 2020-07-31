@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema({
   biography: { type: String, default: '' },
   websiteUrl: { type: String },
   hashedPassword: { type: String, required: true },
-  userPicture: { type: Array, default: [] },
+  userPictureId: { type: String },
   userArtworks: { type: Array, default: [] },
   userComments: { type: Array, default: [] },
   _id: { type: String, default: uuidv4 },

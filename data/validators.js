@@ -1,8 +1,6 @@
 module.exports = {
   isNonEmptyString(inputString) {
-    return (
-      inputString && typeof inputString === 'string' && inputString.length > 0
-    );
+    return inputString && typeof inputString === 'string' && inputString.length > 0;
   },
   isPositiveNumber(num) {
     return typeof num === 'number' && num >= 0;
@@ -14,5 +12,8 @@ module.exports = {
   isValidPassword(pw) {
     // to-do
     return this.isNonEmptyString(pw);
+  },
+  isValidUserId(userId) {
+    return typeof userId == 'string' && userId;
   },
 };

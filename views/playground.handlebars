@@ -1,0 +1,21 @@
+{{#each artworks}}
+  <h3>{{title}}</h3>
+  <p>By {{username}}</p>
+  <p>{{description}}</p>
+{{/each}}
+
+
+<form action="/users/" method="POST" enctype="multipart/form-data">
+  <input type="text" name="firstName" placeholder="First name" id="">
+  <input type="text" name="lastName" placeholder="Last name" id="">
+  <input type="text" name="email" placeholder="Email" id="">
+  <input type="text" name="password" placeholder="Password" id="">
+  <input type="file" name="image" id="image">
+
+  <button type="submit">Submit</button>
+</form>
+
+{{#if user.userPictureId}}
+  <h3>Uploaded image</h3>
+   <img src="/pictures/content/{{user.userPictureId}}"> 
+{{/if}}

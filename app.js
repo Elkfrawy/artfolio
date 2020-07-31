@@ -1,16 +1,20 @@
 const path = require('path');
 const express = require('express');
-const app = express();
 const configRoutes = require('./routes');
-const static = express.static(path.join(__dirname, 'public'));
 const ehb = require('express-handlebars');
-const { stat } = require('fs');
+const Handlebars = require('handlebars');
+const mongooseConnection = require('./config/mongoConnection');
+const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+
+const dbConnection = mongooseConnection();
+const app = express();
+const static = express.static(path.join(__dirname, 'public'));
 
 app.use(express.json());
 app.use('/public', static);
 app.use(express.urlencoded({ extended: true }));
 
-app.engine('handlebars', ehb({ defaultLayout: 'main' }));
+app.engine('handlebars', ehb({ defaultLayout: 'main', handlebars: allowInsecurePrototypeAccess(Handlebars) }));
 app.set('view engine', 'handlebars');
 
 configRoutes(app);

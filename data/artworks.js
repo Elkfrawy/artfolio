@@ -86,17 +86,13 @@ module.exports = {
 
   async getArtworksByCategory(category) {
     if (!validators.isNonEmptyString(category)) throw 'Please provide a category to search by';
-    return await models.Artwork.find({
-      category: new RegExp(category, 'i'),
-    }).exec();
+    return await models.Artwork.find({ category: new RegExp(category, 'i') }).exec();
   },
 
   async getArtworksByUsername(username) {
     if (!validators.isNonEmptyString(username)) throw 'Please provide a username to search by';
 
-    return await models.Artwork.find({
-      username: new RegExp(username, 'i'),
-    }).exec();
+    return await models.Artwork.find({ username: new RegExp(username, 'i') }).exec();
   },
 
   async getArtworksByViews(skips = 0, count = 10) {

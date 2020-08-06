@@ -15,7 +15,7 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   let user;
   try {
-    user = userData.getUserByEmail(email);
+    user = await userData.getUserByEmail(email);
   } catch (e) {
     res.status(401).render('users/login', { hasError: true, error: e });
     return;
@@ -29,7 +29,7 @@ router.post('/login', async (req, res) => {
   const match = true;
   if (match) {
     req.session.user = user;
-    res.redirect('/private');
+    res.redirect('/users/private');
   } else {
     res.status(401).render('users/login', { hasError: true, error: 'Email/Password not match, try again' });
   }
@@ -57,8 +57,9 @@ router.get('/private', async (req, res) => {
 
 // private page for user to edit his/her own profile
 router.get('/edit', async (req, res) => {
-  const user = await userData.getUserById(req.session.user._id);
-  res.render('users/editprofile', { user: user });
+  //const user = await userData.getUserById(req.session.user._id);
+  //res.render('users/editprofile', { user: user });
+  res.render('users/editprofile');
 });
 
 router.post('/', async (req, res) => {

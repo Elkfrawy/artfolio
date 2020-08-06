@@ -1,29 +1,41 @@
 <h1>Edit Profile</h1>
-<form action="/users" method="PUT">
+<form action="/users" method="PUT" class="edit-profile">
     <label>First Name
-        <input type="text" name="firstName" placeholder="First Name" value="{{user.firstName}}" />
+        <input type="text" name="firstName" placeholder="First Name" value="{{user.firstName}}"
+            class="full-width-input" />
     </label>
     <label>Last name
-        <input type="text" name="lastName" placeholder="Last Name" value="{{user.lastName}}" />
-    </label>
+        <input type="text" name="lastName" placeholder="Last Name" value="{{user.lastName}}" class="full-width-input" />
+    </label><br />
     <label>Email Address
-        <input type="text" name="email" placeholder="Email" value="{{user.email}}" />
+        <input type="text" name="email" placeholder="Email" value="{{user.email}}" class="full-width-input" />
+    </label><br />
+    <label>Street Address
+        <input type="text" name="address[streetAddress]" placeholder="street address" value=""
+            class="full-width-input" />
     </label>
-    <label>Address
-        <input type="text" name="address[streetAddress]" placeholder="" value={{user.address.streetAddress}} />
-        <input type="text" name="address[city]" placeholder="" value={{user.address.city}} />
-        <input type="text" name="address[state]" placeholder="" value={{user.address.state}} />
-        <input type="text" name="address[zipCode]" placeholder="" value={{user.address.zipCode}} />
-        <input type="text" name="address[country]" placeholder="" value={{user.address.country}} />
+    <label>City
+        <input type="text" name="address[city]" placeholder="city" value="" class="full-width-input" />
+    </label><br />
+    <label>State
+        <input type="text" name="address[state]" placeholder="state" value="" class="full-width-input" />
     </label>
-    <label>
-        <input type="radio" name="gender" value="F" /> F
+    <label>Zip Code
+        <input type="text" name="address[zipCode]" placeholder="zip code" value="" class="full-width-input" />
+    </label><br />
+    <label>Country
+        <input type="text" name="address[country]" placeholder="country" value="" class="full-width-input" />
+    </label><br />
+
+    <label> F
+        <input type="radio" name="gender" value="F" />
     </label>
-    <label>
-        <input type="radio" name="gender" value="M" /> M
+    <label> M
+        <input type="radio" name="gender" value="M" />
+    </label><br />
+    <label for="biography">
+        Biography
     </label>
-    <label>Biography
-        <textarea id="biography" name="biography" rows="4"
-            placeholder="Something about yourself">{{user.biography}}</textarea>
-    </label>
+    <textarea id="biography" name="biography" rows="3" placeholder="Something about yourself"
+        class="full-width-input">{{user.biography}}</textarea>
 </form>

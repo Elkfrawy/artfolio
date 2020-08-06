@@ -1,0 +1,29 @@
+<h1>Edit Profile</h1>
+<form action="/users" method="PUT">
+    <label>First Name
+        <input type="text" name="firstName" placeholder="First Name" value="{{user.firstName}}" />
+    </label>
+    <label>Last name
+        <input type="text" name="lastName" placeholder="Last Name" value="{{user.lastName}}" />
+    </label>
+    <label>Email Address
+        <input type="text" name="email" placeholder="Email" value="{{user.email}}" />
+    </label>
+    <label>Address
+        <input type="text" name="address[streetAddress]" placeholder="" value={{user.address.streetAddress}} />
+        <input type="text" name="address[city]" placeholder="" value={{user.address.city}} />
+        <input type="text" name="address[state]" placeholder="" value={{user.address.state}} />
+        <input type="text" name="address[zipCode]" placeholder="" value={{user.address.zipCode}} />
+        <input type="text" name="address[country]" placeholder="" value={{user.address.country}} />
+    </label>
+    <label>
+        <input type="radio" name="gender" value="F" /> F
+    </label>
+    <label>
+        <input type="radio" name="gender" value="M" /> M
+    </label>
+    <label>Biography
+        <textarea id="biography" name="biography" rows="4"
+            placeholder="Something about yourself">{{user.biography}}</textarea>
+    </label>
+</form>

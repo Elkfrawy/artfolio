@@ -22,7 +22,7 @@ app.use(
   session({
     name: 'Artfolio',
     secret: 'Everyone is an artist',
-    saveUnitialized: true,
+    saveUninitialized: true,
     resave: false,
   })
 );

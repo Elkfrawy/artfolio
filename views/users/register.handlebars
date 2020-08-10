@@ -1,0 +1,26 @@
+<form action="/users/register" method="POST">
+  <input type="text" name="firstName" placeholder="First name" value="{{user.firstName}}">
+  <input type="text" name="lastName" placeholder="Last name"value="{{user.lastName}}">
+  <p>Gender</p>
+  <input type="radio" name="gender" id="male" value="Male">
+  <label for="male">Male</label>
+  <input type="radio" name="gender" id="female" value="Female">
+  <label for="female">Female</label>
+  <input type="radio" name="gender" id="other" value="Other">
+  <label for="other">Other</label>
+  <input type="email" name="email" placeholder="Email address" value="{{user.email}}">
+  <input type="password" name="password" placeholder="Password">
+  <input type="password" name="passwordConfirm" placeholder="Confirm password">
+
+  <button type="submit">Register</button>
+</form>
+
+{{#if errors}}
+  <ul>
+  {{#each errors}}
+    <li>{{this}}</li>
+  {{/each}}
+  </ul>
+{{/if}}
+
+<div>Already registered? Click <a href="/user/login">here</a> to login</div>

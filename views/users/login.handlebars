@@ -1,0 +1,16 @@
+<form action="/users/login" method="POST">
+{{!-- <label for="username">Username</label> --}}
+<input type="text" name="email" id="email" value="{{email}}" placeholder="Email address">
+{{!-- <label for="password">Password</label> --}}
+<input type="password" name="password" id="password" placeholder="Password">
+
+<button type="submit">Login</button>
+</form>
+
+{{#if errors}}
+  <ul>
+  {{#each errors}}
+    <li>{{this}}</li>
+  {{/each}}
+  </ul>
+{{/if}}

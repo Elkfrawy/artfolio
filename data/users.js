@@ -15,24 +15,20 @@ module.exports = {
 
   async getUserByEmail(email) {
     if (!validators.isValidEmail(email)) throw 'Email address is not valid';
-    return await models.User.find({ email: email }).exec();
+    return await models.User.findOne({ email: email.toLowerCase() }).exec();
   },
 
   async updateUser(id, user) {
-    if (!validators.isNonEmptyString(id))
-      throw 'Please provide a user ID to update';
+    if (!validators.isNonEmptyString(id)) throw 'Please provide a user ID to update';
     if (!user) throw 'Please provide updated user information';
 
     // make sure the updated information firstName, lastName and email are valid, if provided.
-    if (user.firstName && !validators.isNonEmptyString(user.firstName))
-      throw 'Updated first name is not valid';
+    if (user.firstName && !validators.isNonEmptyString(user.firstName)) throw 'Updated first name is not valid';
 
-    if (user.lastName && !validators.isNonEmptyString(user.lastName))
-      throw 'Updated last name is not valid';
+    if (user.lastName && !validators.isNonEmptyString(user.lastName)) throw 'Updated last name is not valid';
 
     if (user.email) {
-      if (!validators.isValidEmail(user.email))
-        throw 'Updated email is not valid';
+      if (!validators.isValidEmail(user.email)) throw 'Updated email is not valid';
       user.email = user.email.toLowerCase();
     }
 
@@ -43,21 +39,17 @@ module.exports = {
   },
 
   async createUser(user) {
-    if (!validators.isNonEmptyString(user.firstName))
-      throw 'First name is not provided';
-    if (!validators.isNonEmptyString(user.lastName))
-      throw 'Last name is not provided';
+    if (!validators.isNonEmptyString(user.firstName)) throw 'First name is not provided';
+    if (!validators.isNonEmptyString(user.lastName)) throw 'Last name is not provided';
     if (!validators.isValidEmail(user.email)) throw 'Email is not valid';
-    if (!validators.isValidPassword(user.hashedPassword))
-      throw 'Please provide a password';
+    if (!validators.isValidPassword(user.hashedPassword)) throw 'Please provide a password';
     const newUser = new models.User(user);
     const createdUser = await saveSafely(newUser);
     return createdUser;
   },
 
   async deleteUser(userId) {
-    if (!validators.isNonEmptyString(userId))
-      throw 'Please provide a user ID to delete';
+    if (!validators.isNonEmptyString(userId)) throw 'Please provide a user ID to delete';
     const deletedUser = await models.User.findByIdAndDelete(userId).exec();
     return deletedUser;
   },

@@ -41,24 +41,29 @@ router.get('/', async (req, res) => {
         res.status(400).json({ error: 'You must provide Artwork title' });
         return;
       }
-      if (!newArtworkData.description) {
-        newArtworkData.description = ""; 
+      if (!newArtworkData.createDate) {
+        res.status(400).json({ error: 'You must provide the date of artwork creation' });
+        return; 
       }
       if (!newArtworkData.category) {
-        newArtworkData.category = "";
-      }
-      if (!newArtworkData.createDate) {
-        newArtworkData.createDate = "";
+        res.status(400).json({ error: 'You must provide artwork category' });
+        return; 
       }
       //user not entering id, getting id from somewhere else
       if (!newArtworkData.userId) {
         res.status(400).json({ error: 'You must provide userId' });
         return;
       }
+      if (!newArtworkData.username) {
+        res.status(400).json({ error: 'You must provide user name' });
+        return;
+      }
+
       if (!newArtworkData.pictures) {
         newArtworkData.pictures = {};
       }
-    try {    
+    try {  
+      const description = newArtworkData.description;
       const {title, description, category, createDate, userId, pictures} = newArtworkData;
       const newArtwork = await artworkData.createArtwork(title, description, category, createDate, userId, pictures);
       res.redirect(`/artworks/${newArtwork._id}`);
@@ -114,9 +119,8 @@ router.get('/', async (req, res) => {
 
         if (requestBody.lastView && requestBody.lastView !== oldArtwork.lastView)
         updatedObject.lastView = requestBody.lastView;
-        
+    
         //NOT included: username, userId, pictures
-        //numberOfViews, lastView not present when artwork is created
 
       } catch (e) {
         res.status(404).json({ error: 'Artwork not found' });

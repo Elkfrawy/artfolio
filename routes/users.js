@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
-const userData = data.users;
+const artworks = data.artworks;
+const pictures = data.pictures;
 const validators = data.validators;
-const upload = require('../config/upload');
-var path = require('path');
-var fs = require('fs').promises;
+const users = data.users;
 
 router.get('/login', async (req, res) => {
   res.render('users/login', { hasError: false });
@@ -15,7 +14,7 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   let user;
   try {
-    user = await userData.getUserByEmail(email);
+    user = await users.getUserByEmail(email);
   } catch (e) {
     res.status(401).render('users/login', { hasError: true, error: e });
     return;
@@ -38,7 +37,7 @@ router.post('/login', async (req, res) => {
 // public page
 router.get('/', async (req, res) => {
   try {
-    const userList = await userData.getAllUsers();
+    const userList = await users.getAllUsers();
     res.render('users/all', { users: userList });
   } catch (e) {
     res.status(500).send();
@@ -48,8 +47,8 @@ router.get('/', async (req, res) => {
 // private page for user to see his/her own profile
 router.get('/private', async (req, res) => {
   try {
-    const user = await userData.getUserById(req.session.user._id);
-    res.render('users/single', { user: user });
+    const singleUser = await userData.getUserById(req.session.user._id);
+    res.render('users/single', { user: singleUser });
   } catch (e) {
     res.status(500).send();
   }
@@ -66,7 +65,7 @@ router.post('/', async (req, res) => {
   const newUserData = req.body;
   // to-do basic check
   try {
-    const newUser = await userData.createUser(newUserData);
+    const newUser = await users.createUser(newUserData);
     res.redirect(`/users/${newUser._id}`);
   } catch (e) {
     res.status(500).send();
@@ -79,14 +78,14 @@ router.put('/', async (req, res) => {
   // to-do basic checks
 
   try {
-    await userData.getUserById(req.session.user._id);
+    await users.getUserById(req.session.user._id);
   } catch (e) {
     res.status(404).json({ error: 'User not found' });
     return;
   }
 
   try {
-    const updatedUser = await userData.updateUser(req.session.user._id, userInfo);
+    const updatedUser = await users.updateUser(req.session.user._id, userInfo);
     req.session.user = updatedUser;
     res.redirect('/private');
   } catch (e) {
@@ -96,18 +95,37 @@ router.put('/', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    await userData.getUserById(req.params.id);
+    await users.getUserById(req.params.id);
   } catch (e) {
     res.status(404).json({ error: 'User not found' });
     return;
   }
 
   try {
-    await userData.deleteUser(req.params.id);
+    await users.deleteUser(req.params.id);
     res.sendStatus(200);
   } catch (e) {
     res.Status(500);
   }
 });
 
+router.get('/portfolio/:id', async (req, res) => {
+  try {
+    const user = await users.getUserById(req.params.id);
+    const artworksByUserId = await artworks.getArtWorksByUserId(req.params.id);
+    let pics = [];
+
+    for (let i = 0; i < artworksByUserId.length; i++) {
+      let artwork = artworksByUserId[i];
+      const pic = await pictures.getPicturesByArtworkId(artwork._id);
+      const firstPic = pic[0];
+      firstPic['artworkTitle'] = artwork.title;
+      // only choose the first picture to display
+      pics.push(firstPic);
+    }
+    res.render('portfolios/index', { pics: pics, user: user });
+  } catch (e) {
+    res.status(404).render('portfolios/index');
+  }
+});
 module.exports = router;

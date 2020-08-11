@@ -1,0 +1,21 @@
+<div>
+    <h1>Artfolio</h1>
+    {{#if pics}}
+    {{#each pics}}
+    <img src="/pictures/content/{{_id}}">
+    <p>{{artworkTitle}}</p>
+    <br>
+    {{/each}}
+    {{/if}}
+</div>
+
+
+{{#if user.userPictureId}}
+<img src="/pictures/content/{{user.userPictureId}}">
+{{/if}}
+
+<h1>{{ user.firstName }} {{ user.lastName}}</h1>
+<p>Bio: {{user.biography}}</p>
+<p>Gender: {{ user.gender }}</p>
+<p>Email: {{ user.email }}</p>
+<a href={{user.websiteUrl}}>Personal Website</a>

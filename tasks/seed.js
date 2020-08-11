@@ -2,6 +2,9 @@ const dbConnection = require('../config/mongoConnection');
 const data = require('../data');
 const artworks = data.artworks;
 const users = data.users;
+var path = require('path');
+const bluebird = require('bluebird');
+const fs = bluebird.promisifyAll(require('fs'));
 
 async function main() {
   const conn = await dbConnection();
@@ -75,9 +78,48 @@ async function main() {
       biography: 'Interested in oil painting',
     };
 
-    await users.createUser(mirandaInfo);
+    const miranda = await users.createUser(mirandaInfo);
     await users.createUser(jackInfo);
     await users.createUser(aymanInfo);
+
+    let artworkAnimals = await artworks.createArtwork(
+      'Animals',
+      'Cute Animals',
+      'Color Pencil',
+      new Date('08/10/2020'),
+      miranda._id
+    );
+
+    //upload animals
+    var directory = path.join(__dirname, '..', 'uploads/animals');
+    var files = fs.readdirSync(directory);
+    for (i = 0; i < files.length; i++) {
+      let file = files[i];
+      await data.pictures.createPicture(
+        (picData = await fs.readFileAsync(path.join(directory, file))),
+        (contentType = 'jpg'),
+        (artworkId = artworkAnimals._id)
+      );
+    }
+
+    //upload plants
+    let artworkPlants = await artworks.createArtwork(
+      'Plants',
+      'Various Plants',
+      'Color Pencil',
+      new Date('08/10/2020'),
+      miranda._id
+    );
+    directory = path.join(__dirname, '..', 'uploads/plants');
+    files = fs.readdirSync(directory);
+    for (i = 0; i < files.length; i++) {
+      let file = files[i];
+      await data.pictures.createPicture(
+        (picData = await fs.readFileAsync(path.join(directory, file))),
+        (contentType = 'jpg'),
+        (artworkId = artworkPlants._id)
+      );
+    }
 
     console.log('Done seeding database');
     await conn.close();

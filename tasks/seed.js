@@ -91,7 +91,7 @@ async function main() {
     );
 
     //upload animals
-    var directory = path.join(__dirname, '..', 'uploads/animals');
+    var directory = path.join(__dirname, '.', 'seedPictures/animals');
     var files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {
       let file = files[i];
@@ -110,7 +110,7 @@ async function main() {
       new Date('08/10/2020'),
       miranda._id
     );
-    directory = path.join(__dirname, '..', 'uploads/plants');
+    directory = path.join(__dirname, '.', 'seedPictures/plants');
     files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {
       let file = files[i];

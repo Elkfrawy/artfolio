@@ -1,3 +1,4 @@
+<a href="/users/">All Artists</a>
 <div>
     <h1>Artfolio</h1>
     {{#if pics}}
@@ -6,6 +7,8 @@
     <p>{{artworkTitle}}</p>
     <br>
     {{/each}}
+    {{else}}
+    <p>Artfolio is coming soon!</p>
     {{/if}}
 </div>
 
@@ -14,7 +17,7 @@
 <img src="/pictures/content/{{user.userPictureId}}">
 {{/if}}
 
-<h1>{{ user.firstName }} {{ user.lastName}}</h1>
+<h2>{{ user.firstName }} {{ user.lastName}}</h2>
 <p>Bio: {{user.biography}}</p>
 <p>Gender: {{ user.gender }}</p>
 <p>Email: {{ user.email }}</p>

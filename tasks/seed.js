@@ -25,6 +25,20 @@ async function main() {
     // const artworksResult = await artworks.getArtworksByKeyword('bla');
     // console.log(artworksResult[0].title);
 
+    let userPicDir = path.join(__dirname, '.', 'seedPictures/userPicture');
+    const mirandaPic = await data.pictures.createPicture(
+      (picData = await fs.readFileAsync(path.join(userPicDir, 'miranda.jpg'))),
+      (contentType = 'jpg')
+    );
+    const jackPic = await data.pictures.createPicture(
+      (picData = await fs.readFileAsync(path.join(userPicDir, 'jack.png'))),
+      (contentType = 'png')
+    );
+    const aymanPic = await data.pictures.createPicture(
+      (picData = await fs.readFileAsync(path.join(userPicDir, 'ayman.jpg'))),
+      (contentType = 'jpg')
+    );
+
     let mirandaInfo = {
       firstName: 'Miranda',
       lastName: 'Zou',
@@ -41,6 +55,7 @@ async function main() {
       birthday: '01/01/1990',
       biography: 'Interested in color pencil',
       websiteUrl: 'https://www.stevens.edu',
+      userPictureId: mirandaPic._id,
     };
 
     let jackInfo = {
@@ -58,6 +73,7 @@ async function main() {
       hashedPassword: '222222',
       birthday: '01/01/1998',
       biography: 'Interested in design',
+      userPictureId: jackPic._id,
     };
 
     let aymanInfo = {
@@ -76,11 +92,12 @@ async function main() {
       hashedPassword: '333333',
       birthday: '01/01/1988',
       biography: 'Interested in oil painting',
+      userPictureId: aymanPic._id,
     };
 
     const miranda = await users.createUser(mirandaInfo);
-    await users.createUser(jackInfo);
-    await users.createUser(aymanInfo);
+    const jack = await users.createUser(jackInfo);
+    const ayman = await users.createUser(aymanInfo);
 
     let artworkAnimals = await artworks.createArtwork(
       'Animals',
@@ -90,9 +107,11 @@ async function main() {
       miranda._id
     );
 
+    let directory;
+    let files;
     //upload animals
-    var directory = path.join(__dirname, '.', 'seedPictures/animals');
-    var files = fs.readdirSync(directory);
+    directory = path.join(__dirname, '.', 'seedPictures/animals');
+    files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {
       let file = files[i];
       await data.pictures.createPicture(
@@ -118,6 +137,81 @@ async function main() {
         (picData = await fs.readFileAsync(path.join(directory, file))),
         (contentType = 'jpg'),
         (artworkId = artworkPlants._id)
+      );
+    }
+
+    //upload fruits
+    let artworkFruits = await artworks.createArtwork(
+      'Fruits',
+      'Nice fruits',
+      'Oil Painting',
+      new Date('08/10/2020'),
+      jack._id
+    );
+    directory = path.join(__dirname, '.', 'seedPictures/fruits');
+    files = fs.readdirSync(directory);
+    for (i = 0; i < files.length; i++) {
+      let file = files[i];
+      await data.pictures.createPicture(
+        (picData = await fs.readFileAsync(path.join(directory, file))),
+        (contentType = 'jpg'),
+        (artworkId = artworkFruits._id)
+      );
+    }
+
+    //upload scenary
+    let artworkScenary = await artworks.createArtwork(
+      'Scenary',
+      'Beatiful places',
+      'Acrylic',
+      new Date('08/10/2020'),
+      ayman._id
+    );
+    directory = path.join(__dirname, '.', 'seedPictures/scenary');
+    files = fs.readdirSync(directory);
+    for (i = 0; i < files.length; i++) {
+      let file = files[i];
+      await data.pictures.createPicture(
+        (picData = await fs.readFileAsync(path.join(directory, file))),
+        (contentType = 'jpg'),
+        (artworkId = artworkScenary._id)
+      );
+    }
+
+    //upload architecture
+    let artworkArchitect = await artworks.createArtwork(
+      'Architecture',
+      'Architecture around world',
+      'Sketch',
+      new Date('08/10/2020'),
+      ayman._id
+    );
+    directory = path.join(__dirname, '.', 'seedPictures/architecture');
+    files = fs.readdirSync(directory);
+    for (i = 0; i < files.length; i++) {
+      let file = files[i];
+      await data.pictures.createPicture(
+        (picData = await fs.readFileAsync(path.join(directory, file))),
+        (contentType = 'jpg'),
+        (artworkId = artworkArchitect._id)
+      );
+    }
+
+    let artworkCharacter = await artworks.createArtwork(
+      'Character',
+      'Cool girls',
+      'Digital Art',
+      new Date('08/11/2020'),
+      miranda._id
+    );
+    directory = path.join(__dirname, '.', 'seedPictures/character');
+    files = fs.readdirSync(directory);
+    for (i = 0; i < files.length; i++) {
+      let file = files[i];
+      await data.pictures.createPicture(
+        (picData = await fs.readFileAsync(path.join(directory, file))),
+        (contentType = 'jpg'),
+        (artworkId = artworkCharacter._id)
       );
     }
 

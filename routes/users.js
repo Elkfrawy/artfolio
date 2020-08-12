@@ -6,34 +6,6 @@ const pictures = data.pictures;
 const validators = data.validators;
 const users = data.users;
 
-router.get('/login', async (req, res) => {
-  res.render('users/login', { hasError: false });
-});
-
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  let user;
-  try {
-    user = await users.getUserByEmail(email);
-  } catch (e) {
-    res.status(401).render('users/login', { hasError: true, error: e });
-    return;
-  }
-
-  if (!validators.isNonEmptyString(password)) {
-    res.status(401).render('users/login', { hasError: true, error: 'Invalid Password' });
-    return;
-  }
-  // use bcrypt to compare later
-  const match = true;
-  if (match) {
-    req.session.user = user;
-    res.redirect('/users/private');
-  } else {
-    res.status(401).render('users/login', { hasError: true, error: 'Email/Password not match, try again' });
-  }
-});
-
 // public page
 router.get('/', async (req, res) => {
   try {

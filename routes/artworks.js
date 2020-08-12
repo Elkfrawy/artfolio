@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
-const artworkData = data.artworks;;
+const artworkData = data.artworks;
+const userData = data.users; 
+const pictureData = data.pictures;
 const upload = require('../config/upload');
 var path = require('path');
 
@@ -18,7 +20,8 @@ router.get('/', async (req, res) => {
   router.get('/:id', async (req, res) => {
     try {
       const artwork = await artworkData.getArtworkById(req.params.id);
-      res.render('artworks/single', { artwork: artwork });
+      const picture = await pictureData.getPicturesByArtworkId(req.params.id)
+      res.render('artworks/single', { artwork: artwork }, {picture: picture});
     } catch (e) {
       res.status(500).send();
     }
@@ -28,7 +31,8 @@ router.get('/', async (req, res) => {
   router.get('/:userid', async(req, res) =>{
         try{
             const artworks = await artworkData.getArtWorksByUserId(req.params.id);
-            res.render('artworks/portfolio', {artworks: artworks});
+            const user = await userData.getUserById(req.params.id);
+            res.render('artworks/portfolio', {artworks: artworks}, {user: user});
         }catch (e) {
             res.status(500).send();
           }

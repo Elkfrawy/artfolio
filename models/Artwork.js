@@ -15,6 +15,7 @@ const ArtworkSchema = new mongoose.Schema({
   numberOfViews: { type: Number, default: 0 },
   lastView: { type: Date, default: Date.now },
   _id: { type: String, default: uuidv4 },
+  //add displayPicture as the front cover on portfolio page
 });
 
 module.exports = mongoose.model('artwork', ArtworkSchema);

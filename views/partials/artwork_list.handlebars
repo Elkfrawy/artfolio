@@ -1,0 +1,21 @@
+<div class="row mx-auto">
+    {{#each artworks}}
+        <a class="col-lg-3 col-md-4 col-6">
+            <div class="card mb-4">
+              <img class="card-img-top" src="{{pictures.[0].pictureUrl}}" alt="{{title}}">
+              <div class="card-body">
+                  <p class="card-text">{{title}}</p>
+              </div>
+            </div>
+            <a href="/artworks/{{_id}}" class="stretched-link"></a>
+        </a>
+    {{else}}
+            <div class="alert alert-warning mx-auto" role="alert">
+        {{#if emptyMessage}}
+            {{emptyMessage}}
+        {{else}}
+            No artworks to show.
+        {{/if}}
+            </div>
+    {{/each}}
+</div>

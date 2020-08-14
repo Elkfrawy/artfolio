@@ -23,7 +23,7 @@ router.get('/search', async (req, res) => {
       res.status(400).render('home/search', { error: 'You must provide a query to search with' });
     } else {
       const artworks = await artworkData.getArtworksByAny(req.query.query);
-      res.render('home/search', { artworks });
+      res.render('home/search', { artworks, emptyMessage: "Couldn't find any artworks for the given keyword!" });
     }
   } catch (e) {
     res.status(500).send({ error: e });

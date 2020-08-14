@@ -6,14 +6,13 @@ const ehb = require('express-handlebars');
 const Handlebars = require('handlebars');
 const mongooseConnection = require('./config/mongoConnection');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
-const session = require('express-session');
 
 const app = express();
 
 app.use(
   session({
     name: 'AuthCookie',
-    secret: 'smghsalk63@$%@69)*AGFSJAS*%AVAT535sf8749',
+    secret: 'Everyone is an artist. smghsalk63@$%@69)*AGFSJAS*%AVAT535sf8749',
     saveUninitialized: true,
     resave: false,
   })
@@ -53,15 +52,6 @@ const handlebarsInst = ehb.create({
 
 app.engine('handlebars', handlebarsInst.engine);
 app.set('view engine', 'handlebars');
-
-app.use(
-  session({
-    name: 'Artfolio',
-    secret: 'Everyone is an artist',
-    saveUninitialized: true,
-    resave: false,
-  })
-);
 
 configRoutes(app);
 

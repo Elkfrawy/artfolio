@@ -98,24 +98,11 @@ router.get('/logout', (req, res) => {
   res.render('users/logout', { title: 'Logging out' });
 });
 
-router.get('/:id', async (req, res) => {});
-
 // private page for user to edit his/her own profile
 router.get('/edit', async (req, res) => {
   //const user = await userData.getUserById(req.session.user._id);
   //res.render('users/editprofile', { user: user });
   res.render('users/editprofile');
-});
-
-router.post('/', async (req, res) => {
-  const newUserData = req.body;
-  // to-do basic check
-  try {
-    const newUser = await users.createUser(newUserData);
-    res.redirect(`/users/${newUser._id}`);
-  } catch (e) {
-    res.status(500).send();
-  }
 });
 
 // Validated user to update information

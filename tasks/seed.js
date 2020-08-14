@@ -51,7 +51,7 @@ async function main() {
         zipCode: '07030',
         country: 'United States',
       },
-      hashedPassword: '111111',
+      hashedPassword: '$2b$10$FcmXEbDdgdRLJRXp1Vh/juUlP/.xE89XCZZ8jrHoR57/Wea2E/hXO',
       birthday: '01/01/1990',
       biography: 'Interested in color pencil',
       websiteUrl: 'https://www.stevens.edu',
@@ -70,7 +70,7 @@ async function main() {
         zipCode: '07030',
         country: 'United States',
       },
-      hashedPassword: '222222',
+      hashedPassword: '$2b$10$FcmXEbDdgdRLJRXp1Vh/juUlP/.xE89XCZZ8jrHoR57/Wea2E/hXO',
       birthday: '01/01/1998',
       biography: 'Interested in design',
       userPictureId: jackPic._id,
@@ -89,7 +89,7 @@ async function main() {
         country: 'United States',
       },
 
-      hashedPassword: '333333',
+      hashedPassword: '$2b$10$FcmXEbDdgdRLJRXp1Vh/juUlP/.xE89XCZZ8jrHoR57/Wea2E/hXO',
       birthday: '01/01/1988',
       biography: 'Interested in oil painting',
       userPictureId: aymanPic._id,
@@ -116,8 +116,9 @@ async function main() {
       let file = files[i];
       await data.pictures.createPicture(
         (picData = await fs.readFileAsync(path.join(directory, file))),
-        (contentType = 'jpg'),
-        (artworkId = artworkAnimals._id)
+        (contentType = 'image/jpeg'),
+        (artworkId = artworkAnimals._id),
+        (title = 'Animal')
       );
     }
 
@@ -135,7 +136,7 @@ async function main() {
       let file = files[i];
       await data.pictures.createPicture(
         (picData = await fs.readFileAsync(path.join(directory, file))),
-        (contentType = 'jpg'),
+        (contentType = 'image/jpeg'),
         (artworkId = artworkPlants._id)
       );
     }
@@ -154,7 +155,7 @@ async function main() {
       let file = files[i];
       await data.pictures.createPicture(
         (picData = await fs.readFileAsync(path.join(directory, file))),
-        (contentType = 'jpg'),
+        (contentType = 'image/jpeg'),
         (artworkId = artworkFruits._id)
       );
     }
@@ -173,7 +174,7 @@ async function main() {
       let file = files[i];
       await data.pictures.createPicture(
         (picData = await fs.readFileAsync(path.join(directory, file))),
-        (contentType = 'jpg'),
+        (contentType = 'image/jpeg'),
         (artworkId = artworkScenary._id)
       );
     }
@@ -192,7 +193,7 @@ async function main() {
       let file = files[i];
       await data.pictures.createPicture(
         (picData = await fs.readFileAsync(path.join(directory, file))),
-        (contentType = 'jpg'),
+        (contentType = 'image/jpeg'),
         (artworkId = artworkArchitect._id)
       );
     }
@@ -210,7 +211,7 @@ async function main() {
       let file = files[i];
       await data.pictures.createPicture(
         (picData = await fs.readFileAsync(path.join(directory, file))),
-        (contentType = 'jpg'),
+        (contentType = 'image/jpeg'),
         (artworkId = artworkCharacter._id)
       );
     }

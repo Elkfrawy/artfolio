@@ -41,7 +41,6 @@ module.exports = {
 
     const createdArtwork = await saveSafely(newArtwork);
     return createdArtwork;
-    
   },
 
   async updateArtwork(id, artwork) {

@@ -42,7 +42,7 @@ module.exports = {
     if (!validators.isNonEmptyString(user.firstName)) throw 'First name is not provided';
     if (!validators.isNonEmptyString(user.lastName)) throw 'Last name is not provided';
     if (!validators.isValidEmail(user.email)) throw 'Email is not valid';
-    if (!validators.isValidPassword(user.hashedPassword)) throw 'Please provide a password';
+    if (!validators.isNonEmptyString(user.hashedPassword)) throw 'Please provide a password';
     const newUser = new models.User(user);
     const createdUser = await saveSafely(newUser);
     return createdUser;

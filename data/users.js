@@ -15,9 +15,7 @@ module.exports = {
 
   async getUserByEmail(email) {
     if (!validators.isValidEmail(email)) throw 'Email address is not valid';
-    // return a list, but it should be either empty or contain 1 value
-    const user = await models.User.find({ email: email }).exec();
-    return user[0];
+    return await models.User.findOne({ email: email.toLowerCase() }).exec();
   },
 
   async updateUser(id, user) {

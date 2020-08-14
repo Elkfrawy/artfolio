@@ -2,6 +2,7 @@
 const models = require('../models');
 const validators = require('./validators');
 const users = require('./users');
+const pics = require('./pictures');
 
 module.exports = {
   async getArtworkById(id) {
@@ -20,7 +21,7 @@ module.exports = {
     return await models.Artwork.find({}).exec();
   },
 
-  async createArtwork(title, description, category, createDate, userId, pictures) {
+  async createArtwork(title, description, category, createDate, userId) {
     if (!title) throw 'You must provide a title';
     if (!category) throw 'You must provide a category';
     if (!userId) throw 'You must provide a userId';
@@ -36,7 +37,6 @@ module.exports = {
       createDate,
       username,
       userId,
-      pictures,
     });
 
     const createdArtwork = await saveSafely(newArtwork);

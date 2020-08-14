@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
 const configRoutes = require('./routes');
 const ehb = require('express-handlebars');
 const Handlebars = require('handlebars');
@@ -52,6 +53,15 @@ const handlebarsInst = ehb.create({
 
 app.engine('handlebars', handlebarsInst.engine);
 app.set('view engine', 'handlebars');
+
+app.use(
+  session({
+    name: 'Artfolio',
+    secret: 'Everyone is an artist',
+    saveUninitialized: true,
+    resave: false,
+  })
+);
 
 configRoutes(app);
 

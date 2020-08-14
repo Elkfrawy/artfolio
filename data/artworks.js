@@ -77,6 +77,18 @@ module.exports = {
     return deletedArtwork;
   },
 
+  async getArtworksByAny(query) {
+    if (!validators.isNonEmptyString(query)) throw 'Please provide a keyword to search by';
+    return await models.Artwork.find({
+      $or: [
+        { title: new RegExp(query, 'i') },
+        { description: new RegExp(query, 'i') },
+        { category: new RegExp(query, 'i') },
+        { username: new RegExp(query, 'i') },
+      ],
+    }).exec();
+  },
+
   async getArtworksByKeyword(keyword) {
     if (!validators.isNonEmptyString(keyword)) throw 'Please provide a keyword to search by';
     return await models.Artwork.find({

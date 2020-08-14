@@ -10,11 +10,17 @@ module.exports = {
     return typeof email === 'string' && email.match(mailformat);
   },
   isValidPassword(pw) {
-    // to-do
-    return this.isNonEmptyString(pw);
+    return this.isNonEmptyString(pw) && pw.length >= 8;
   },
   isValidUserId(userId) {
     return typeof userId == 'string' && userId;
+  },
+  validateGender(gender) {
+    if (gender === 'Male' || gender === 'Female' || gender === 'Other') {
+      return true;
+    } else {
+      return false;
+    }
   },
   isArrayOfStrings(sArray) {
     if (!Array.isArray(sArray)) return false;

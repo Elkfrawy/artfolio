@@ -99,11 +99,11 @@ module.exports = {
     return await genericGetWithSort(skips, count, { numberOfViews: -1 });
   },
 
-  async getRecentlyVisitedArtworks() {
+  async getRecentlyVisitedArtworks(skips = 0, count = 0) {
     return await genericGetWithSort(skips, count, { lastView: -1 });
   },
 
-  async getRecentlyAddedArtworks() {
+  async getRecentlyAddedArtworks(skips = 0, count = 0) {
     return await genericGetWithSort(skips, count, { postDate: -1 });
   },
 

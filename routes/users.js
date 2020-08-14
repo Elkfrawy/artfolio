@@ -146,17 +146,7 @@ router.get('/portfolio/:id', async (req, res) => {
   try {
     const user = await users.getUserById(req.params.id);
     const artworksByUserId = await artworks.getArtWorksByUserId(req.params.id);
-    let pics = [];
-
-    for (let i = 0; i < artworksByUserId.length; i++) {
-      let artwork = artworksByUserId[i];
-      const pic = await pictures.getPicturesByArtworkId(artwork._id);
-      const firstPic = pic[0];
-      firstPic['artworkTitle'] = artwork.title;
-      // only choose the first picture to display
-      pics.push(firstPic);
-    }
-    res.render('portfolios/index', { pics: pics, user: user });
+    res.render('portfolios/index', { artworks: artworksByUserId, user: user });
   } catch (e) {
     res.status(404).render('portfolios/index');
   }

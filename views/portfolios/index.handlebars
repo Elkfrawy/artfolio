@@ -1,9 +1,9 @@
 <a href="/users/">All Artists</a>
 <div>
     <h1>Artfolio</h1>
-    {{#if pics}}
-    {{#each pics}}
-    <img src="/pictures/content/{{_id}}">
+    {{#if artworks}}
+    {{#each artworks}}
+    <img src="{{pictures.[0].pictureUrl}}">
     <p>{{artworkTitle}}</p>
     <br>
     {{/each}}

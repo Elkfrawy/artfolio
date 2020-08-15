@@ -47,7 +47,7 @@ module.exports = {
     if (!validators.isNonEmptyString(id)) throw 'Please provide an artwork ID';
     if (!artwork) throw 'Please provide an artwork to update with';
 
-    const oldArtwork = await models.Artwork.findById(id).exec(); // Don't forgot to call "exec()" for any query
+    const oldArtwork = await models.Artwork.findById(id).exec();
     if (!oldArtwork) throw `There is no artwork with the given ID: ${id}`;
 
     if (artwork.title) {
@@ -75,6 +75,11 @@ module.exports = {
     if (!validators.isNonEmptyString(id)) throw 'Please provide an id to delete';
     const deletedArtwork = await models.Artwork.findByIdAndDelete(id).exec();
     return deletedArtwork;
+  },
+
+  async getArtworkByTitle(title){
+    if (!validators.isNonEmptyString(title)) throw 'Please provide a title to search by';
+    return await models.Artwork.find({ title: new RegExp(title, 'i') }).exec();
   },
 
   async getArtworksByKeyword(keyword) {

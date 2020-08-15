@@ -1,0 +1,39 @@
+<section class ="CreateSingle-artwork">
+<h2>Create Your Artwork</h2>
+<div class = 'link-buttons'>
+    <button onclick="location.href='/home'" type="button">Home</button>
+</div>
+
+<form action = '/artworks/create' method = 'POST' enctype="multipart/form-data">
+    <label>Title</label>
+        <input type ='text' value ="{{artwork.title}}"/> 
+    
+    <label>Description
+        <textarea>{{artwork.description}}</textarea>">
+    </label>
+    <label>Creation Date
+        <input type ='date' value ="{{artwork.createDate}}"/> 
+    </label>
+    <label>Category
+        <input type = 'text' value ="{{artwork.category}}"/>
+    </label>
+    <label>Upload multiple images
+        <input type="file" accept="image/*" multiple/>
+    </label>
+    {{!-- <label>Upload single image
+        <input type="file" accept="image/*" single>
+    </label> --}}
+
+<button type="submit">Submit</button>
+
+</form>
+{{#if errors}}
+<ul class="text-danger">
+    <li>
+    {{#each errors}}
+      {{this}}
+    {{/each}}
+    </li>
+</ul>
+{{/if}} 
+</section>

@@ -1,0 +1,28 @@
+<section class ="DisplaySingle-artwork">
+
+<div class = 'link-buttons'>
+    <button onclick="location.href='/home'" type="button">Home</button>
+</div>
+
+<section class = 'artwork-information'>
+    <h3>Art work title: {{artwork.title}}</h3>
+    <P>Artist Name: {{artwork.username}}</P>
+    <p>Art work Description: {{artwork.description}}</p>
+    <p>Creation Date: {{artwork.createDate}}</p>
+    <p>Category: {{artwork.category}}</p>
+</section>
+
+<section class= 'artwork-pictures'>
+    {{#if pictures}}
+        {{#each pictures}}
+        <div>
+            <p>{{pictures.title}}</p>
+            {{!-- <p>{{pictures.data}}</p> --}}
+            <img src="{{pictureUrl}}"> 
+            <br>
+        </div>
+        {{/each}}
+    {{/if}}
+</section>
+
+</section>

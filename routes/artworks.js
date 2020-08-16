@@ -20,7 +20,7 @@ router.get('/:id', async (req, res) => {
   try {
     const artwork = await artworkData.getArtworkById(req.params.id);
     const picture = await pictureData.getPicturesByArtworkId(req.params.id);
-    await res.render('artworks/single', { artwork: artwork }, { picture: picture });
+    res.render('artworks/single', { artwork: artwork, picture: picture });
   } catch (e) {
     res.status(500).send();
   }

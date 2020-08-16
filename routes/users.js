@@ -23,9 +23,12 @@ router.get('/', async (req, res) => {
 
 // private page for user to see his/her own profile
 router.get('/profile', async (req, res) => {
+  if (!req.session.user) res.render('users/login');
   try {
-    const singleUser = await userData.getUserById(req.session.user._id);
-    res.render('users/single', { user: singleUser });
+    validators.isNonEmptyString(req.session.user._id);
+    const singleUser = await users.getUserById(req.session.user._id);
+    const artworksByUserId = await artworks.getArtWorksByUserId(req.session.user._id);
+    res.render('portfolios/portfolio', { user: singleUser, artworks: artworksByUserId, authenticated: true });
   } catch (e) {
     res.status(500).send();
   }
@@ -100,9 +103,9 @@ router.get('/logout', (req, res) => {
 
 // private page for user to edit his/her own profile
 router.get('/edit', async (req, res) => {
-  //const user = await userData.getUserById(req.session.user._id);
-  //res.render('users/editprofile', { user: user });
-  res.render('users/editprofile');
+  const user = await userData.getUserById(req.session.user._id);
+  res.render('users/editprofile', { user: user });
+  //res.render('users/editprofile');
 });
 
 // Validated user to update information
@@ -144,9 +147,10 @@ router.delete('/:id', async (req, res) => {
 
 router.get('/portfolio/:id', async (req, res) => {
   try {
+    validators.isNonEmptyString(req.params.id);
     const user = await users.getUserById(req.params.id);
     const artworksByUserId = await artworks.getArtWorksByUserId(req.params.id);
-    res.render('portfolios/index', { artworks: artworksByUserId, user: user });
+    res.render('portfolios/portfolio', { artworks: artworksByUserId, user: user, authenticated: false });
   } catch (e) {
     res.status(404).render('portfolios/index');
   }

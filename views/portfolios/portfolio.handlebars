@@ -60,7 +60,7 @@
                 {{/if}}
                 <div class="card-body">
                     <h2>{{ user.firstName }} {{ user.lastName}}</h2>
-                    <a class="info-tag">Bio</a>
+                    <h6 class="info-tag1">Bio</h6>
                     <p>{{user.biography}}</p>
                     <a class="info-tag">Gender: </a>
                     <a>{{ user.gender }}</a><br>
@@ -70,14 +70,15 @@
                     <a href={{user.websiteUrl}} class="personal-link">{{user.websiteUrl}}</a><br>
                     {{/if}}
                     {{#if authenticated}}
-                    <a class="info-tag">Address: </a>
+                    <a class="info-tag">Address </a>
                     <ul class="info-addr">
                         <li>Street Address: {{user.address.streetAddress}}</li>
                         <li>City: {{user.address.city}}</li>
                         <li>State: {{user.address.state}}</li>
                         <li>Zip Code: {{user.address.zipCode}}</li>
                     </ul>
-                    <a class="info-tag">Birthday: </a> <a>{{user.birthday}}</a>
+                    <a class="info-tag">Birthday: </a> <a>{{dateFormat user.birthday "YYYY-MM-DD"}}
+                    </a>
                     {{/if}}
                 </div>
             </div>

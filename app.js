@@ -50,6 +50,8 @@ const handlebarsInst = ehb.create({
   handlebars: allowInsecurePrototypeAccess(Handlebars),
 });
 
+handlebarsInst.handlebars.registerHelper('dateFormat', require('handlebars-dateformat'));
+
 app.engine('handlebars', handlebarsInst.engine);
 app.set('view engine', 'handlebars');
 

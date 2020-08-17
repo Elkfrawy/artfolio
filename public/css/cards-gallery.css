@@ -114,9 +114,9 @@
   text-align: center;
 }
 .edit-btn {
-  background-color: rgb(179, 203, 226);
+  background-color: dodgerblue;
   border: none;
-  color: rgb(9, 9, 53);
+  color: white;
   padding: 8px 16px;
   font-size: 16px;
   cursor: pointer;
@@ -129,9 +129,9 @@
 }
 
 .pic-edit-btn {
-  background-color: rgb(179, 203, 226);
+  background-color: dodgerblue;
   border: none;
-  color: rgb(9, 9, 53);
+  color: white;
   padding: 8px 12px;
   font-size: 16px;
   cursor: pointer;

@@ -45,7 +45,7 @@ router.post('/register', async (req, res) => {
   if (!data.validators.isNonEmptyString(email)) errors.push('Email address is missing');
   else if (!data.validators.isValidEmail(email)) errors.push('The provided emails is incorrect');
   if (!data.validators.isNonEmptyString(password)) errors.push('Password is missing');
-  else if (!data.validators.isValidPassword(password)) error.push('Password must be at least of length 8');
+  else if (!data.validators.isValidPassword(password)) errors.push('Password must be at least of length 8');
   if (!data.validators.isNonEmptyString(passwordConfirm)) errors.push('Password confirmation is missing');
   if (password !== passwordConfirm) errors.push("Password and confirmation don't match");
 

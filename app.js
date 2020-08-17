@@ -24,12 +24,20 @@ app.use((req, res, next) => {
   next();
 });
 
+
 const dbConnection = mongooseConnection();
 const static = express.static(path.join(__dirname, 'public'));
 
 app.use(express.json());
 app.use('/public', static);
 app.use(express.urlencoded({ extended: true }));
+
+app.use(async (req, res, next) => {
+  if (req.body._method) {
+    req.method = req.body._method;
+  }
+  next();
+});
 
 app.use(function (req, res, next) {
   res.locals.session = req.session;

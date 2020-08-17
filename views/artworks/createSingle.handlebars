@@ -4,21 +4,21 @@
     <button onclick="location.href='/home'" type="button">Home</button>
 </div>
 
-<form action = '/artworks/create' method = 'POST' enctype="multipart/form-data">
-    <label>Title</label>
-        <input type ='text' value ="{{artwork.title}}"/> 
-    
-    <label>Description
-        <textarea>{{artwork.description}}</textarea>">
+<form method = "POST" enctype="multipart/form-data">
+    <label>title
+        <input type ='text' id ="title" name="title" placeholder ="title" value="{{artwork.title}}"/> 
+    </label>
+    <label>description
+        <textarea id ="description" name="description" placeholder = "provide a description">{{artwork.description}}</textarea>
     </label>
     <label>Creation Date
-        <input type ='date' value ="{{artwork.createDate}}"/> 
+        <input type ='date' id ="createDate" name="createDate" placeholder = "creation date" value="{{artwork.createDate}}"/> 
     </label>
     <label>Category
-        <input type = 'text' value ="{{artwork.category}}"/>
+        <input type = 'text' name="category" placeholder = "artwork category" value="{{artwork.category}}"/>
     </label>
     <label>Upload multiple images
-        <input type="file" accept="image/*" multiple/>
+        <input type="file" name="image" id="image" accept="image/*" multiple/>
     </label>
     {{!-- <label>Upload single image
         <input type="file" accept="image/*" single>
@@ -29,11 +29,12 @@
 </form>
 {{#if errors}}
 <ul class="text-danger">
-    <li>
     {{#each errors}}
-      {{this}}
-    {{/each}}
+    <li>
+    {{this}}   
     </li>
+    {{/each}}
+    
 </ul>
 {{/if}} 
 </section>

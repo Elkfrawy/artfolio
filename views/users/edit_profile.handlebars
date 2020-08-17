@@ -23,15 +23,16 @@
         <div class="col-sm-9">
             <ul class="nav nav-tabs">
                 {{#if displayProfile}}
-                <li class="nav-item"><a href="#profile" data-toggle="tab" class="nav-link">Profile </a></li>
+                <li class="nav-item"><a href="#profile" data-toggle="tab" class="nav-link active">Profile </a></li>
                 <li class="nav-item"><a href="#password" data-toggle="tab" class="nav-link">Password</a></li>
                 {{else}}
                 <li class="nav-item"><a href="#profile" data-toggle="tab" class="nav-link">Profile</a></li>
-                <li class="nav-item"><a href="#password" data-toggle="tab" class="nav-link">Password</a></li>
+                <li class="nav-item"><a href="#password" data-toggle="tab" class="nav-link active">Password</a></li>
                 {{/if}}
             </ul>
             <div id="myTabContent" class="tab-content">
-                <div class="tab-pane active in" id="profile">
+                <div {{#if displayProfile}} class="tab-pane fade show active" {{else}} class="tab-pane fade"
+                    {{/if}}id="profile">
                     <form action="/users/updateprofile" method="POST">
                         <label>First Name</label>
                         <input type="text" value="{{user.firstName}}" name="firstName" class="full-width-input">
@@ -119,7 +120,8 @@
                         </div>
                     </form>
                 </div>
-                <div class="tab-pane fade" id="password">
+                <div {{#if displayProfile}} class="tab-pane fade" {{else}} class="tab-pane fade show active"
+                    {{/if}}id="password">
                     <form action="/users/updatepassword" method="POST">
                         <label>Current Password</label>
                         <input type="text" name="currentPassword" class="full-width-input" />

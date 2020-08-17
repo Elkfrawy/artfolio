@@ -109,3 +109,35 @@
 .gallery-block.cards-gallery .user-info .card-body .info-tag {
   text-align: left;
 }
+
+.edit-profile {
+  text-align: center;
+}
+.edit-btn {
+  background-color: rgb(179, 203, 226);
+  border: none;
+  color: rgb(9, 9, 53);
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+}
+
+.edit-btn:hover {
+  background-color: rgb(141, 182, 219);
+}
+
+.pic-edit-btn {
+  background-color: rgb(179, 203, 226);
+  border: none;
+  color: rgb(9, 9, 53);
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.pic-edit-btn:hover {
+  background-color: rgb(141, 182, 219);
+}

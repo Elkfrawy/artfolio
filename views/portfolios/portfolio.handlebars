@@ -16,13 +16,14 @@
                         <div class="card-body">
                             <h6><a href="/artworks/{{_id}}">{{title}}</a></h6>
                             <p class="text-muted card-text">{{description}}</p>
-                            <form action="/artworks/{{_id}}" method="delete">
-                                <button type="submit"
+                            <form action="/artworks/{{_id}}" method="POST">
+                                <input type="hidden" name="_method" value="delete" />
+                                <button type="submit" class="pic-edit-btn"
                                     onclick="return confirm('Are you sure you want to delete this artwork?');"><i
                                         class="fa fa-trash"></i></button>
                             </form>
                             <form action="/artworks/{{_id}}" method="get">
-                                <button type="submit"><i class="fa fa-edit"></i></button>
+                                <button type="submit" class="pic-edit-btn"><i class="fa fa-edit"></i></button>
                             </form>
 
                         </div>
@@ -52,6 +53,7 @@
             </div>
         </div>
         <div class="user-info">
+
             <div class="card border-0">
                 {{#if user.userPictureId}}
                 <a>
@@ -60,7 +62,7 @@
                 {{/if}}
                 <div class="card-body">
                     <h2>{{ user.firstName }} {{ user.lastName}}</h2>
-                    <h6 class="info-tag1">Bio</h6>
+                    <h6>Bio</h6>
                     <p>{{user.biography}}</p>
                     <a class="info-tag">Gender: </a>
                     <a>{{ user.gender }}</a><br>
@@ -77,10 +79,15 @@
                         <li>State: {{user.address.state}}</li>
                         <li>Zip Code: {{user.address.zipCode}}</li>
                     </ul>
-                    <a class="info-tag">Birthday: </a> <a>{{dateFormat user.birthday "YYYY-MM-DD"}}
-                    </a>
+                    <a class="info-tag">Birthday: </a> <a>{{dateFormat user.birthday "YYYY-MM-DD" true}}</a><br>
+
                     {{/if}}
                 </div>
+                {{#if authenticated}}
+                <form action="/users/edit" method="get" class="edit-profile">
+                    <button type="submit" class="edit-btn">Edit</button>
+                </form><br>
+                {{/if}}
             </div>
         </div>
     </div>

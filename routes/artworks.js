@@ -138,8 +138,7 @@ router.delete('/:id', async (req, res) => {
 
   try {
     await artworkData.deleteArtwork(req.params.id);
-    //return to portfolio page
-    res.sendStatus(200);
+    res.redirect('/users/profile');
   } catch (e) {
     res.Status(500);
   }

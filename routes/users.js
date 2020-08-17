@@ -23,7 +23,10 @@ router.get('/', async (req, res) => {
 
 // private page for user to see his/her own profile
 router.get('/profile', async (req, res) => {
-  if (!req.session.user) res.render('users/login');
+  if (!req.session.user) {
+    res.render('users/login');
+    return;
+  }
   try {
     validators.isNonEmptyString(req.session.user._id);
     const singleUser = await users.getUserById(req.session.user._id);
@@ -103,29 +106,52 @@ router.get('/logout', (req, res) => {
 
 // private page for user to edit his/her own profile
 router.get('/edit', async (req, res) => {
-  const user = await userData.getUserById(req.session.user._id);
-  res.render('users/editprofile', { user: user });
-  //res.render('users/editprofile');
+  if (!req.session.user) {
+    res.redirect('users/login');
+    return;
+  }
+  validators.isNonEmptyString(req.session.user._id);
+  const singleUser = await users.getUserById(req.session.user._id);
+
+  res.render('users/edit_profile', { user: singleUser, displayProfile: true });
 });
 
 // Validated user to update information
-router.put('/', async (req, res) => {
-  let userInfo = req.body;
-  // to-do basic checks
-
-  try {
-    await users.getUserById(req.session.user._id);
-  } catch (e) {
-    res.status(404).json({ error: 'User not found' });
+router.patch('/updateprofile', async (req, res) => {
+  if (!req.session.user) {
+    res.redirect('users/login');
     return;
   }
+  validators.isValidUserId(req.session.user._id);
+  const currentUser = await users.getUserById(req.session.user._id);
 
-  try {
-    const updatedUser = await users.updateUser(req.session.user._id, userInfo);
-    req.session.user = updatedUser;
-    res.redirect('/private');
-  } catch (e) {
-    res.sendStatus(500);
+  let userInfo = req.body;
+  const errors = [];
+  const firstName = userInfo.firstName;
+  const lastName = userInfo.lastName;
+  const gender = userInfo.gender;
+  if (userInfo.birthday) {
+    userInfo.birthday = new Date(userInfo.birthday);
+  }
+  // first name and last name are required
+  if (!validators.isNonEmptyString(firstName)) errors.push('First name is missing');
+  if (!validators.isNonEmptyString(lastName)) errors.push('Last name is missing');
+
+  if (errors.length > 0) {
+    res.status(400).render('users/edit_profile', { user: currentUser, displayProfile: true, profileErrors: errors });
+  } else {
+    try {
+      const updatedUser = await users.updateUser(req.session.user._id, userInfo);
+      req.session.user = {
+        _id: updatedUser._id,
+        email: updatedUser.email,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+      };
+      res.render('users/update_success');
+    } catch (e) {
+      res.sendStatus(500);
+    }
   }
 });
 
@@ -147,12 +173,69 @@ router.delete('/:id', async (req, res) => {
 
 router.get('/portfolio/:id', async (req, res) => {
   try {
-    validators.isNonEmptyString(req.params.id);
+    validators.isValidUserId(req.params.id);
     const user = await users.getUserById(req.params.id);
     const artworksByUserId = await artworks.getArtWorksByUserId(req.params.id);
     res.render('portfolios/portfolio', { artworks: artworksByUserId, user: user, authenticated: false });
   } catch (e) {
-    res.status(404).render('portfolios/index');
+    res.status(404);
   }
 });
+
+router.post('/changeuserpic', upload.single('image'), async (req, res) => {
+  if (!req.session.user) {
+    res.redirect('users/login');
+  } else {
+    let image;
+    if (req.file) {
+      image = await data.pictures.createPicture(
+        (picData = await fs.readFile(path.join(__dirname, '..', 'uploads', req.file.filename))),
+        (contentType = req.file.mimetype)
+      );
+      const currentUserId = req.session.user._id;
+      validators.isValidUserId(currentUserId);
+      try {
+        await users.updateUser(currentUserId, { userPictureId: image._id });
+        res.redirect('/users/edit');
+      } catch (e) {
+        res.status(500);
+      }
+    }
+  }
+});
+
+router.patch('/updatepassword', async (req, res) => {
+  if (!req.session.user) {
+    res.redirect('users/login');
+    return;
+  }
+  validators.isValidUserId(req.session.user._id);
+  const user = await users.getUserById(req.session.user._id);
+  const { currentPassword, newPassword, newPassword2 } = req.body;
+
+  const errors = [];
+
+  if (!validators.isNonEmptyString(currentPassword)) errors.push('Current Password is missing');
+  if (!validators.isNonEmptyString(newPassword)) errors.push('New Password is missing');
+  if (!validators.isNonEmptyString(newPassword2)) errors.push('Second New Password is missing');
+  if (!validators.isValidPassword(newPassword)) errors.push('New password not meeting requirement');
+  if (newPassword !== newPassword2) errors.push('New Password and confirmation do not match');
+
+  if (errors.length > 0) {
+    res.status(400).render('users/edit_profile', { user: user, passwordErrors: errors });
+  } else {
+    if (user && (await bcrypt.compare(currentPassword, user.hashedPassword))) {
+      const newHashedPassword = await bcrypt.hash(newPassword, 10);
+      await users.updateUser(user._id, { hashedPassword: newHashedPassword });
+      res.render('users/update_success');
+    } else {
+      res.status(400).render('users/edit_profile', {
+        user: user,
+        displayProfile: false,
+        passwordErrors: ['Current Password is not correct'],
+      });
+    }
+  }
+});
+
 module.exports = router;

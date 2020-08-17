@@ -19,7 +19,7 @@ module.exports = {
   },
 
   async updateUser(id, user) {
-    if (!validators.isNonEmptyString(id)) throw 'Please provide a user ID to update';
+    if (!validators.isValidUserId(id)) throw 'Please provide a user ID to update';
     if (!user) throw 'Please provide updated user information';
 
     // make sure the updated information firstName, lastName and email are valid, if provided.

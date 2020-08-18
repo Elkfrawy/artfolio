@@ -31,7 +31,7 @@ module.exports = {
 
     const userObj = await users.getUserById(artwork.userId);
     const username = userObj.firstName + ' ' + userObj.lastName;
-  
+
     const newArtwork = new models.Artwork({
       title: artwork.title,
       description: artwork.description,
@@ -79,9 +79,16 @@ module.exports = {
     return deletedArtwork;
   },
 
-  async getArtworkByTitle(title){
-    if (!validators.isNonEmptyString(title)) throw 'Please provide a title to search by';
-    return await models.Artwork.find({ title: new RegExp(title, 'i') }).exec();
+  async getArtworksByAny(query) {
+    if (!validators.isNonEmptyString(query)) throw 'Please provide a keyword to search by';
+    return await models.Artwork.find({
+      $or: [
+        { title: new RegExp(query, 'i') },
+        { description: new RegExp(query, 'i') },
+        { category: new RegExp(query, 'i') },
+        { username: new RegExp(query, 'i') },
+      ],
+    }).exec();
   },
 
   async getArtworksByKeyword(keyword) {

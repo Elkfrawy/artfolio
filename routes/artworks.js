@@ -34,7 +34,7 @@ router.get('/:id', async (req, res) => {
   try {
     const artwork = await artworkData.getArtworkById(req.params.id);
     const picture = await pictureData.getPicturesByArtworkId(req.params.id);
-    await res.render('artworks/single', { artwork: artwork }, { picture: picture });
+    res.render('artworks/single', { artwork: artwork, picture: picture });
   } catch (e) {
     res.status(500).send();
   }
@@ -152,8 +152,7 @@ router.delete('/:id', async (req, res) => {
 
   try {
     await artworkData.deleteArtwork(req.params.id);
-    //return to portfolio page
-    res.sendStatus(200);
+    res.redirect('/users/profile');
   } catch (e) {
     res.Status(500);
   }

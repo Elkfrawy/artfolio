@@ -109,8 +109,8 @@ async function main() {
 
     let directory;
     let files;
-    // upload animals
-    directory = path.join(__dirname, '.', 'seedPictures/animals');
+    //upload animals
+    directory = path.join(__dirname, '.', 'seedPictures/animal');
     files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {
       let file = files[i];
@@ -213,6 +213,24 @@ async function main() {
         (picData = await fs.readFileAsync(path.join(directory, file))),
         (contentType = 'image/jpeg'),
         (artworkId = artworkCharacter._id)
+      );
+    }
+
+    let artworkDress = await artworks.createArtwork(
+      'Dress',
+      'Dream Wedding',
+      'Sketch',
+      new Date('08/11/2020'),
+      miranda._id
+    );
+    directory = path.join(__dirname, '.', 'seedPictures/dress');
+    files = fs.readdirSync(directory);
+    for (i = 0; i < files.length; i++) {
+      let file = files[i];
+      await data.pictures.createPicture(
+        (picData = await fs.readFileAsync(path.join(directory, file))),
+        (contentType = 'image/jpeg'),
+        (artworkId = artworkDress._id)
       );
     }
 

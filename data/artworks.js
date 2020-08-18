@@ -3,6 +3,7 @@ const models = require('../models');
 const validators = require('./validators');
 const users = require('./users');
 const pics = require('./pictures');
+const { artworks } = require('.');
 
 module.exports = {
   async getArtworkById(id) {
@@ -21,22 +22,23 @@ module.exports = {
     return await models.Artwork.find({}).exec();
   },
 
-  async createArtwork(title, description, category, createDate, userId) {
-    if (!title) throw 'You must provide a title';
-    if (!category) throw 'You must provide a category';
-    if (!userId) throw 'You must provide a userId';
-    if (!description) throw 'You must provide a description';
-    if (!createDate) throw 'You must provide a createDate';
+  async createArtwork(artwork) {
+    if (!validators.isNonEmptyString(artwork.title)) throw 'You must provide a title';
+    if (!validators.isNonEmptyString(artwork.description)) throw 'You must provide a description';
+    if (!validators.isNonEmptyString(artwork.category)) throw 'You must provide a category';
+    if (!artwork.createDate) throw 'You must provide a createDate';
+    if (!artwork.userId) throw 'You must provide a userId';
 
-    const userObj = await users.getUserById(userId);
+    const userObj = await users.getUserById(artwork.userId);
     const username = userObj.firstName + ' ' + userObj.lastName;
+
     const newArtwork = new models.Artwork({
-      title,
-      description,
-      category,
-      createDate,
-      username,
-      userId,
+      title: artwork.title,
+      description: artwork.description,
+      category: artwork.category,
+      createDate: artwork.createDate,
+      userId: artwork.userId,
+      username: username,
     });
 
     const createdArtwork = await saveSafely(newArtwork);
@@ -47,7 +49,7 @@ module.exports = {
     if (!validators.isNonEmptyString(id)) throw 'Please provide an artwork ID';
     if (!artwork) throw 'Please provide an artwork to update with';
 
-    const oldArtwork = await models.Artwork.findById(id).exec(); // Don't forgot to call "exec()" for any query
+    const oldArtwork = await models.Artwork.findById(id).exec();
     if (!oldArtwork) throw `There is no artwork with the given ID: ${id}`;
 
     if (artwork.title) {

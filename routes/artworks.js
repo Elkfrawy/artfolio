@@ -6,6 +6,7 @@ const userData = data.users;
 const pictureData = data.pictures;
 const upload = require('../config/upload');
 var path = require('path');
+const fs = require('fs').promises;
 const validators = require('../data/validators');
 
 router.get('/', async (req, res) => {
@@ -33,78 +34,129 @@ router.get('/search', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const artwork = await artworkData.getArtworkById(req.params.id);
-    const picture = await pictureData.getPicturesByArtworkId(req.params.id);
-    res.render('artworks/single', { artwork: artwork, picture: picture });
+    const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
+    res.render('artworks/displaySingle', { artwork, pictures });
   } catch (e) {
-    res.status(500).send();
+    res.status(500).send('No Artwork with that ID found');
   }
 });
 
-router.post('/', async (req, res) => {
-  const newArtworkData = req.body;
-  if (!newArtworkData.title) {
-    res.status(400).json({ error: 'You must provide Artwork title' });
-    return;
-  }
-  if (!newArtworkData.createDate) {
-    res.status(400).json({ error: 'You must provide the date of artwork creation' });
-    return;
-  }
-  if (!newArtworkData.category) {
-    res.status(400).json({ error: 'You must provide artwork category' });
-    return;
-  }
-  //user not entering id, getting id from somewhere else
-  if (!newArtworkData.userId) {
-    res.status(400).json({ error: 'You must provide userId' });
-    return;
-  }
-  if (!newArtworkData.username) {
-    res.status(400).json({ error: 'You must provide user name' });
-    return;
-  }
-
-  if (!newArtworkData.pictures) {
-    newArtworkData.pictures = {};
-  }
-  try {
-    const { title, description, category, createDate, userId, pictures } = newArtworkData;
-    const newArtwork = await artworkData.createArtwork(title, description, category, createDate, userId, pictures);
-    res.redirect(`/artworks/${newArtwork._id}`);
-  } catch (e) {
-    res.status(500).send();
+//routes problem: cant use /new routes, redirects to /:id rotues for some reason
+//solution: /... will automatically be interpreted as an id, use /.../..
+router.get('/create/new', async (req, res) => {
+  if (!req.session.user) {
+    res.redirect('users/login');
+  } else {
+    try {
+      res.render('artworks/createSingle');
+    } catch (e) {
+      res.status(500).send();
+    }
   }
 });
 
-router.put('/:id', async (req, res) => {
-  try {
-    await artworkData.getArtworkById(req.params.id);
-  } catch (e) {
-    res.status(404).json({ error: 'Artwork not found' });
-    return;
+router.post('/create/new', upload.array('image'), async (req, res) => {
+  const { title, description, createDate, category } = req.body;
+
+  const errors = [];
+  if (!validators.isNonEmptyString(title)) {
+    errors.push('Missing artwork title');
+  }
+  if (!validators.isNonEmptyString(description)) {
+    errors.push('Missing artwork description');
+  }
+  if (!createDate) {
+    errors.push('Missing artwork creation date');
+  }
+  if (!validators.isNonEmptyString(category)) {
+    errors.push('Missing artwork category');
   }
 
-  const artworkInfo = req.body;
-  if (
-    !artworkInfo.title ||
-    !artworkInfo.description ||
-    !artworkInfo.category ||
-    !artworkInfo.createDate ||
-    !artworkInfo.numberOfViews ||
-    !artworkInfo.lastView
-  ) {
-    res.status(400).json({ error: 'You must Supply All fields' });
-    return;
-  }
+  const user = await userData.getUserById(req.session.user._id);
+  const userId = req.session.user._id;
+  console.log(userId);
+  //const username = `${user.firstName},${user.lastName}`;
 
-  try {
-    const updatedArtwork = await artworkData.updateArtwork(req.params.id, artworkInfo);
-    res.redirect(`/artworks/${updatedArtwork._id}`);
-  } catch (e) {
-    res.sendStatus(500);
+  let newArtwork = { title, description, category, createDate, userId: userId };
+
+  if (errors.length > 0) {
+    res.status(400).render('artworks/createSingle', { errors });
+  } else {
+    try {
+      newArtwork = await artworkData.createArtwork(newArtwork);
+
+      let pictures = [];
+      if (req.files) {
+        for (let i = 0; i < req.files.length; i++) {
+          let file = req.files[i];
+          let pic = await pictureData.createPicture(
+            (picData = await fs.readFile(path.join(__dirname, '..', 'uploads', file.filename))),
+            (contentType = file.mimetype),
+            (artworkId = newArtwork._id)
+          );
+          pictures.push(pic);
+        }
+      }
+      return res.render('artworks/DisplaySingle', { artwork: newArtwork, pictures: pictures });
+    } catch (e) {
+      res.status(500).render('artworks/CreateSingle', { errors: [e] });
+    }
   }
 });
 
+//fedde93e-e0e4-4822-87c5-fd5b39909e26
+
+router.get('/edit/:id', async (req, res) => {
+  if (req.session.user) {
+    try {
+      const artwork = await artworkData.getArtworkById(req.params.id);
+      const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
+      res.render('artworks/editSingle', { artwork, pictures });
+    } catch (e) {
+      res.status(500).send('No Artwork with that ID exists for editing');
+    }
+  } else {
+    res.send('Can not edit this artwork, user not logged-in');
+  }
+});
+
+router.post('/addimage/:id', upload.array('image'), async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('users/login');
+  }
+
+  let pictures = [];
+  if (req.files) {
+    for (let i = 0; i < req.files.length; i++) {
+      let file = req.files[i];
+      let pic = await pictureData.createPicture(
+        (picData = await fs.readFile(path.join(__dirname, '..', 'uploads', file.filename))),
+        (contentType = file.mimetype),
+        (artworkId = req.params.id)
+      );
+      pictures.push(pic);
+    }
+  }
+  try {
+    res.redirect(`/artworks/edit/${req.params.id}`);
+  } catch (e) {
+    res.status(500);
+  }
+});
+
+router.post('/deleteimage/:id', async (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('users/login');
+  }
+  const pic = await pictureData.getPictureById(req.params.id);
+  const artworkId = pic.artworkId;
+  try {
+    await pictureData.deletePicture(req.params.id);
+    return res.redirect(`/artworks/edit/${artworkId}`);
+  } catch (e) {
+    res.send('error deleting picture');
+  }
+});
 router.patch('/:id', async (req, res) => {
   const requestBody = req.body;
   let updatedObject = {};

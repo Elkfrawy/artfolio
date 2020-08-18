@@ -1,0 +1,66 @@
+<section class ="DisplaySingle-artwork">
+
+<div class = 'link-buttons'>
+    <button onclick="location.href='/home'" type="button">Home</button>
+</div>
+
+<section class = 'artwork-information'>
+    <h3>Edit Artwork</h3>
+    <form action = "/artworks/{{artwork.id}}" method = "POST">
+        <label>Title
+        <input type ='text' id ="title" name="title" placeholder ="title" value="{{artwork.title}}"/> 
+        </label>
+        <br>
+    <label>Description
+        <textarea id ="description" name="description" placeholder = "provide a description">{{artwork.description}}</textarea>
+    </label>
+    <br>
+    <label>Creation Date
+        <input type ='date' id ="createDate" name="createDate" placeholder = "creation date" value="{{artwork.createDate}}"/> 
+    </label>
+    <br>
+    <label>Category
+        <input type = 'text' name="category" placeholder = "artwork category" value="{{artwork.category}}"/>
+    </label>
+    <br>
+    <input type="hidden" name="_method" value="patch" />
+    <br>
+    <button class = "submit-b" type = "submit"> Update </button>
+    <br>
+    </form>
+</section>
+
+<div>
+    <br>
+<h6>Upload more pictures:</h6>
+<form action ="/artworks/addimage/{{artwork.id}}" method ="POST" enctype="multipart/form-data">
+    <input type="file" name="image" id="image" accept="image/*"multiple/> 
+    <button class = "upload-b" type = "submit">Upload</button>
+</form>
+
+
+</div>
+<section class= 'artwork-pictures' id = "picture-area">
+    {{#if pictures}}
+        {{#each pictures}}
+        <div>
+            <p>{{title}}</p>
+            <img src="{{pictureUrl}}"> 
+            <br>
+            <form action ="/artworks/deleteimage/{{_id}}" method = "POST">
+                <button class = "delete-b" type = "submit">Delete</button>
+            </form>
+        </div>
+        {{/each}}
+    {{/if}}
+</section>
+<br>
+<br>
+<div>
+    <form action = '/artworks/{{artwork.id}}' method = "POST">
+        <input type="hidden" name="_method" value="delete" />
+        <button class =" delete-artwork-b" type = "submit">DELETE ARTWORK</button>
+    </form>
+</div>
+
+</section>

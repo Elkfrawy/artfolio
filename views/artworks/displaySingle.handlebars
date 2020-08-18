@@ -1,0 +1,32 @@
+<main class ="DisplaySingle-artwork">
+
+<div class = 'link-buttons'>
+    <button onclick="location.href='/home'" type="button">Home</button>
+</div>
+<br> 
+<div class = "body">
+<div class = 'artwork-information'>
+    <h4>Art work title: {{artwork.title}}</h4>
+    <P>Artist Name: {{artwork.username}}</P>
+    <p>Art work Description: {{artwork.description}}</p>
+    <p>Creation Date: {{artwork.createDate}}</p>
+    <p>Category: {{artwork.category}}</p>
+</div>
+
+<div class= 'artwork-pictures'>
+    {{#if pictures}}
+        {{#each pictures}}
+        <div class = "images">
+            <br>
+            <br>
+            <p class = "image title">{{title}}</p>
+            <img class ="image" src="{{pictureUrl}}"> 
+        </div>
+        {{/each}}
+    {{/if}}
+</div>
+
+</div>
+
+
+</main>

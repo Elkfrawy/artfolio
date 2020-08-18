@@ -109,7 +109,7 @@ async function main() {
 
     let directory;
     let files;
-    //upload animals
+    // upload animals
     directory = path.join(__dirname, '.', 'seedPictures/animals');
     files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {

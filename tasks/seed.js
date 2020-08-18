@@ -11,20 +11,6 @@ async function main() {
   await conn.dropDatabase();
 
   try {
-    // let firstArtwork = await artworks.createArtwork(
-    //   'My first artwork',
-    //   'This was my first artwork ever!',
-    //   'drawing',
-    //   Date.now(),
-    //   '23523523',
-    //   []
-    // );
-
-    // await artworks.updateArtwork(firstArtwork._id, { title: 'A new title!' });
-
-    // const artworksResult = await artworks.getArtworksByKeyword('bla');
-    // console.log(artworksResult[0].title);
-
     let userPicDir = path.join(__dirname, '.', 'seedPictures/userPicture');
     const mirandaPic = await data.pictures.createPicture(
       (picData = await fs.readFileAsync(path.join(userPicDir, 'miranda.jpg'))),
@@ -99,13 +85,13 @@ async function main() {
     const jack = await users.createUser(jackInfo);
     const ayman = await users.createUser(aymanInfo);
 
-    let artworkAnimals = await artworks.createArtwork(
-      'Animals',
-      'Cute Animals',
-      'Color Pencil',
-      new Date('08/10/2020'),
-      miranda._id
-    );
+    let artworkAnimals = await artworks.createArtwork({
+      title: 'Animals',
+      description: 'Cute Animals',
+      category: 'Color Pencil',
+      createDate: new Date('08/10/2020'),
+      userId: miranda._id,
+    });
 
     let directory;
     let files;
@@ -123,13 +109,13 @@ async function main() {
     }
 
     //upload plants
-    let artworkPlants = await artworks.createArtwork(
-      'Plants',
-      'Various Plants',
-      'Color Pencil',
-      new Date('08/10/2020'),
-      miranda._id
-    );
+    let artworkPlants = await artworks.createArtwork({
+      title: 'Plants',
+      description: 'Various Plants',
+      category: 'Color Pencil',
+      createDate: new Date('08/10/2020'),
+      userId: miranda._id,
+    });
     directory = path.join(__dirname, '.', 'seedPictures/plants');
     files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {
@@ -142,13 +128,13 @@ async function main() {
     }
 
     //upload fruits
-    let artworkFruits = await artworks.createArtwork(
-      'Fruits',
-      'Nice fruits',
-      'Oil Painting',
-      new Date('08/10/2020'),
-      jack._id
-    );
+    let artworkFruits = await artworks.createArtwork({
+      title: 'Fruits',
+      description: 'Nice fruits',
+      category: 'Oil Painting',
+      createDate: new Date('08/10/2020'),
+      userId: jack._id,
+    });
     directory = path.join(__dirname, '.', 'seedPictures/fruits');
     files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {
@@ -161,13 +147,13 @@ async function main() {
     }
 
     //upload scenary
-    let artworkScenary = await artworks.createArtwork(
-      'Scenary',
-      'Beatiful places',
-      'Acrylic',
-      new Date('08/10/2020'),
-      ayman._id
-    );
+    let artworkScenary = await artworks.createArtwork({
+      title: 'Scenary',
+      description: 'Beatiful places',
+      category: 'Acrylic',
+      createDate: new Date('08/10/2020'),
+      userId: ayman._id,
+    });
     directory = path.join(__dirname, '.', 'seedPictures/scenary');
     files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {
@@ -180,13 +166,13 @@ async function main() {
     }
 
     //upload architecture
-    let artworkArchitect = await artworks.createArtwork(
-      'Architecture',
-      'Architecture around world',
-      'Sketch',
-      new Date('08/10/2020'),
-      ayman._id
-    );
+    let artworkArchitect = await artworks.createArtwork({
+      title: 'Architecture',
+      description: 'Architecture around world',
+      category: 'Sketch',
+      createDate: new Date('08/10/2020'),
+      userId: ayman._id,
+    });
     directory = path.join(__dirname, '.', 'seedPictures/architecture');
     files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {
@@ -198,13 +184,13 @@ async function main() {
       );
     }
 
-    let artworkCharacter = await artworks.createArtwork(
-      'Character',
-      'Cool girls',
-      'Digital Art',
-      new Date('08/11/2020'),
-      miranda._id
-    );
+    let artworkCharacter = await artworks.createArtwork({
+      title: 'Character',
+      description: 'Cool girls',
+      category: 'Digital Art',
+      createDate: new Date('08/11/2020'),
+      userId: miranda._id,
+    });
     directory = path.join(__dirname, '.', 'seedPictures/character');
     files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {
@@ -216,13 +202,13 @@ async function main() {
       );
     }
 
-    let artworkDress = await artworks.createArtwork(
-      'Dress',
-      'Dream Wedding',
-      'Sketch',
-      new Date('08/11/2020'),
-      miranda._id
-    );
+    let artworkDress = await artworks.createArtwork({
+      title: 'Dress',
+      description: 'Dream Wedding',
+      category: 'Sketch',
+      createDate: new Date('08/11/2020'),
+      userId: miranda._id,
+    });
     directory = path.join(__dirname, '.', 'seedPictures/dress');
     files = fs.readdirSync(directory);
     for (i = 0; i < files.length; i++) {

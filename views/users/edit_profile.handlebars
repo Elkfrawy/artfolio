@@ -1,0 +1,150 @@
+<div class="profile-well">
+
+    <div class="row">
+
+        <div class="col-sm-3">
+            <div class="text-center">
+                <img src="/pictures/content/{{user.userPictureId}}" class="avatar img-circle img-thumbnail"
+                    alt="avatar">
+                <h6>Upload a different photo...</h6>
+
+                <form action="/users/changeuserpic" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="image" id="image" accept="image/*" />
+                    <br>
+                    <br>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </div>
+                </form>
+            </div>
+            </hr><br>
+        </div>
+
+        <div class="col-sm-9">
+            <ul class="nav nav-tabs">
+                {{#if displayProfile}}
+                <li class="nav-item"><a href="#profile" data-toggle="tab" class="nav-link active">Profile </a></li>
+                <li class="nav-item"><a href="#password" data-toggle="tab" class="nav-link">Password</a></li>
+                {{else}}
+                <li class="nav-item"><a href="#profile" data-toggle="tab" class="nav-link">Profile</a></li>
+                <li class="nav-item"><a href="#password" data-toggle="tab" class="nav-link active">Password</a></li>
+                {{/if}}
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div {{#if displayProfile}} class="tab-pane fade show active" {{else}} class="tab-pane fade"
+                    {{/if}}id="profile">
+                    <form action="/users/updateprofile" method="POST">
+                        <label>First Name</label>
+                        <input type="text" value="{{user.firstName}}" name="firstName" class="full-width-input">
+                        <label>Last Name</label>
+                        <input type="text" value="{{user.lastName}}" name="lastName" class="full-width-input">
+                        <label>Email</label>
+                        <a>{{user.email}}</a><br>
+
+                        <label>Street Address
+                            <input type="text" name="address[streetAddress]" placeholder="street address"
+                                value="{{user.address.streetAddress}}" class="full-width-input" />
+                        </label>
+                        <label>City
+                            <input type="text" name="address[city]" placeholder="city" value="{{user.address.city}}"
+                                class="full-width-input" />
+                        </label><br>
+                        <label>State
+                            <input type="text" name="address[state]" placeholder="state" value="{{user.address.state}}"
+                                class="full-width-input" />
+                        </label>
+                        <label>Zip Code
+                            <input type="text" name="address[zipCode]" placeholder="zip code"
+                                value="{{user.address.zipCode}}" class="full-width-input" />
+                        </label>
+                        <label>Country
+                            <input type="text" name="address[country]" placeholder="country"
+                                value="{{user.address.country}}" class="full-width-input" />
+                        </label><br />
+                        {{#if (isMale user.gender)}}
+                        <label> Female
+                            <input type="radio" name="gender" value="Female" />
+                        </label>
+                        <label> Male
+                            <input type="radio" name="gender" value="Male" checked />
+                        </label>
+                        <label> Other
+                            <input type="radio" name="gender" value="Other" />
+                        </label>
+
+                        {{else}}
+                        {{#if (isFemale user.gender)}}
+                        <label> Female
+                            <input type="radio" name="gender" value="Female" checked />
+                        </label>
+                        <label> Male
+                            <input type="radio" name="gender" value="Male" /> </label>
+                        <label> Other
+                            <input type="radio" name="gender" value="Other" />
+                        </label>
+                        {{else}}
+                        <label> Female
+                            <input type="radio" name="gender" value="Female" />
+                        </label>
+                        <label> Male
+                            <input type="radio" name="gender" value="Male" /> </label>
+                        <label> Other
+                            <input type="radio" name="gender" value="Other" checked />
+                        </label>
+
+                        {{/if}}
+                        {{/if}}
+                        <br>
+                        <label>Birthday
+                            <input type="date" name="birthday" value={{dateFormat user.birthday "YYYY-MM-DD" true}}>
+                        </label>
+                        <br />
+                        <label for="biography">
+                            Biography
+                        </label>
+                        <textarea id="biography" name="biography" rows="3"
+                            placeholder="Tell us something about yourself"
+                            class="full-width-input">{{user.biography}}</textarea>
+
+                        {{#if profileErrors}}
+                        <ul class="text-danger">
+                            {{#each profileErrors}}
+                            <li>{{this}}</li>
+                            {{/each}}
+                        </ul>
+                        {{/if}}
+
+                        <input type="hidden" name="_method" value="patch" />
+                        <div>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+                <div {{#if displayProfile}} class="tab-pane fade" {{else}} class="tab-pane fade show active"
+                    {{/if}}id="password">
+                    <form action="/users/updatepassword" method="POST">
+                        <label>Current Password</label>
+                        <input type="text" name="currentPassword" class="full-width-input" />
+                        <label>New Password</label>
+                        <input type="text" name="newPassword" class="full-width-input" />
+                        <label>Verify New Password</label>
+                        <input type="text" name="newPassword2" class="full-width-input"
+                            placeholder="Enter your password second time" />
+
+                        {{#if passwordErrors}}
+                        <ul class="text-danger">
+                            {{#each passwordErrors}}
+                            <li>{{this}}</li>
+                            {{/each}}
+                        </ul>
+                        {{/if}}
+                        <input type="hidden" name="_method" value="patch" />
+                        <div>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -44,6 +44,13 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(async (req, res, next) => {
+  if (req.body._method) {
+    req.method = req.body._method;
+  }
+  next();
+});
+
 const handlebarsInst = ehb.create({
   defaultLayout: 'main',
   // Specify helpers which are only registered on this instance.
@@ -56,6 +63,15 @@ const handlebarsInst = ehb.create({
   },
   partialsDir: ['views/partials/'],
   handlebars: allowInsecurePrototypeAccess(Handlebars),
+});
+
+handlebarsInst.handlebars.registerHelper('dateFormat', require('handlebars-dateformat'));
+handlebarsInst.handlebars.registerHelper('isMale', function (value) {
+  return value == 'Male';
+});
+
+handlebarsInst.handlebars.registerHelper('isFemale', function (value) {
+  return value == 'Female';
 });
 
 app.engine('handlebars', handlebarsInst.engine);

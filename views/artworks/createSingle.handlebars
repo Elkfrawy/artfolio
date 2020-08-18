@@ -1,32 +1,40 @@
 <section class ="CreateSingle-artwork">
-<h2>Create Your Artwork</h2>
+
 <div class = 'link-buttons'>
     <button onclick="location.href='/home'" type="button">Home</button>
 </div>
-
-<form method = "POST" enctype="multipart/form-data">
-    <label>title
-        <input type ='text' id ="title" name="title" placeholder ="title" value="{{artwork.title}}"/> 
+<h2>Create Your Artwork</h2>
+<br>
+<div class="create-form">
+ <form class = "create-new-form" method = "POST" enctype="multipart/form-data">
+    <label>Title
+        <input class ="input" type ='text' id ="title" name="title" placeholder ="Title" value="{{artwork.title}}"/> 
     </label>
-    <label>description
-        <textarea id ="description" name="description" placeholder = "provide a description">{{artwork.description}}</textarea>
+    <br>
+    <label>Description
+        <textarea class ="input" id ="description" name="description" placeholder = "Provide a description">{{artwork.description}}</textarea>
     </label>
+    <br>
     <label>Creation Date
-        <input type ='date' id ="createDate" name="createDate" placeholder = "creation date" value="{{artwork.createDate}}"/> 
+        <input class ="input" type ='date' id ="createDate" name="createDate" placeholder = "creation date" value="{{artwork.createDate}}"/> 
     </label>
+    <br>
     <label>Category
-        <input type = 'text' name="category" placeholder = "artwork category" value="{{artwork.category}}"/>
+        <input class ="input"type = 'text' name="category" placeholder = "artwork category" value="{{artwork.category}}"/>
     </label>
+    <br>
     <label>Upload multiple images
         <input type="file" name="image" id="image" accept="image/*" multiple/>
     </label>
     {{!-- <label>Upload single image
         <input type="file" accept="image/*" single>
     </label> --}}
+<br>
+<button class = "submit-b" type="submit">Submit</button>
 
-<button type="submit">Submit</button>
+</form>   
+</div>
 
-</form>
 {{#if errors}}
 <ul class="text-danger">
     {{#each errors}}

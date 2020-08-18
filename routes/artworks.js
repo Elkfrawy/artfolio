@@ -9,7 +9,6 @@ const upload = require('../config/upload');
 var path = require('path');
 const fs = require('fs').promises;
 
-
 router.get('/', async (req, res) => {
   
   try {
@@ -21,6 +20,7 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:id', async (req, res) => {
+
       try {
         const artwork = await artworkData.getArtworkById(req.params.id);
         const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
@@ -196,8 +196,7 @@ router.delete('/:id', async (req, res) => {
 
   try {
     await artworkData.deleteArtwork(req.params.id);
-    //return to portfolio page
-    res.sendStatus(200);
+    res.redirect('/users/profile');
   } catch (e) {
     res.Status(500);
   }

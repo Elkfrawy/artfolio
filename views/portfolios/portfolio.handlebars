@@ -1,0 +1,98 @@
+<section class="gallery-block cards-gallery">
+    <div class="total-display">
+        <div class="artfolio-display">
+            <div class="heading">
+                <h2>{{user.firstName}}'s Artfolio</h2>
+            </div>
+            <div class="row">
+                {{#if authenticated}}
+                {{#if artworks}}
+                {{#each artworks}}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border-0 transform-on-hover">
+                        <a class="lightbox" href="#">
+                            <img src="{{pictures.[0].pictureUrl}}" alt="Card Image" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h6><a href="/artworks/{{_id}}">{{title}}</a></h6>
+                            <p class="text-muted card-text">{{description}}</p>
+                            <form action="/artworks/{{_id}}" method="POST">
+                                <input type="hidden" name="_method" value="delete" />
+                                <button type="submit" class="pic-edit-btn"
+                                    onclick="return confirm('Are you sure you want to delete this artwork?');"><i
+                                        class="fa fa-trash"></i></button>
+                            </form>
+                            <form action="/artworks/{{_id}}" method="get">
+                                <button type="submit" class="pic-edit-btn"><i class="fa fa-edit"></i></button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                {{/if}}
+                {{else}}
+
+                {{#if artworks}}
+                {{#each artworks}}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card border-0 transform-on-hover">
+                        <a class="lightbox" href="/artworks/{{_id}}">
+                            <img src="{{pictures.[0].pictureUrl}}" alt="Card Image" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <h6><a href="/artworks/{{_id}}">{{title}}</a></h6>
+                            <p class="text-muted card-text">{{description}}</p>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+                {{/if}}
+
+                {{/if}}
+            </div>
+        </div>
+        <div class="user-info">
+
+            <div class="card border-0">
+                {{#if user.userPictureId}}
+                <a>
+                    <img src="/pictures/content/{{user.userPictureId}}" alt="Card Image" class="card-img-top">
+                </a>
+                {{/if}}
+                <div class="card-body">
+                    <h2>{{ user.firstName }} {{ user.lastName}}</h2>
+                    <h6>Bio</h6>
+                    <p>{{user.biography}}</p>
+                    <a class="info-tag">Gender: </a>
+                    <a>{{ user.gender }}</a><br>
+                    <a class="info-tag">Email: </a> <a>{{ user.email }}</a><br>
+                    {{#if user.websiteUrl}}
+                    <a class="info-tag">Website: </a>
+                    <a href={{user.websiteUrl}} class="personal-link">{{user.websiteUrl}}</a><br>
+                    {{/if}}
+                    {{#if authenticated}}
+                    <a class="info-tag">Address </a>
+                    <ul class="info-addr">
+                        <li>Street Address: {{user.address.streetAddress}}</li>
+                        <li>City: {{user.address.city}}</li>
+                        <li>State: {{user.address.state}}</li>
+                        <li>Zip Code: {{user.address.zipCode}}</li>
+                    </ul>
+                    <a class="info-tag">Birthday: </a> <a>{{dateFormat user.birthday "YYYY-MM-DD" true}}</a><br>
+
+                    {{/if}}
+                </div>
+                {{#if authenticated}}
+                <form action="/users/edit" method="get" class="edit-profile">
+                    <button type="submit" class="edit-btn">Edit</button>
+                </form><br>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.js"></script>
+<script>
+    baguetteBox.run('.cards-gallery', { animation: 'slideIn' });
+</script>

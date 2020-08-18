@@ -4,12 +4,12 @@
     <section>
         <h2><a href="/artworks/{{_id}}">{{title}}</a></h2>
         <ul>
-            <li>{{username}}</li>
+            <li>Artist Name: {{username}}</li>
             {{#if description.length}}
-            <li>{{description}}</li>
+            <li>Description: {{description}}</li>
             {{/if}}
-            <li>{{createDate}}</li>
-            <li>{{category}}</li>
+            <li>Create Date: {{createDate}}</li>
+            <li>Category: {{category}}</li>
         </ul>
     </section>
     {{/each}}

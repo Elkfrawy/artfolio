@@ -52,6 +52,9 @@ const handlebarsInst = ehb.create({
 
       return new Handlebars.SafeString(JSON.stringify(obj));
     },
+    divisibleBy: (num, divideBy) => {
+      return (num + 1) % divideBy == 0;
+    },
   },
   partialsDir: ['views/partials/'],
   handlebars: allowInsecurePrototypeAccess(Handlebars),

@@ -6,6 +6,7 @@ const userData = data.users;
 const pictureData = data.pictures;
 const upload = require('../config/upload');
 var path = require('path');
+const validators = require('../data/validators');
 
 router.get('/', async (req, res) => {
   try {
@@ -13,6 +14,19 @@ router.get('/', async (req, res) => {
     res.render('artworks/all', { artworks: artworksList });
   } catch (e) {
     res.status(500).send();
+  }
+});
+
+router.get('/search', async (req, res) => {
+  try {
+    if (!validators.isNonEmptyString(req.query.query)) {
+      res.status(400).render('home/search', { error: 'You must provide a query to search with' });
+    } else {
+      const artworks = await artworkData.getArtworksByAny(req.query.query);
+      res.render('home/search', { artworks, emptyMessage: "Couldn't find any artworks for the given keyword!" });
+    }
+  } catch (e) {
+    res.status(500).send({ error: e });
   }
 });
 

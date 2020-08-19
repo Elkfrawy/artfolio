@@ -65,7 +65,7 @@ async function main() {
     let aymanInfo = {
       firstName: 'Ayman',
       lastName: 'Elkfrawy',
-      email: 'Aelkfraw@stevens.edu',
+      email: 'aelkfraw@stevens.edu',
       gender: 'Male',
       address: {
         streetAddress: '20 15st Stt',

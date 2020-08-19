@@ -26,6 +26,26 @@
     {{/if}}
 </div>
 
+{{#if artwork.comments}}
+<div id="commentsContainer">
+    {{#each artwork.comments}}
+    <div>
+        <p>{{comment}}</p>
+        <p>By <a href="/users/portfolio/{{userId}}">{{userName}}</a></p>
+        {{#if (equals userId ../session.user._id) }}
+            <a href="/artworks/{{../artwork._id}}/comments/{{_id}}" class="deleteComment">Delete</a>
+        {{/if}}
+    </div>
+    {{/each}}
+</div>
+{{/if}}
+{{#if session.user}}
+    <form action="/artworks/{{artwork._id}}/comments" method="post" id="commentForm">
+        <textarea name="comment" id="comment" cols="30" rows="5" placeholder="Write comment about this artwork"></textarea>
+        <button type="submit" id="submitComment">Comment</button>
+    </form>
+{{/if}}
+<div class="alert alert-danger" id='commentError'></div>
 </div>
 
 

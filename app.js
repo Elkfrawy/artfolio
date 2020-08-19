@@ -39,6 +39,16 @@ app.use(async (req, res, next) => {
   next();
 });
 
+const forbiddenRoutes = (req,res, next)=>{
+  if(!req.session.user){
+    res.render('home/accessDenied');
+  }else{
+    next();
+  }
+}
+app.use('/artworks/create',forbiddenRoutes);
+app.use('/artworks/edit/:id',forbiddenRoutes);
+
 app.use(function (req, res, next) {
   res.locals.session = req.session;
   next();

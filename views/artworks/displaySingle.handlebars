@@ -1,32 +1,47 @@
-<main class ="DisplaySingle-artwork">
-
-<div class = 'link-buttons'>
-    <button onclick="location.href='/home'" type="button">Home</button>
+<div>
+<div class="card" style="width: 50rem;">
+    <div class="card-header">
+      <a href="/users/portfolio/{{userId}}" data-size="1600x1067">
+     <h5 class="card-title">Artist: {{artwork.username}}</h5>
+      </a>
+    </div>
+  <div class="card-body">
+    <h5 class="card-title">Title</h5>
+    <p class="card-text">{{artwork.title}}</p>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Description</h5>
+    <p class="card-text">{{artwork.description}}</p>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Creation Date</h5>
+    <p class="card-text">{{artwork.createDate}}</p>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Category</h5>
+    <p class="card-text">{{artwork.category}}</p>
+  </div>
 </div>
-<br> 
-<div class = "body">
-<div class = 'artwork-information'>
-    <h4>Art work title: {{artwork.title}}</h4>
-    <P>Artist Name: {{artwork.username}}</P>
-    <p>Art work Description: {{artwork.description}}</p>
-    <p>Creation Date: {{artwork.createDate}}</p>
-    <p>Category: {{artwork.category}}</p>
-</div>
+<br>
+<br>
 
-<div class= 'artwork-pictures'>
-    {{#if pictures}}
+<div class = "row">
+    <div class = "col-md-12">
+    <div id = "mdb-lightbox-ui"></div>
+        <div class = "mdb-lightbox">
+        {{#if pictures}}
         {{#each pictures}}
-        <div class = "images">
-            <br>
-            <br>
-            <p class = "image title">{{title}}</p>
-            <img class ="image" src="{{pictureUrl}}"> 
-        </div>
+        <figure class="col-md-4"> 
+            <h3 class="text-center my-3">{{title}}</h3>
+            <a href="{{pictureUrl}}" data-size="1600x1067">
+                <img alt="picture" src={{pictureUrl}} class="img-fluid">
+            </a>
+            
+        </figure>
         {{/each}}
-    {{/if}}
+        {{/if}}
+        </div>
+    </div>
 </div>
-
 </div>
-
-
-</main>
+  <script src= "/public/js/MDBlightbox.js"></script>

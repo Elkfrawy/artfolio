@@ -1,48 +1,53 @@
-<section class ="CreateSingle-artwork">
 
-<div class = 'link-buttons'>
-    <button onclick="location.href='/home'" type="button">Home</button>
-</div>
-<h2>Create Your Artwork</h2>
-<br>
-<div class="create-form">
- <form class = "create-new-form" method = "POST" enctype="multipart/form-data">
-    <label>Title
-        <input class ="input" type ='text' id ="title" name="title" placeholder ="Title" value="{{artwork.title}}"/> 
-    </label>
-    <br>
-    <label>Description
-        <textarea class ="input" id ="description" name="description" placeholder = "Provide a description">{{artwork.description}}</textarea>
-    </label>
-    <br>
-    <label>Creation Date
-        <input class ="input" type ='date' id ="createDate" name="createDate" placeholder = "creation date" value="{{artwork.createDate}}"/> 
-    </label>
-    <br>
-    <label>Category
-        <input class ="input"type = 'text' name="category" placeholder = "artwork category" value="{{artwork.category}}"/>
-    </label>
-    <br>
-    <label>Upload multiple images
-        <input type="file" name="image" id="image" accept="image/*" multiple/>
-    </label>
-    {{!-- <label>Upload single image
-        <input type="file" accept="image/*" single>
-    </label> --}}
-<br>
-<button class = "submit-b" type="submit">Submit</button>
+<div class="container">
 
-</form>   
-</div>
+<div class="row justify-content-center">
+<div class="col-md-6">
+<div class="card">
 
-{{#if errors}}
-<ul class="text-danger">
+<header class="card-header">
+	<h4 class="card-title mt-2">Create Your Artwork</h4>
+</header>
+<article class="card-body">
+
+<form class ="create-new-form" method ="POST" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" class="form-control" id="title" name = "title" value="{{artwork.title}}" required>
+    <small id="title-help" class="form-text text-muted">Choose a title that ties all your images together</small>
+  </div>
+  <div class="form-group">
+    <label for="Description">Description</label>
+    <textarea class="form-control" id="Description" name = "description" rows="3">{{artwork.description}}</textarea>
+  </div>
+  <div class="form-group">
+    <label for="createDate">Creation Date</label>
+     <input type="date" class="form-control" id="createDate" name = "createDate" value="{{artwork.createDate}}">
+     <small id="title-help" class="form-text text-muted">Pick the date when your image(s) was created</small>
+  </div>
+  <div class="form-group">
+    <label for="category">Category</label>
+    <input type="text" class="form-control" id="category" name = "category" value="{{artwork.category}}">
+  </div>
+  <div class="form-group">
+    <label for="image">Upload single/multiple Images</label>
+    <input type="file" class="form-control-file" name="image" id="image" accept="image/*" multiple/>
+  </div>
+  <div class="form-group">
+  <button type="submit" class="btn btn-success">Submit</button>
+  </div>
+  {{#if errors}}
+    <ul class="text-danger">
     {{#each errors}}
     <li>
     {{this}}   
     </li>
     {{/each}}
-    
 </ul>
 {{/if}} 
-</section>
+</form>
+
+</article>
+</div>
+</div> 
+</div>

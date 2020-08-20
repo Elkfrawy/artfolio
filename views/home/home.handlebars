@@ -7,11 +7,15 @@
           <h2>{{title}}</h2>
           <div class="carousel-item row no-gutters active">
             {{#each artworks}}
-              <div class="col-3 float-left"><img class="img-fluid" src="{{pictures.[0].pictureUrl}}"></div>
               {{#if (divisibleBy @index 4)}}
                 </div>
                 <div class="carousel-item row no-gutters">
               {{/if}}
+              <div class="col-3 float-left">
+                <img class="img-fluid" src="{{pictures.[0].pictureUrl}}">
+                <a href="/artworks/{{_id}}" class="stretched-link"></a>
+              </div>
+              
             {{/each}}
           </div>
         <a class="carousel-control-prev" href="#section_{{@index}}" role="button" data-slide="prev">

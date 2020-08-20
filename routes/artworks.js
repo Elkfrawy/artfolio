@@ -31,8 +31,6 @@ router.get('/search', async (req, res) => {
   }
 });
 
-
-
 //routes problem: cant use /new routes, redirects to /:id rotues for some reason
 //solution: /... will automatically be interpreted as an id, use /.../..
 //put get id route last
@@ -100,7 +98,7 @@ router.post('/create', upload.array('image'), async (req, res) => {
 router.get('/edit/:id', async (req, res) => {
   if (req.session.user) {
     try {
-      const userId = req.session.user._id; 
+      const userId = req.session.user._id;
       const artwork = await artworkData.getArtworkById(req.params.id);
       const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
       res.render('artworks/editSingle', { artwork, pictures, userId });
@@ -150,27 +148,28 @@ router.post('/deleteimage/:id', async (req, res) => {
   }
 });
 
-router.post('/changeImageTitle/:id', async(req,res)=>{
+router.post('/changeImageTitle/:id', async (req, res) => {
   const pic = await pictureData.getPictureById(req.params.id);
   const artworkId = pic.artworkId;
-  const newTitle = req.body.title; 
- 
-  if (!validators.isNonEmptyString(newTitle)) {
-    res.redirect(`/artworks/edit/${artworkId}`)
-  }
-  
-    await pictureData.updatePictureTitle(req.params.id, newTitle);
-    return res.redirect(`/artworks/edit/${artworkId}`);
-  
-});
+  const newTitle = req.body.title;
 
+  if (!validators.isNonEmptyString(newTitle)) {
+    res.redirect(`/artworks/edit/${artworkId}`);
+  }
+
+  await pictureData.updatePictureTitle(req.params.id, newTitle);
+  return res.redirect(`/artworks/edit/${artworkId}`);
+});
 
 router.get('/:id', async (req, res) => {
   try {
     const artwork = await artworkData.getArtworkById(req.params.id);
     const userId = artwork.userId;
     const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
-    res.render('artworks/displaySingle', { artwork, pictures, userId});
+    // Update views
+    await artworkData.recordNewView(req.params.id);
+
+    res.render('artworks/displaySingle', { artwork, pictures, userId });
   } catch (e) {
     res.status(500).send('No Artwork with that ID found');
   }

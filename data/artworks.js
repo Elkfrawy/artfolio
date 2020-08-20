@@ -4,6 +4,7 @@ const validators = require('./validators');
 const users = require('./users');
 const pics = require('./pictures');
 const { artworks } = require('.');
+const Artwork = require('../models/Artwork');
 
 module.exports = {
   async getArtworkById(id) {
@@ -76,6 +77,7 @@ module.exports = {
   async deleteArtwork(id) {
     if (!validators.isNonEmptyString(id)) throw 'Please provide an id to delete';
     const deletedArtwork = await models.Artwork.findByIdAndDelete(id).exec();
+    await pics.deletePicturesByArtworkId(id);
     return deletedArtwork;
   },
 
@@ -152,6 +154,13 @@ module.exports = {
     } else {
       throw "Didn't find a comment with the given ID to delete";
     }
+  },
+
+  async recordNewView(artworkId) {
+    if (!validators.isNonEmptyString(artworkId)) throw 'Please provide artworkId for the comment to delete';
+
+    const artwork = await this.getArtworkById(artworkId);
+    await Artwork.findByIdAndUpdate(artworkId, { $inc: { numberOfViews: 1 }, $set: { lastView: Date.now() } });
   },
 };
 

@@ -30,7 +30,6 @@
           errorMessages.show();
           errorMessages.text(responseMessage.error);
         } else {
-          errorMessages.hide();
           const { _id, comment, userId, userName } = responseMessage.createdComment;
           const artworkId = responseMessage.artworkId;
           const commentsContainer = $('#commentsContainer');
@@ -82,23 +81,33 @@
   }
   registerDeleteEvent();
 
-  // Forms XXXX validation
-  const myForm = $('#myformId');
-  myForm.submit(function (event) {
-    errorMessages.empty();
-    const hasError = false;
-
-    // For each field do validation
-    const commentText = $('#comment').val();
-    if (commentText === undefined || commentText === '') {
-      errorMessages.append('<li>You must provide text</li>');
-      hasError = true;
-    } // and so on with other fields
-
-    if (hasError) {
-      event.preventDefault();
-      return false;
-    }
-    return true;
+  // Validate Register form
+  // .validate will use the validations in the HTML itself like required, minLength...
+  // and in addition it will validate the custom validations below
+  $('#register').validate({
+    rules: {
+      firstName: {
+        lettersonly: true,
+      },
+      lastName: {
+        lettersonly: true,
+      },
+      password: {
+        minlength: 8,
+      },
+      passwordConfirm: {
+        minlength: 8,
+        equalTo: '#password',
+      },
+    },
+    // All rules has build in message, but you can customize these messages with the following section
+    messages: {
+      passwordConfirm: {
+        equalTo: "Password and its confirmation don't match",
+      },
+    },
   });
+
+  // If we don't have custom validations we can use the following line to use only the validations on the HTML elements
+  $('#login').validate();
 })(jQuery);

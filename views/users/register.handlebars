@@ -8,7 +8,7 @@
 	<h4 class="card-title mt-2">Registration</h4>
 </header>
 <article class="card-body">
-<form method="POST">
+<form method="POST" id="register">
 	<div class="form-row">
 		<div class="col form-group">
 			<label for="firstName">First name </label>   
@@ -16,12 +16,12 @@
 		</div> <!-- form-group end.// -->
 		<div class="col form-group">
 			<label for="lastName">Last name</label>
-		  	<input type="text" id="lastName" class="form-control" placeholder="" name="lastName" value="{{user.lastName}}">
+		  	<input type="text" id="lastName" class="form-control" placeholder="" name="lastName" value="{{user.lastName}}" required>
 		</div> <!-- form-group end.// -->
 	</div> <!-- form-row end.// -->
 	<div class="form-group">
 		<label for="email">Email address</label>
-		<input type="email" id="email" class="form-control" placeholder="" name="email" value="{{user.email}}">
+		<input type="email" id="email" class="form-control" placeholder="" name="email" value="{{user.email}}" required>
 		<small class="form-text text-muted">We'll never share your email with anyone else.</small>
 	</div> <!-- form-group end.// -->
 	<div class="form-group">
@@ -40,11 +40,11 @@
 	</div> <!-- form-group end.// -->
 	<div class="form-group">
 		<label for="password">Password</label>
-	    <input class="form-control" id="password" type="password" name="password">
+	    <input class="form-control" id="password" type="password" name="password" required>
 	</div> <!-- form-group end.// -->  
   	<div class="form-group">
 		<label for="confirmPassword">Confirm Password</label>
-	    <input class="form-control" id="confirmPassword" type="password" name="passwordConfirm">
+	    <input class="form-control" id="confirmPassword" type="password" name="passwordConfirm" required>
 	</div> <!-- form-group end.// -->  
     <div class="form-group">
         <button type="submit" class="btn btn-primary btn-block"> Register  </button>

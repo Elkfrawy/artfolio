@@ -8,14 +8,14 @@
 	<h4 class="card-title mt-2">Login</h4>
 </header>
 <article class="card-body">
-<form method="POST">
+<form method="POST" id="login">
 	<div class="form-group">
 		<label for="email">Email address</label>
-		<input type="email" id="email" class="form-control" placeholder="" name="email" value="{{email}}">
+		<input type="email" id="email" class="form-control" placeholder="" name="email" value="{{email}}" required>
 	</div> <!-- form-group end.// -->
 	<div class="form-group">
 		<label for="password">Password</label>
-	    <input class="form-control" id="password" type="password" name="password" >
+	    <input class="form-control" id="password" type="password" name="password" required minlength="8">
 	</div> <!-- form-group end.// -->  
   <div class="form-group">
       <button type="submit" class="btn btn-primary btn-block"> Login  </button>

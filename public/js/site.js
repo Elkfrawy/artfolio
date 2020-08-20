@@ -34,13 +34,20 @@
           const commentsContainer = $('#commentsContainer');
           commentsContainer.append(
             $(
-              `<div>
-              <p>${comment}</p>
-              <p>By <a href="/users/portfolio/${userId}">${userName}</a></p>
-              <a href="/artworks/${artworkId}/comments/${_id}" class="deleteComment">Delete</a>
-            </div>`
+              `
+        <div class="media my-4">
+          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          <div class="media-body">
+            <h5 class="mt-0"> <a href="/users/portfolio/${userId}">${userName}</a></h5>
+            ${comment}
+            <br>
+            <a href="/artworks/${artworkId}/comments/${_id}" class="deleteComment btn btn-danger btn-sm my-2">Delete</a>
+          </div>
+        </div>
+        `
             )
           );
+          $('#comment').val('');
           registerDeleteEvent();
         }
       });
@@ -63,7 +70,7 @@
             commentError.text(responseMessage.error);
           } else {
             commentError.hide();
-            deleteBut.parent().remove();
+            deleteBut.parent().parent().remove();
           }
         });
 

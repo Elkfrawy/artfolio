@@ -8,6 +8,19 @@ module.exports = {
     return img;
   },
 
+  async updatePictureTitle(id, newTitle) {
+    if (!validators.isNonEmptyString(id)) throw 'Please provide an picture ID';
+    if (!newTitle) throw 'Please provide an picture title to update with';
+
+    const oldPicture = await models.Picture.findById(id).exec();
+    if (!oldPicture) throw `There is no picture with that given ID: ${id}`;
+
+   oldPicture.title = newTitle;
+    
+  return await saveSafely(oldPicture); // Save the the changes
+  },
+
+
   async getPictureById(picId) {
     if (!validators.isNonEmptyString(picId)) throw 'Image ID must be non-empty string';
 
@@ -16,6 +29,7 @@ module.exports = {
 
     return pic;
   },
+
 
   async deletePicture(picId) {
     if (!validators.isNonEmptyString(picId)) throw 'Image ID must be non-empty string';
@@ -37,3 +51,10 @@ module.exports = {
     return await models.Picture.find({ artworkId: { $in: artworkIds } }, '-data').exec();
   },
 };
+async function saveSafely(document) {
+  try {
+    return await document.save();
+  } catch (e) {
+    throw e.message; // Rethrow only the message instead of the whole stack trace
+  }
+}

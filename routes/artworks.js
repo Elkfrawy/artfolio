@@ -31,21 +31,14 @@ router.get('/search', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
-  try {
-    const artwork = await artworkData.getArtworkById(req.params.id);
-    const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
-    res.render('artworks/displaySingle', { artwork, pictures });
-  } catch (e) {
-    res.status(500).send('No Artwork with that ID found');
-  }
-});
+
 
 //routes problem: cant use /new routes, redirects to /:id rotues for some reason
 //solution: /... will automatically be interpreted as an id, use /.../..
-router.get('/create/new', async (req, res) => {
+//put get id route last
+router.get('/create', async (req, res) => {
   if (!req.session.user) {
-    res.redirect('users/login');
+    res.redirect('/users/login');
   } else {
     try {
       res.render('artworks/createSingle');
@@ -55,7 +48,7 @@ router.get('/create/new', async (req, res) => {
   }
 });
 
-router.post('/create/new', upload.array('image'), async (req, res) => {
+router.post('/create', upload.array('image'), async (req, res) => {
   const { title, description, createDate, category } = req.body;
 
   const errors = [];
@@ -72,15 +65,13 @@ router.post('/create/new', upload.array('image'), async (req, res) => {
     errors.push('Missing artwork category');
   }
 
-  const user = await userData.getUserById(req.session.user._id);
   const userId = req.session.user._id;
-  console.log(userId);
-  //const username = `${user.firstName},${user.lastName}`;
+  //console.log(userId);
 
   let newArtwork = { title, description, category, createDate, userId: userId };
 
   if (errors.length > 0) {
-    res.status(400).render('artworks/createSingle', { errors });
+    res.status(400).render('artworks/createSingle', { errors, artwork: newArtwork });
   } else {
     try {
       newArtwork = await artworkData.createArtwork(newArtwork);
@@ -104,14 +95,15 @@ router.post('/create/new', upload.array('image'), async (req, res) => {
   }
 });
 
-//fedde93e-e0e4-4822-87c5-fd5b39909e26
+//678287e1-5bd4-4e80-81bd-57530ce41949
 
 router.get('/edit/:id', async (req, res) => {
   if (req.session.user) {
     try {
+      const userId = req.session.user._id; 
       const artwork = await artworkData.getArtworkById(req.params.id);
       const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
-      res.render('artworks/editSingle', { artwork, pictures });
+      res.render('artworks/editSingle', { artwork, pictures, userId });
     } catch (e) {
       res.status(500).send('No Artwork with that ID exists for editing');
     }
@@ -122,7 +114,7 @@ router.get('/edit/:id', async (req, res) => {
 
 router.post('/addimage/:id', upload.array('image'), async (req, res) => {
   if (!req.session.user) {
-    return res.redirect('users/login');
+    return res.redirect('/users/login');
   }
 
   let pictures = [];
@@ -157,6 +149,33 @@ router.post('/deleteimage/:id', async (req, res) => {
     res.send('error deleting picture');
   }
 });
+
+router.post('/changeImageTitle/:id', async(req,res)=>{
+  const pic = await pictureData.getPictureById(req.params.id);
+  const artworkId = pic.artworkId;
+  const newTitle = req.body.title; 
+ 
+  if (!validators.isNonEmptyString(newTitle)) {
+    res.redirect(`/artworks/edit/${artworkId}`)
+  }
+  
+    await pictureData.updatePictureTitle(req.params.id, newTitle);
+    return res.redirect(`/artworks/edit/${artworkId}`);
+  
+});
+
+
+router.get('/:id', async (req, res) => {
+  try {
+    const artwork = await artworkData.getArtworkById(req.params.id);
+    const userId = artwork.userId;
+    const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
+    res.render('artworks/displaySingle', { artwork, pictures, userId});
+  } catch (e) {
+    res.status(500).send('No Artwork with that ID found');
+  }
+});
+
 router.patch('/:id', async (req, res) => {
   const requestBody = req.body;
   let updatedObject = {};

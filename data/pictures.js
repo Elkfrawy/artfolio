@@ -15,11 +15,10 @@ module.exports = {
     const oldPicture = await models.Picture.findById(id).exec();
     if (!oldPicture) throw `There is no picture with that given ID: ${id}`;
 
-   oldPicture.title = newTitle;
-    
-  return await saveSafely(oldPicture); // Save the the changes
-  },
+    oldPicture.title = newTitle;
 
+    return await saveSafely(oldPicture); // Save the the changes
+  },
 
   async getPictureById(picId) {
     if (!validators.isNonEmptyString(picId)) throw 'Image ID must be non-empty string';
@@ -29,7 +28,6 @@ module.exports = {
 
     return pic;
   },
-
 
   async deletePicture(picId) {
     if (!validators.isNonEmptyString(picId)) throw 'Image ID must be non-empty string';
@@ -49,6 +47,11 @@ module.exports = {
   async getPicturesByArtworkIds(artworkIds) {
     if (!validators.isArrayOfStrings(artworkIds)) throw 'You must provide an array of artwork id';
     return await models.Picture.find({ artworkId: { $in: artworkIds } }, '-data').exec();
+  },
+
+  async deletePicturesByArtworkId(artworkId) {
+    if (!validators.isNonEmptyString(artworkId)) throw 'You must provide artwork Id';
+    await models.Picture.deleteMany({ artworkId: artworkId }).exec();
   },
 };
 async function saveSafely(document) {

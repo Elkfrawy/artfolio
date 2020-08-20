@@ -30,7 +30,6 @@
           errorMessages.show();
           errorMessages.text(responseMessage.error);
         } else {
-          errorMessages.hide();
           const { _id, comment, userId, userName } = responseMessage.createdComment;
           const artworkId = responseMessage.artworkId;
           const commentsContainer = $('#commentsContainer');

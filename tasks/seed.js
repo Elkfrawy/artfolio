@@ -42,6 +42,7 @@ async function main() {
       biography: 'Interested in color pencil',
       websiteUrl: 'https://www.stevens.edu',
       userPictureId: mirandaPic._id,
+      socialMedia: { LinkedIn: 'https://www.linkedin.com/in/xianqing-miranda-zou-41993958/' },
     };
 
     let jackInfo = {

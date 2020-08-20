@@ -33,4 +33,7 @@ module.exports = {
 
     return true;
   },
+  isValidBirthday(birthDay) {
+    return +birthDay <= +Date.now();
+  },
 };

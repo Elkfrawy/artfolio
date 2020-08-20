@@ -36,7 +36,7 @@
             $(
               `
         <div class="media my-4">
-          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          <img class="d-flex mr-3 rounded-circle avatar-lg" src="/pictures/user/${userId}" alt="">
           <div class="media-body">
             <h5 class="mt-0"> <a href="/users/portfolio/${userId}">${userName}</a></h5>
             ${comment}

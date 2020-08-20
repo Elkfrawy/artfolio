@@ -26,3 +26,8 @@ body {
   outline: none;
   box-shadow: none;
 }
+
+.avatar-lg {
+  width: 64px;
+  height: 64px;
+}

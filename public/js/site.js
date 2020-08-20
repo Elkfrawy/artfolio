@@ -1,16 +1,18 @@
 (function ($) {
   const submitComment = $('#commentForm');
-  const commentError = $('#commentError');
+  const errorMessages = $('#error-messages');
 
-  commentError.hide();
+  // errorMessages.hide();
   submitComment.submit(function (event) {
     event.preventDefault();
-    commentError.hide();
+    errorMessages.empty();
+    const hasError = false;
 
+    // For each field do validation
     const comment = $('#comment').val();
     if (comment === undefined || comment === '' || comment === null) {
-      commentError.show();
-      commentError.text('Please provide a comment text');
+      errorMessages.append('<li>Please provide a comment text</li>');
+      hasError = true;
     } else {
       const artworkId = $('#artworkId').val();
       let requestConfig = {
@@ -25,10 +27,10 @@
 
       $.ajax(requestConfig).then(function (responseMessage) {
         if (responseMessage.error) {
-          commentError.show();
-          commentError.text(responseMessage.error);
+          errorMessages.show();
+          errorMessages.text(responseMessage.error);
         } else {
-          commentError.hide();
+          errorMessages.hide();
           const { _id, comment, userId, userName } = responseMessage.createdComment;
           const artworkId = responseMessage.artworkId;
           const commentsContainer = $('#commentsContainer');
@@ -66,10 +68,10 @@
 
         $.ajax(requestConfig).then(function (responseMessage) {
           if (responseMessage.error) {
-            commentError.show();
-            commentError.text(responseMessage.error);
+            errorMessages.show();
+            errorMessages.text(responseMessage.error);
           } else {
-            commentError.hide();
+            errorMessages.hide();
             deleteBut.parent().parent().remove();
           }
         });
@@ -79,4 +81,24 @@
     });
   }
   registerDeleteEvent();
+
+  // Forms XXXX validation
+  const myForm = $('#myformId');
+  myForm.submit(function (event) {
+    errorMessages.empty();
+    const hasError = false;
+
+    // For each field do validation
+    const commentText = $('#comment').val();
+    if (commentText === undefined || commentText === '') {
+      errorMessages.append('<li>You must provide text</li>');
+      hasError = true;
+    } // and so on with other fields
+
+    if (hasError) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  });
 })(jQuery);

@@ -8,7 +8,7 @@
 
             {{#if authenticated}}
             <div>
-                <form action="/artworks/create/new" method="GET">
+                <form action="/artworks/create" method="GET">
                     <button type="submit" class="btn btn-success">Create New Artwork</button>
                 </form>
             </div>
@@ -117,7 +117,7 @@
                         <li>Zip Code: {{user.address.zipCode}}</li>
                     </ul>
                     <a class="info-tag">Birthday: </a> <a>{{dateFormat user.birthday "YYYY-MM-DD" true}}</a><br>
-
+                    {{/if}}
                 </div>
                 {{#if authenticated}}
                 <form action="/users/edit" method="get" class="edit-profile">

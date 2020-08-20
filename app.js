@@ -24,7 +24,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 const dbConnection = mongooseConnection();
 const static = express.static(path.join(__dirname, 'public'));
 
@@ -62,6 +61,9 @@ const handlebarsInst = ehb.create({
     },
     divisibleBy: (num, divideBy) => {
       return (num + 1) % divideBy == 0;
+    },
+    equals: (left, right) => {
+      return left === right;
     },
   },
   partialsDir: ['views/partials/'],

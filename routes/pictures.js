@@ -19,4 +19,18 @@ router.get('/content/:id', async (req, res) => {
   }
 });
 
+router.get('/user/:id', async (req, res) => {
+  if (!validators.isNonEmptyString(req.params.id)) {
+    res.status(400, { errors: ['Must provide non-empty string for userId'] });
+    return;
+  }
+
+  try {
+    const user = await data.users.getUserById(req.params.id);
+    res.redirect(`/pictures/content/${user.userPictureId}`);
+  } catch (e) {
+    res.status(400).json({ error: e });
+  }
+});
+
 module.exports = router;

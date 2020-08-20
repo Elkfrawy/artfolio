@@ -127,11 +127,11 @@ module.exports = {
     if (!validators.isNonEmptyString(commentText)) throw 'Please provide the comment string';
 
     const user = await users.getUserById(userId);
-    const artwork = await getArtworkById(artworkId);
+    const artwork = await this.getArtworkById(artworkId);
 
     let comment = new models.Comment({
       userId,
-      username: user.firstName + ' ' + user.lastName,
+      userName: user.firstName + ' ' + user.lastName,
       comment: commentText,
     });
     artwork.comments.push(comment);
@@ -144,10 +144,11 @@ module.exports = {
     if (!validators.isNonEmptyString(artworkId)) throw 'Please provide artworkId for the comment to delete';
     if (!validators.isNonEmptyString(commentId)) throw 'Please provide the commentId to delete';
 
-    const artwork = getArtworkById(artworkId);
+    const artwork = await this.getArtworkById(artworkId);
     const comment = artwork.comments.id(commentId);
     if (comment) {
       comment.remove();
+      await artwork.save();
     } else {
       throw "Didn't find a comment with the given ID to delete";
     }

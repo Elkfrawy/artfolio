@@ -206,7 +206,49 @@ router.delete('/:id', async (req, res) => {
     await artworkData.deleteArtwork(req.params.id);
     res.redirect('/users/profile');
   } catch (e) {
-    res.Status(500);
+    res.status(500);
+  }
+});
+
+router.post('/:id/comments/', async (req, res) => {
+  try {
+    const comment = req.body.comment;
+    const artworkId = req.params.id;
+    if (!validators.isNonEmptyString(comment)) {
+      res.status(400).json({ error: 'You must provide a comment text' });
+      return;
+    }
+    if (!req.session.user) {
+      res.status(403).json({ error: 'User is not logged in. Please login to post a comment.' });
+      return;
+    }
+    if (!validators.isNonEmptyString(artworkId)) {
+      res.status(400).json({ error: 'Comment must be associated with an artwork' });
+      return;
+    }
+    const createdComment = await artworkData.createComment(req.session.user._id, artworkId, comment);
+    res.status(200).json({ createdComment, artworkId });
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+router.delete('/:id/comments/:commentId', async (req, res) => {
+  const artworkId = req.params.id;
+  const commentId = req.params.commentId;
+  try {
+    if (!validators.isNonEmptyString(artworkId)) {
+      res.status(400).json({ error: 'You must provide the artworkId' });
+      return;
+    }
+    if (!validators.isNonEmptyString(commentId)) {
+      res.status(400).json({ error: 'You must provide the commentId' });
+      return;
+    }
+    await artworkData.deleteComment(artworkId, commentId);
+    res.status(200).json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e });
   }
 });
 

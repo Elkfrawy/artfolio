@@ -26,6 +26,42 @@
     {{/if}}
 </div>
 
+<!-- Comments Form -->
+{{#if session.user}}
+<div class="card my-4">
+    <h5 class="card-header">Leave a Comment:</h5>
+    <div class="card-body">
+    <form action="/artworks/{{artwork._id}}/comments" method="post" id="commentForm">
+        <div class="form-group">
+        <textarea name="comment" id="comment" class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" id="submitComment" class="btn btn-primary">Submit</button>
+    </form>
+    </div>
+</div>
+{{else}}
+<div class="alert alert-warning my-4gi">Login to be able to comment about this artwork.</div>
+{{/if}}
+
+<!-- Single Comment -->
+{{#if artwork.comments}}
+<div id="commentsContainer">
+    {{#each artwork.comments}}
+<div class="media my-4">
+    <img class="d-flex mr-3 rounded-circle avatar-lg" src="/pictures/user/{{userId}}" alt="">
+    <div class="media-body">
+    <h5 class="mt-0"><a href="/users/portfolio/{{userId}}">{{userName}}</a></h5>
+    {{comment}} 
+    {{#if (equals userId ../session.user._id) }}
+        <br>
+        <a href="/artworks/{{../artwork._id}}/comments/{{_id}}" class="deleteComment btn btn-danger btn-sm my-2">Delete</a>
+    {{/if}}
+    </div>
+</div>
+    {{/each}}
+</div>
+{{/if}}
+<div class="alert alert-danger" id='commentError'></div>
 </div>
 
 

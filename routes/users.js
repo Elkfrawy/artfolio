@@ -107,13 +107,12 @@ router.get('/logout', (req, res) => {
 // private page for user to edit his/her own profile
 router.get('/edit', async (req, res) => {
   if (!req.session.user) {
-    res.redirect('users/login');
+    res.redirect('/users/login');
     return;
   }
   validators.isNonEmptyString(req.session.user._id);
   const singleUser = await users.getUserById(req.session.user._id);
-
-  res.render('users/edit_profile', { user: singleUser, displayProfile: true });
+  res.render('users/edit_profile', { user: singleUser, displayProfile: true, today: Date.now() });
 });
 
 // Validated user to update information
@@ -136,6 +135,7 @@ router.patch('/updateprofile', async (req, res) => {
   // first name and last name are required
   if (!validators.isNonEmptyString(firstName)) errors.push('First name is missing');
   if (!validators.isNonEmptyString(lastName)) errors.push('Last name is missing');
+  if (!validators.isValidBirthday(userInfo.birthday)) errors.push('Birthday cannot be later than today');
 
   if (errors.length > 0) {
     res.status(400).render('users/edit_profile', { user: currentUser, displayProfile: true, profileErrors: errors });

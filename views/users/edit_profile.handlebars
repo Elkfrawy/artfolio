@@ -35,9 +35,10 @@
                     {{/if}}id="profile">
                     <form action="/users/updateprofile" method="POST">
                         <label>First Name</label>
-                        <input type="text" value="{{user.firstName}}" name="firstName" class="full-width-input">
+                        <input type="text" value="{{user.firstName}}" name="firstName" class="full-width-input"
+                            required>
                         <label>Last Name</label>
-                        <input type="text" value="{{user.lastName}}" name="lastName" class="full-width-input">
+                        <input type="text" value="{{user.lastName}}" name="lastName" class="full-width-input" required>
                         <label>Email</label>
                         <a>{{user.email}}</a><br>
 
@@ -96,7 +97,8 @@
                         {{/if}}
                         <br>
                         <label>Birthday
-                            <input type="date" name="birthday" value={{dateFormat user.birthday "YYYY-MM-DD" true}}>
+                            <input type="date" name="birthday" value={{dateFormat user.birthday "YYYY-MM-DD" true}}
+                                max={{dateFormat today "YYYY-MM-DD" true}} min="1900-01-01">
                         </label>
                         <br />
                         <label for="biography">

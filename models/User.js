@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema({
   websiteUrl: { type: String },
   hashedPassword: { type: String, required: true },
   userPictureId: { type: String },
+  socialMedia: { type: Object, default: {} },
   _id: { type: String, default: uuidv4 },
 });
 

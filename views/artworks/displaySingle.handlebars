@@ -1,5 +1,6 @@
-<div>
-<div class="card" style="width: 50rem;">
+<div class ="total-display">
+<div class ="artinfo-display">
+<div class="card">
     <div class="card-header">
       <a href="/users/portfolio/{{userId}}" data-size="1600x1067">
      <h5 class="card-title">Artist: {{artwork.username}}</h5>
@@ -15,7 +16,7 @@
   </div>
   <div class="card-body">
     <h5 class="card-title">Creation Date</h5>
-    <p class="card-text">{{artwork.createDate}}</p>
+    <p class="card-text">{{dateFormat artwork.createDate "YYYY-MM-DD" true}}</p>
   </div>
   <div class="card-body">
     <h5 class="card-title">Category</h5>
@@ -24,24 +25,24 @@
 </div>
 <br>
 <br>
+</div>
 
-<div class = "row">
-    <div class = "col-md-12">
-    <div id = "mdb-lightbox-ui"></div>
-        <div class = "mdb-lightbox">
+ <div class = "picture-display">
+   <div class = "row">
         {{#if pictures}}
         {{#each pictures}}
-        <figure class="col-md-4"> 
+        <div class="col-md-6 col-lg-4"> 
             <h3 class="text-center my-3">{{title}}</h3>
-            <a href="{{pictureUrl}}" data-size="1600x1067">
-                <img alt="picture" src={{pictureUrl}} class="img-fluid">
+             {{!-- data-size="1600x1067" --}}
+            <a href="{{pictureUrl}}">   
+                <img alt="picture" src={{pictureUrl}} class="image-fluid">
             </a>
             
-        </figure>
+        </div>
         {{/each}}
         {{/if}}
-        </div>
-    </div>
-</div>
+      </div>
+ </div>
+
 </div>
   <script src= "/public/js/MDBlightbox.js"></script>

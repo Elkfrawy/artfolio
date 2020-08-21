@@ -88,3 +88,20 @@ body {
     cursor: pointer;
     border-radius: 8px;
 }
+
+.total-display {
+    width: 100%;
+  }
+  .artinfo-display {
+    float: left;
+    width: 30%;
+  }
+  .picture-display {
+    float: right;
+    width: 60%;
+  }
+  
+  .image-fluid{
+      max-width: 210px;
+      height: auto;
+  }

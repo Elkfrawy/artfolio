@@ -103,7 +103,7 @@ router.get('/edit/:id', async (req, res) => {
       const userId = req.session.user._id; 
       const artwork = await artworkData.getArtworkById(req.params.id);
       const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
-      res.render('artworks/editSingle', { artwork, pictures, userId });
+      res.render('artworks/editSingle', { artwork, pictures, userId, displayArtworkinfo:true });
     } catch (e) {
       res.status(500).send('No Artwork with that ID exists for editing');
     }
@@ -130,7 +130,11 @@ router.post('/addimage/:id', upload.array('image'), async (req, res) => {
     }
   }
   try {
-    res.redirect(`/artworks/edit/${req.params.id}`);
+    const artwork = await artworkData.getArtworkById(req.params.id);
+    const userId = artwork.userId; 
+    const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
+    //res.redirect(`/artworks/edit/${req.params.id}`);
+    return res.render('artworks/editSingle', {userId, artwork, pictures, displayArtworkinfo: false});
   } catch (e) {
     res.status(500);
   }
@@ -142,26 +146,37 @@ router.post('/deleteimage/:id', async (req, res) => {
   }
   const pic = await pictureData.getPictureById(req.params.id);
   const artworkId = pic.artworkId;
+  
+  const artwork = await artworkData.getArtworkById(artworkId);
+  const userId = artwork.userId;
+
   try {
     await pictureData.deletePicture(req.params.id);
-    return res.redirect(`/artworks/edit/${artworkId}`);
+    const pictures = await pictureData.getPicturesByArtworkId(artworkId);
+    //return res.redirect(`/artworks/edit/${artworkId}`);
+    return res.render('artworks/editSingle', {userId, artwork, pictures, displayArtworkinfo: false});
   } catch (e) {
     res.send('error deleting picture');
   }
 });
 
 router.post('/changeImageTitle/:id', async(req,res)=>{
+  if (!req.session.user) {
+    return res.redirect('users/login');
+  }
   const pic = await pictureData.getPictureById(req.params.id);
   const artworkId = pic.artworkId;
   const newTitle = req.body.title; 
- 
-  if (!validators.isNonEmptyString(newTitle)) {
-    res.redirect(`/artworks/edit/${artworkId}`)
-  }
   
-    await pictureData.updatePictureTitle(req.params.id, newTitle);
-    return res.redirect(`/artworks/edit/${artworkId}`);
+  const artwork = await artworkData.getArtworkById(artworkId);
+  const userId = artwork.userId;
+
+  if (!validators.isNonEmptyString(newTitle)) return res.redirect(`/artworks/edit/${artworkId}`)
   
+  await pictureData.updatePictureTitle(req.params.id, newTitle);
+  const pictures = await pictureData.getPicturesByArtworkId(artworkId);
+  //return res.redirect(`/artworks/edit/${artworkId}`);
+  return res.render('artworks/editSingle', {userId, artwork, pictures, displayArtworkinfo: false}); 
 });
 
 

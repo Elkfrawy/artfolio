@@ -10,6 +10,7 @@ var path = require('path');
 var fs = require('fs').promises;
 const bcrypt = require('bcrypt');
 const { response } = require('express');
+const xss = require('xss');
 
 // public page
 router.get('/', async (req, res) => {
@@ -44,10 +45,10 @@ router.get('/register', async (req, res) => {
 router.post('/register', async (req, res) => {
   const errors = [];
   const { firstName, lastName, gender, email, password, passwordConfirm } = req.body;
-  if (!data.validators.isNonEmptyString(firstName)) errors.push('First name is missing');
-  if (!data.validators.isNonEmptyString(lastName)) errors.push('Last name is missing');
+  if (!data.validators.isLettersOnly(firstName)) errors.push('First name is missing');
+  if (!data.validators.isLettersOnly(lastName)) errors.push('Last name is missing');
   if (!data.validators.isNonEmptyString(gender)) errors.push('Gender is missing');
-  else if (!data.validators.validateGender(gender)) errors.push('Gender provide is invalid');
+  else if (!data.validators.validateGender(gender)) errors.push('Gender provided is invalid');
   if (!data.validators.isNonEmptyString(email)) errors.push('Email address is missing');
   else if (!data.validators.isValidEmail(email)) errors.push('The provided emails is incorrect');
   if (!data.validators.isNonEmptyString(password)) errors.push('Password is missing');
@@ -56,7 +57,13 @@ router.post('/register', async (req, res) => {
   if (password !== passwordConfirm) errors.push("Password and confirmation don't match");
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  let user = { firstName, lastName, email: email.toLowerCase(), hashedPassword, gender };
+  let user = {
+    firstName: xss(firstName),
+    lastName: xss(lastName),
+    email: xss(email.toLowerCase()),
+    hashedPassword,
+    gender: xss(gender),
+  };
 
   if (errors.length > 0) {
     res.status(400).render('users/register', { errors, user });

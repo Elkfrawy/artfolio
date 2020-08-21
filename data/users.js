@@ -39,8 +39,8 @@ module.exports = {
   },
 
   async createUser(user) {
-    if (!validators.isNonEmptyString(user.firstName)) throw 'First name is not provided';
-    if (!validators.isNonEmptyString(user.lastName)) throw 'Last name is not provided';
+    if (!validators.isLettersOnly(user.firstName)) throw 'First name must be  provided and contains only letters';
+    if (!validators.isLettersOnly(user.lastName)) throw 'Last name must be  provided and contains only letters';
     if (!validators.isValidEmail(user.email)) throw 'Email is not valid';
     if (!validators.isNonEmptyString(user.hashedPassword)) throw 'Please provide a password';
     const newUser = new models.User(user);

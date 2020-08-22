@@ -15,6 +15,7 @@ const UserSchema = new mongoose.Schema({
   userPictureId: { type: String },
   socialMedia: { type: Object, default: {} },
   _id: { type: String, default: uuidv4 },
+  likedArtworks:{type: Array, default: []}
 });
 
 module.exports = mongoose.model('user', UserSchema);

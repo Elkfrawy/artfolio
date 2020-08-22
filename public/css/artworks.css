@@ -88,3 +88,71 @@ body {
     cursor: pointer;
     border-radius: 8px;
 }
+
+.total-display {
+    width: 100%;
+  }
+  .artinfo-display {
+    float: left;
+    width: 30%;
+  }
+  .picture-display {
+    float: right;
+    width: 60%;
+  }
+
+
+
+
+  .comment-display{
+      margin-top: 50em;
+  }
+  
+
+
+
+  .image-fluid{
+      max-width: 210px;
+      height: auto;
+  }
+
+  #heart { 
+        position: relative; 
+        width: 50px; 
+        height: 50px; 
+      } 
+
+      #heart:before, #heart:after { 
+        position: absolute; 
+        content: ""; 
+        left: 25px; 
+        top: 0; 
+        width: 25px; 
+        height: 40px; 
+        background: red; 
+        border-radius: 25px 25px 0 0; 
+        -webkit-transform: rotate(-45deg); 
+        -moz-transform: rotate(-45deg); 
+        -ms-transform: rotate(-45deg); 
+        -o-transform: rotate(-45deg); 
+        transform: rotate(-45deg); 
+       -webkit-transform-origin: 0 100%; 
+       -moz-transform-origin: 0 100%; 
+       -ms-transform-origin: 0 100%; 
+       -o-transform-origin: 0 100%; 
+       transform-origin: 0 100%; 
+     } 
+
+      #heart:after { 
+        left: 0; 
+        -webkit-transform: rotate(45deg); 
+        -moz-transform: rotate(45deg); 
+        -ms-transform: rotate(45deg); 
+        -o-transform: rotate(45deg); 
+       transform: rotate(45deg); 
+       -webkit-transform-origin: 100% 100%; 
+       -moz-transform-origin: 100% 100%; 
+       -ms-transform-origin: 100% 100%; 
+       -o-transform-origin: 100% 100%; 
+       transform-origin :100% 100%; 
+     } 

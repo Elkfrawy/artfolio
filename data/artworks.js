@@ -93,6 +93,20 @@ module.exports = {
     }).exec();
   },
 
+  async increaseLike(id){
+    if (!validators.isNonEmptyString(id)) throw 'Id is not valid';
+    const artWork = await models.Artwork.findById(id).exec();
+    artWork.likeCount += 1;
+    return await saveSafely(artWork);
+  },
+  async decreaseLike(id){
+    if (!validators.isNonEmptyString(id)) throw 'Id is not valid';
+    const artWork = await models.Artwork.findById(id).exec();
+    artWork.likeCount -= 1;
+    return await saveSafely(artWork);
+  },
+
+
   async getArtworksByKeyword(keyword) {
     if (!validators.isNonEmptyString(keyword)) throw 'Please provide a keyword to search by';
     return await models.Artwork.find({

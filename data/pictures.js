@@ -10,7 +10,7 @@ module.exports = {
 
   async updatePictureTitle(id, newTitle) {
     if (!validators.isNonEmptyString(id)) throw 'Please provide an picture ID';
-    if (!newTitle) throw 'Please provide an picture title to update with';
+    //if (!newTitle) throw 'Please provide an picture title to update with';
 
     const oldPicture = await models.Picture.findById(id).exec();
     if (!oldPicture) throw `There is no picture with that given ID: ${id}`;

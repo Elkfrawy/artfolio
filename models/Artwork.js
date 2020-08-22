@@ -16,6 +16,7 @@ const ArtworkSchema = new mongoose.Schema(
     numberOfViews: { type: Number, default: 0 },
     lastView: { type: Date, default: Date.now },
     _id: { type: String, default: uuidv4 },
+    likeCount:{ type:Number, default:0}
   },
   { toJSON: { virtuals: true } }
 );

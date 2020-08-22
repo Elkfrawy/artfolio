@@ -179,4 +179,70 @@
       },
     },
   });
+
+  $().ready(function () {
+    $('#createForm').validate({
+      rules: {
+        title: 'required',
+        description: 'required',
+        category: {
+          required: true,
+          letterswithbasicpunc: true,
+        },
+        createDate: {
+          required: true,
+          pastDateOnly: true,
+        },
+      },
+      messages: {
+        title: 'Please enter a title',
+        description: 'Please provide a description',
+        category: {
+          required: 'Please enter a category',
+          letterswithbasicpunc: 'Please enter a letters only category',
+        },
+        createDate: {
+          required: 'Please select the artwork creation date',
+        },
+      },
+    });
+  });
+
+  $().ready(function () {
+    $('#editForm').validate({
+      rules: {
+        title: 'required',
+        description: 'required',
+        category: {
+          required: true,
+          letterswithbasicpunc: true,
+        },
+        createDate: {
+          required: true,
+          pastDateOnly: true,
+        },
+      },
+      messages: {
+        title: 'Please enter a title',
+        description: 'Please provide a description',
+        category: {
+          required: 'Please enter a category',
+          letterswithbasicpunc: 'Please enter a letters only category',
+        },
+        createDate: {
+          required: 'Please select the artwork creation date',
+        },
+      },
+    });
+  });
+
+  jQuery.validator.addMethod(
+    'pastDateOnly',
+    function (value, element) {
+      const CreateDate = new Date(value);
+      const nowDate = new Date();
+      return this.optional(element) || CreateDate <= nowDate;
+    },
+    'Artwork creation date must be in the past.'
+  );
 })(jQuery);

@@ -1,5 +1,6 @@
 const models = require('../models');
 const validators = require('./validators');
+const artworks = require('./artworks');
 
 module.exports = {
   async getAllUsers() {
@@ -32,9 +33,31 @@ module.exports = {
       user.email = user.email.toLowerCase();
     }
 
-    const updatedUser = models.User.findByIdAndUpdate(id, user, {
+    const updatedUser = await models.User.findByIdAndUpdate(id, user, {
       new: true, // return the updated object
     }).exec();
+
+    const updatedUsername = updatedUser.firstName + ' ' + updatedUser.lastName;
+
+    const artworkList = await models.Artwork.find({ userId: id }).exec();
+    for (i = 0; i < artworkList.length; i++) {
+      const currentArtwork = artworkList[i];
+      await models.Artwork.findByIdAndUpdate(currentArtwork._id, { username: updatedUsername }).exec();
+    }
+
+    const commentedArtworkList = await models.Artwork.find({ 'comments.userId': id }).exec();
+    for (i = 0; i < commentedArtworkList.length; i++) {
+      const currentCommentedArtwork = commentedArtworkList[0];
+      const commentList = currentCommentedArtwork.comments;
+
+      for (comment of commentList) {
+        if (comment.userId === id) {
+          comment.userName = updatedUsername;
+        }
+      }
+      await models.Artwork.findByIdAndUpdate(currentCommentedArtwork._id, { comments: commentList }).exec();
+    }
+
     return updatedUser;
   },
 

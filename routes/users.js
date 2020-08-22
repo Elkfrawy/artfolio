@@ -2,12 +2,11 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const artworks = data.artworks;
-const pictures = data.pictures;
 const validators = data.validators;
 const users = data.users;
 const upload = require('../config/upload');
-var path = require('path');
-var fs = require('fs').promises;
+const path = require('path');
+const fs = require('fs').promises;
 const bcrypt = require('bcrypt');
 const { response } = require('express');
 const xss = require('xss');
@@ -25,7 +24,7 @@ router.get('/', async (req, res) => {
 // private page for user to see his/her own profile
 router.get('/profile', async (req, res) => {
   if (!req.session.user) {
-    res.render('users/login');
+    res.redirect('/users/login');
     return;
   }
   try {
@@ -129,19 +128,20 @@ router.patch('/updateprofile', async (req, res) => {
     return;
   }
   validators.isValidUserId(req.session.user._id);
-  const currentUser = await users.getUserById(req.session.user._id);
+  const currentUser = await users.getUserById(xss(req.session.user._id));
 
   let userInfo = req.body;
+
   const errors = [];
-  const firstName = userInfo.firstName;
-  const lastName = userInfo.lastName;
-  const gender = userInfo.gender;
+  userInfo.firstName = xss(userInfo.firstName);
+  userInfo.lastName = xss(userInfo.lastName);
+
   if (userInfo.birthday) {
-    userInfo.birthday = new Date(userInfo.birthday);
+    userInfo.birthday = new Date(xss(userInfo.birthday));
   }
   // first name and last name are required
-  if (!validators.isNonEmptyString(firstName)) errors.push('First name is missing');
-  if (!validators.isNonEmptyString(lastName)) errors.push('Last name is missing');
+  if (!validators.isNonEmptyString(userInfo.firstName)) errors.push('First name is missing');
+  if (!validators.isNonEmptyString(userInfo.lastName)) errors.push('Last name is missing');
   if (!validators.isValidBirthday(userInfo.birthday)) errors.push('Birthday cannot be later than today');
 
   if (errors.length > 0) {
@@ -218,15 +218,15 @@ router.patch('/updatepassword', async (req, res) => {
   }
   validators.isValidUserId(req.session.user._id);
   const user = await users.getUserById(req.session.user._id);
-  const { currentPassword, newPassword, newPassword2 } = req.body;
+  const { currentPassword, newPassword, confirmPassword } = req.body;
 
   const errors = [];
 
   if (!validators.isNonEmptyString(currentPassword)) errors.push('Current Password is missing');
   if (!validators.isNonEmptyString(newPassword)) errors.push('New Password is missing');
-  if (!validators.isNonEmptyString(newPassword2)) errors.push('Second New Password is missing');
+  if (!validators.isNonEmptyString(confirmPassword)) errors.push('Second New Password is missing');
   if (!validators.isValidPassword(newPassword)) errors.push('New password not meeting requirement');
-  if (newPassword !== newPassword2) errors.push('New Password and confirmation do not match');
+  if (newPassword !== confirmPassword) errors.push('New Password and confirmation do not match');
 
   if (errors.length > 0) {
     res.status(400).render('users/edit_profile', { user: user, passwordErrors: errors });

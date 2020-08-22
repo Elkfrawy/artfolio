@@ -110,4 +110,73 @@
 
   // If we don't have custom validations we can use the following line to use only the validations on the HTML elements
   $('#login').validate();
+
+  $('#form-profile-edit').validate({
+    rules: {
+      firstName: {
+        required: true,
+        letterswithbasicpunc: true,
+      },
+      lastName: {
+        required: true,
+        letterswithbasicpunc: true,
+      },
+
+      'address[city]': {
+        lettersonly: true,
+      },
+      'address[state]': {
+        lettersonly: true,
+        stateUS: {
+          depends: function (element) {
+            const country = $('#address-country')[0];
+            return country.value === 'United States';
+          },
+        },
+      },
+      'address[zipCode]': {
+        zipcodeUS: {
+          depends: function (element) {
+            const country = $('#address-country')[0];
+            return country.value === 'United States';
+          },
+        },
+      },
+
+      birthday: {},
+      websiteUrl: {
+        url: true,
+      },
+
+      'socialMedia[instagram]': {
+        url: true,
+      },
+      'socialMedia[twitter]': {
+        url: true,
+      },
+      'socialMedia[facebook]': {
+        url: true,
+      },
+      'socialMedia[linkedIn]': {
+        url: true,
+      },
+    },
+  });
+
+  $('#form-password-edit').validate({
+    rules: {
+      currentPassword: {
+        minlength: 8,
+      },
+
+      newPassword: {
+        minlength: 8,
+      },
+
+      confirmPassword: {
+        minlength: 8,
+        equalTo: '#newPassword',
+      },
+    },
+  });
 })(jQuery);

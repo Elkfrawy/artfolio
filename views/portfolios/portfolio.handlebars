@@ -72,7 +72,6 @@
             </div>
         </div>
         <div class="user-info">
-
             <div class="card border-0">
                 {{#if user.userPictureId}}
                 <a>
@@ -88,9 +87,12 @@
                     <a class="info-tag">Email: </a> <a>{{ user.email }}</a><br>
                     {{#if user.websiteUrl}}
                     <a class="info-tag">Website: </a>
-                    <a href={{user.websiteUrl}} class="personal-link">{{user.websiteUrl}}</a><br>
+                    <a href="{{user.websiteUrl}}" class="personal-link" target="_blank">{{user.websiteUrl}}</a><br>
                     {{/if}}
+                    {{!-- {{#if user.socialMedia}}
+                    <a href="#" class="fa fa-facebook"></a>
 
+                    {{/if}} --}}
 
                     {{#if authenticated}}
                     <a class="info-tag">Address </a>
@@ -102,6 +104,33 @@
                     </ul>
                     <a class="info-tag">Birthday: </a> <a>{{dateFormat user.birthday "YYYY-MM-DD" true}}</a><br>
                     {{/if}}
+                    <br>
+                    <div>
+                        <ul class="social-icons">
+                            {{#if user.socialMedia}}
+                            {{#if user.socialMedia.facebook}}
+                            <li><a href="{{user.socialMedia.facebook}}" target="_blank"><img
+                                        src="/public/social_media_icon/Facebook.png" /></a>
+                            </li>
+                            {{/if}}
+                            {{#if user.socialMedia.twitter}}
+                            <li><a href="{{user.socialMedia.twitter}}" target="_blank"><img
+                                        src="/public/social_media_icon/Twitter.png" /></a>
+                            </li>
+                            {{/if}}
+                            {{#if user.socialMedia.instagram}}
+                            <li><a href="{{user.socialMedia.instagram}}" target="_blank"><img
+                                        src="/public/social_media_icon/Instagram.png" /></a>
+                            </li>
+                            {{/if}}
+                            {{#if user.socialMedia.linkedIn}}
+                            <li><a href="{{user.socialMedia.linkedIn}}" target="_blank"><img
+                                        src="/public/social_media_icon/Linkedin.png" /></a>
+                            </li>
+                            {{/if}}
+                            {{/if}}
+                        </ul>
+                    </div>
                 </div>
                 {{#if authenticated}}
                 <form action="/users/edit" method="get" class="edit-profile">

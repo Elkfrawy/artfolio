@@ -6,6 +6,7 @@ const ehb = require('express-handlebars');
 const Handlebars = require('handlebars');
 const mongooseConnection = require('./config/mongoConnection');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
+const { options } = require('./routes/home');
 
 const app = express();
 
@@ -81,12 +82,15 @@ const handlebarsInst = ehb.create({
 });
 
 handlebarsInst.handlebars.registerHelper('dateFormat', require('handlebars-dateformat'));
-handlebarsInst.handlebars.registerHelper('isMale', function (value) {
-  return value == 'Male';
+handlebarsInst.handlebars.registerHelper('checkGender', function (value, inputValue) {
+  if (value == inputValue) {
+    return 'checked';
+  } else {
+    return '';
+  }
 });
-
-handlebarsInst.handlebars.registerHelper('isFemale', function (value) {
-  return value == 'Female';
+handlebarsInst.handlebars.registerHelper('select', function (selected, options) {
+  return options.fn(this).replace(new RegExp(' value="' + selected + '"'), '$& selected="selected"');
 });
 
 app.engine('handlebars', handlebarsInst.engine);

@@ -1,18 +1,52 @@
 {{> searchbar}}
 
+
 <div class="container text-center my-3">
   {{#each sections}} 
-  <div id="section_{{@index}}" class="carousel slide w-100" data-ride="carousel">
+  <div id="section_{{@index}}" class="carousel slide w-90 my-3" data-ride="carousel">
+    <div class="carousel-inner w-90" role="listbox">
+          <div class="h3">{{title}}</div>
+          <div class="carousel-item row no-gutters active mt-3">
+            {{#each artworks}}
+              {{#if (divisibleBy @index 3)}}
+                </div>
+                <div class="carousel-item row no-gutters mt-3">
+              {{/if}}
+              <div class="col-3 float-left px-1 mx-4">
+                {{> artwork_icon}}
+              </div>
+              
+            {{/each}}
+          </div>
+        <a class="carousel-control-prev" href="#section_{{@index}}" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#section_{{@index}}" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+  </div>
+  {{/each}}
+</div>
+
+
+
+{{!-- 
+<div class="container text-center my-3">
+  {{#each sections}} 
+  <div id="section_{{@index}}" class="carousel slide w-100 mb-5" data-ride="carousel">
     <div class="carousel-inner w-100" role="listbox">
-          <h2>{{title}}</h2>
+          <div class="h3">{{title}}</div>
           <div class="carousel-item row no-gutters active">
             {{#each artworks}}
               {{#if (divisibleBy @index 4)}}
                 </div>
                 <div class="carousel-item row no-gutters">
               {{/if}}
-              <div class="col-3 float-left">
-                <img class="img-fluid" src="{{pictures.[0].pictureUrl}}">
+              <div class="col-3 float-left px-1">
+                <img class="img-fluid img-thumbnail carousel-main-image" src="{{pictures.[0].pictureUrl}}">
                 <a href="/artworks/{{_id}}" class="stretched-link"></a>
               </div>
               
@@ -29,5 +63,4 @@
     </div>
   </div>
   {{/each}}
-
-</div>
+</div> --}}

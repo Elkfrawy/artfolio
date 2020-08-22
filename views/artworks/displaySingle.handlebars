@@ -1,5 +1,5 @@
-<div class ="total-display">
-<div class ="artinfo-display">
+<div class ="total-display row">
+<div class ="artinfo-display col-4">
 <div class="card">
     <div class="card-header">
       <a href="/users/portfolio/{{userId}}" data-size="1600x1067">
@@ -38,7 +38,7 @@
 <br>
 </div>
 
-<div class = "picture-display">
+<div class = "picture-display col">
    <div class = "row">
         {{#if pictures}}
         {{#each pictures}}
@@ -46,7 +46,7 @@
             <h3 class="text-center my-3">{{title}}</h3>
              {{!-- data-size="1600x1067" --}}
             <a href="{{pictureUrl}}">   
-                <img alt="picture" src={{pictureUrl}} class="image-fluid">
+                <img alt="picture" src={{pictureUrl}} class="image-fluid rounded img-thumbnail mx-2">
             </a>
             
         </div>
@@ -55,8 +55,10 @@
     </div>
 </div>
 </div>
-{{!-- <div class = "row">
-<div class = "col"> --}}
+</div>
+
+<div class = "row">
+<div class = "col">
     <!-- Comments Form -->
     <div class = "comment-display">
     {{#if session.user}}
@@ -95,8 +97,5 @@
     {{/if}}
     </div>
     </div> 
-{{!-- </div>
-</div> --}}
-
-
+</div>
 </div>

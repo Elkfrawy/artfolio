@@ -111,66 +111,138 @@
   // If we don't have custom validations we can use the following line to use only the validations on the HTML elements
   $('#login').validate();
 
+  $('#form-profile-edit').validate({
+    rules: {
+      firstName: {
+        required: true,
+        letterswithbasicpunc: true,
+      },
+      lastName: {
+        required: true,
+        letterswithbasicpunc: true,
+      },
 
-  $().ready(function(){
-    $("#createForm").validate({
-      rules:{
-        title: "required",
-        description: "required",
-      category: {
-        required:true,
-        letterswithbasicpunc:true,
+      'address[city]': {
+        lettersonly: true,
       },
-      createDate:{
-        required:true,
-        pastDateOnly: true
-      }
+      'address[state]': {
+        lettersonly: true,
+        stateUS: {
+          depends: function (element) {
+            const country = $('#address-country')[0];
+            return country.value === 'United States';
+          },
+        },
       },
-      messages: {
-        title: "Please enter a title",
-        description: "Please provide a description",
-        category:{
-          required: "Please enter a category",
-          letterswithbasicpunc: "Please enter a letters only category"
+      'address[zipCode]': {
+        zipcodeUS: {
+          depends: function (element) {
+            const country = $('#address-country')[0];
+            return country.value === 'United States';
+          },
+        },
+      },
+
+      birthday: {},
+      websiteUrl: {
+        url: true,
+      },
+
+      'socialMedia[instagram]': {
+        url: true,
+      },
+      'socialMedia[twitter]': {
+        url: true,
+      },
+      'socialMedia[facebook]': {
+        url: true,
+      },
+      'socialMedia[linkedIn]': {
+        url: true,
+      },
+    },
+  });
+
+  $('#form-password-edit').validate({
+    rules: {
+      currentPassword: {
+        minlength: 8,
+      },
+
+      newPassword: {
+        minlength: 8,
+      },
+
+      confirmPassword: {
+        minlength: 8,
+        equalTo: '#newPassword',
+      },
+    },
+  });
+
+  $().ready(function () {
+    $('#createForm').validate({
+      rules: {
+        title: 'required',
+        description: 'required',
+        category: {
+          required: true,
+          letterswithbasicpunc: true,
         },
         createDate: {
-          required: "Please select the artwork creation date"
-        }
-      }
-    });
-  })
-
-  $().ready(function(){
-    $("#editForm").validate({
-      rules:{
-        title: "required",
-        description: "required",
-      category: {
-        required:true,
-        letterswithbasicpunc:true
-      },
-      createDate:{
-        required:true,
-        pastDateOnly: true
-      }
+          required: true,
+          pastDateOnly: true,
+        },
       },
       messages: {
-        title: "Please enter a title",
-        description: "Please provide a description",
-        category:{
-          required: "Please enter a category",
-          letterswithbasicpunc: "Please enter a letters only category"
+        title: 'Please enter a title',
+        description: 'Please provide a description',
+        category: {
+          required: 'Please enter a category',
+          letterswithbasicpunc: 'Please enter a letters only category',
         },
         createDate: {
-          required: "Please select the artwork creation date"
-        }
-      }
+          required: 'Please select the artwork creation date',
+        },
+      },
     });
-  })
+  });
 
-jQuery.validator.addMethod("pastDateOnly", function(value, element){
-  const CreateDate = new Date(value);
-  const nowDate = new Date();
-  return this.optional(element) || CreateDate <= nowDate;}, "Artwork creation date must be in the past.");
+  $().ready(function () {
+    $('#editForm').validate({
+      rules: {
+        title: 'required',
+        description: 'required',
+        category: {
+          required: true,
+          letterswithbasicpunc: true,
+        },
+        createDate: {
+          required: true,
+          pastDateOnly: true,
+        },
+      },
+      messages: {
+        title: 'Please enter a title',
+        description: 'Please provide a description',
+        category: {
+          required: 'Please enter a category',
+          letterswithbasicpunc: 'Please enter a letters only category',
+        },
+        createDate: {
+          required: 'Please select the artwork creation date',
+        },
+      },
+    });
+  });
 
+  jQuery.validator.addMethod(
+    'pastDateOnly',
+    function (value, element) {
+      const CreateDate = new Date(value);
+      const nowDate = new Date();
+      return this.optional(element) || CreateDate <= nowDate;
+    },
+    'Artwork creation date must be in the past.'
+  );
 })(jQuery);

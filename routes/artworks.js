@@ -8,6 +8,7 @@ const upload = require('../config/upload');
 var path = require('path');
 const fs = require('fs').promises;
 const validators = require('../data/validators');
+const xss = require('xss');
 
 router.get('/', async (req, res) => {
   try {
@@ -264,7 +265,7 @@ router.delete('/:id', async (req, res) => {
 
 router.post('/:id/comments/', async (req, res) => {
   try {
-    const comment = req.body.comment;
+    const comment = xss(req.body.comment);
     const artworkId = req.params.id;
     if (!validators.isNonEmptyString(comment)) {
       res.status(400).json({ error: 'You must provide a comment text' });

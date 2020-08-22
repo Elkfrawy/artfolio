@@ -1,5 +1,6 @@
 const models = require('../models');
 const validators = require('./validators');
+const artworks = require('./artworks');
 
 module.exports = {
   async getAllUsers() {
@@ -23,24 +24,46 @@ module.exports = {
     if (!user) throw 'Please provide updated user information';
 
     // make sure the updated information firstName, lastName and email are valid, if provided.
-    if (user.firstName && !validators.isNonEmptyString(user.firstName)) throw 'Updated first name is not valid';
+    if (user.firstName && !validators.isLettersOnly(user.firstName)) throw 'Updated first name is not valid';
 
-    if (user.lastName && !validators.isNonEmptyString(user.lastName)) throw 'Updated last name is not valid';
+    if (user.lastName && !validators.isLettersOnly(user.lastName)) throw 'Updated last name is not valid';
 
     if (user.email) {
       if (!validators.isValidEmail(user.email)) throw 'Updated email is not valid';
       user.email = user.email.toLowerCase();
     }
 
-    const updatedUser = models.User.findByIdAndUpdate(id, user, {
+    const updatedUser = await models.User.findByIdAndUpdate(id, user, {
       new: true, // return the updated object
     }).exec();
+
+    const updatedUsername = updatedUser.firstName + ' ' + updatedUser.lastName;
+
+    const artworkList = await models.Artwork.find({ userId: id }).exec();
+    for (i = 0; i < artworkList.length; i++) {
+      const currentArtwork = artworkList[i];
+      await models.Artwork.findByIdAndUpdate(currentArtwork._id, { username: updatedUsername }).exec();
+    }
+
+    const commentedArtworkList = await models.Artwork.find({ 'comments.userId': id }).exec();
+    for (i = 0; i < commentedArtworkList.length; i++) {
+      const currentCommentedArtwork = commentedArtworkList[0];
+      const commentList = currentCommentedArtwork.comments;
+
+      for (comment of commentList) {
+        if (comment.userId === id) {
+          comment.userName = updatedUsername;
+        }
+      }
+      await models.Artwork.findByIdAndUpdate(currentCommentedArtwork._id, { comments: commentList }).exec();
+    }
+
     return updatedUser;
   },
 
   async createUser(user) {
-    if (!validators.isNonEmptyString(user.firstName)) throw 'First name is not provided';
-    if (!validators.isNonEmptyString(user.lastName)) throw 'Last name is not provided';
+    if (!validators.isLettersOnly(user.firstName)) throw 'First name must be  provided and contains only letters';
+    if (!validators.isLettersOnly(user.lastName)) throw 'Last name must be  provided and contains only letters';
     if (!validators.isValidEmail(user.email)) throw 'Email is not valid';
     if (!validators.isNonEmptyString(user.hashedPassword)) throw 'Please provide a password';
     const newUser = new models.User(user);

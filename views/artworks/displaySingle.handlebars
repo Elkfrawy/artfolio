@@ -23,7 +23,7 @@
     <p class="card-text">{{artwork.category}}</p>
   </div>
   <div class ="card-body">
-    <h6 class = "card-title">Likes: {{artwork.likeCount}}</h6>
+    <h6 class = "card-title">Artwork Likes: {{artwork.likeCount}}</h6>
     <form action ="/artworks/likes/{{artwork._id}}" method = "POST">
       <button id="heart" type = "submit" class="btn btn-light">
       </button>
@@ -52,10 +52,10 @@
     </div>
 </div>
 </div>
-<div class = "row">
-<div class = "col">
+{{!-- <div class = "row">
+<div class = "col"> --}}
     <!-- Comments Form -->
-    <div class = "comment">
+    <div class = "comment-display">
     {{#if session.user}}
     <div class="card my-4">
         <h5 class="card-header">Leave a Comment:</h5>
@@ -92,8 +92,8 @@
     {{/if}}
     </div>
     </div> 
-</div>
-</div>
+{{!-- </div>
+</div> --}}
 
 
 </div>

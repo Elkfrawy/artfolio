@@ -119,7 +119,7 @@
         description: "required",
       category: {
         required:true,
-        lettersonly:true
+        letterswithbasicpunc:true,
       },
       createDate:{
         required:true,
@@ -131,7 +131,7 @@
         description: "Please provide a description",
         category:{
           required: "Please enter a category",
-          lettersonly: "Please enter a letters only category"
+          letterswithbasicpunc: "Please enter a letters only category"
         },
         createDate: {
           required: "Please select the artwork creation date"
@@ -147,7 +147,7 @@
         description: "required",
       category: {
         required:true,
-        lettersonly:true
+        letterswithbasicpunc:true
       },
       createDate:{
         required:true,
@@ -159,7 +159,7 @@
         description: "Please provide a description",
         category:{
           required: "Please enter a category",
-          lettersonly: "Please enter a letters only category"
+          letterswithbasicpunc: "Please enter a letters only category"
         },
         createDate: {
           required: "Please select the artwork creation date"

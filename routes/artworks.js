@@ -40,7 +40,7 @@ router.get('/create', async (req, res) => {
     res.redirect('/users/login');
   } else {
     try {
-      res.render('artworks/createSingle');
+      res.render('artworks/createSingle', { title: 'Creating new artwork' });
     } catch (e) {
       res.status(500).send();
     }
@@ -102,7 +102,13 @@ router.get('/edit/:id', async (req, res) => {
       const userId = req.session.user._id;
       const artwork = await artworkData.getArtworkById(req.params.id);
       const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
-      res.render('artworks/editSingle', { artwork, pictures, userId, displayArtworkinfo:true });
+      res.render('artworks/editSingle', {
+        artwork,
+        pictures,
+        userId,
+        displayArtworkinfo: true,
+        title: `Editing artwork ${artwork.title}`,
+      });
     } catch (e) {
       res.status(500).send('No Artwork with that ID exists for editing');
     }
@@ -130,10 +136,10 @@ router.post('/addimage/:id', upload.array('image'), async (req, res) => {
   }
   try {
     const artwork = await artworkData.getArtworkById(req.params.id);
-    const userId = artwork.userId; 
+    const userId = artwork.userId;
     const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
     //res.redirect(`/artworks/edit/${req.params.id}`);
-    return res.render('artworks/editSingle', {userId, artwork, pictures, displayArtworkinfo: false});
+    return res.render('artworks/editSingle', { userId, artwork, pictures, displayArtworkinfo: false });
   } catch (e) {
     res.status(500);
   }
@@ -145,7 +151,7 @@ router.post('/deleteimage/:id', async (req, res) => {
   }
   const pic = await pictureData.getPictureById(req.params.id);
   const artworkId = pic.artworkId;
-  
+
   const artwork = await artworkData.getArtworkById(artworkId);
   const userId = artwork.userId;
 
@@ -153,33 +159,33 @@ router.post('/deleteimage/:id', async (req, res) => {
     await pictureData.deletePicture(req.params.id);
     const pictures = await pictureData.getPicturesByArtworkId(artworkId);
     //return res.redirect(`/artworks/edit/${artworkId}`);
-    return res.render('artworks/editSingle', {userId, artwork, pictures, displayArtworkinfo: false});
+    return res.render('artworks/editSingle', { userId, artwork, pictures, displayArtworkinfo: false });
   } catch (e) {
     res.send('error deleting picture');
   }
 });
 
-router.post('/changeImageTitle/:id', async(req,res)=>{
+router.post('/changeImageTitle/:id', async (req, res) => {
   if (!req.session.user) {
     return res.redirect('users/login');
   }
   const pic = await pictureData.getPictureById(req.params.id);
   const artworkId = pic.artworkId;
-  const newTitle = req.body.title; 
-  
+  const newTitle = req.body.title;
+
   const artwork = await artworkData.getArtworkById(artworkId);
   const userId = artwork.userId;
 
   //if (!validators.isNonEmptyString(newTitle)) return res.redirect(`/artworks/edit/${artworkId}`)
-  
+
   await pictureData.updatePictureTitle(req.params.id, newTitle);
   const pictures = await pictureData.getPicturesByArtworkId(artworkId);
   //return res.redirect(`/artworks/edit/${artworkId}`);
-  return res.render('artworks/editSingle', {userId, artwork, pictures, displayArtworkinfo: false}); 
+  return res.render('artworks/editSingle', { userId, artwork, pictures, displayArtworkinfo: false });
 });
 
-router.post('/likes/:id', async(req,res)=>{
-  if(!req.session.user){
+router.post('/likes/:id', async (req, res) => {
+  if (!req.session.user) {
     //display message, cant like
   }
   const userId = req.session.user._id;
@@ -188,17 +194,15 @@ router.post('/likes/:id', async(req,res)=>{
   //const artwork = await artworkData.getArtworkById(artworkId);
   const likedArtworks = user.likedArtworks;
 
-
-  if(likedArtworks.includes(artworkId)){
-    await userData.removeArtworkToLikes(userId,artworkId);
-    await artworkData.decreaseLike(artworkId); 
-  }else{
+  if (likedArtworks.includes(artworkId)) {
+    await userData.removeArtworkToLikes(userId, artworkId);
+    await artworkData.decreaseLike(artworkId);
+  } else {
     await userData.appendArtworkToLikes(userId, artworkId);
-    await artworkData.increaseLike(artworkId); 
-    
-  } 
+    await artworkData.increaseLike(artworkId);
+  }
   return res.redirect(`/artworks/${artworkId}`);
-}); 
+});
 
 router.get('/:id', async (req, res) => {
   try {

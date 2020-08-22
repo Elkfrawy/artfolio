@@ -3,28 +3,29 @@
 <div class="card">
     <div class="card-header">
       <a href="/users/portfolio/{{userId}}" data-size="1600x1067">
-     <h5 class="card-title">Artist: {{artwork.username}}</h5>
+     <div class="card-title h4">Artist: {{artwork.username}}</div>
       </a>
     </div>
   <div class="card-body">
-    <h5 class="card-title">Title</h5>
+    <div class="card-title h5">Title</div>
     <p class="card-text">{{artwork.title}}</p>
   </div>
   <div class="card-body">
-    <h5 class="card-title">Description</h5>
+    <div class="card-title h5">Description</div>
     <p class="card-text">{{artwork.description}}</p>
   </div>
   <div class="card-body">
-    <h5 class="card-title">Creation Date</h5>
+    <div class="card-title h5">Creation Date</div>
     <p class="card-text">{{dateFormat artwork.createDate "YYYY-MM-DD" true}}</p>
   </div>
   <div class="card-body">
-    <h5 class="card-title">Category</h5>
+    <div class="card-title h5">Category</div>
     <p class="card-text">{{artwork.category}}</p>
   </div>
   <div class ="card-body">
-    <h6 class = "card-title">Artwork Likes: {{artwork.likeCount}}</h6>
+    <div class = "card-title h5">Artwork Likes: {{artwork.likeCount}}</div>
     <form action ="/artworks/likes/{{artwork._id}}" method = "POST">
+    <label for="heart" hidden>Like this artwork</label>
       <button id="heart" type = "submit" class="btn btn-light">
       </button>
     </form>
@@ -40,7 +41,7 @@
         {{#if pictures}}
         {{#each pictures}}
         <div class="col-md-6 col-lg-4"> 
-            <h3 class="text-center my-3">{{title}}</h3>
+            <div class="text-center my-3 h4">{{title}}</div>
              {{!-- data-size="1600x1067" --}}
             <a href="{{pictureUrl}}">   
                 <img alt="picture" src={{pictureUrl}} class="image-fluid rounded img-thumbnail mx-2">
@@ -60,10 +61,11 @@
     <div class = "comment-display">
     {{#if session.user}}
     <div class="card my-4">
-        <h5 class="card-header">Leave a Comment:</h5>
+        <div class="card-header h4">Leave a Comment:</div>
         <div class="card-body">
         <form action="/artworks/{{artwork._id}}/comments" method="post" id="commentForm">
             <div class="form-group">
+              <label for="comment" hidden>Write a comment about his artwork</label>
             <textarea name="comment" id="comment" class="form-control" rows="3"></textarea>
             </div>
             <button type="submit" id="submitComment" class="btn btn-primary">Submit</button>
@@ -82,7 +84,7 @@
     <div class="media my-4">
         <img class="d-flex mr-3 rounded-circle avatar-lg" src="/pictures/user/{{userId}}" alt="">
         <div class="media-body">
-        <h5 class="mt-0"><a href="/users/portfolio/{{userId}}">{{userName}}</a></h5>
+        <div class="mt-0 h5"><a href="/users/portfolio/{{userId}}">{{userName}}</a></div>
         {{comment}} 
         {{#if (equals userId ../session.user._id) }}
             <br>

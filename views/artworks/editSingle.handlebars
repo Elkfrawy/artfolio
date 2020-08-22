@@ -13,11 +13,10 @@
         
             <div id ="myTab" class= "tab-content">
                 <div {{#if displayArtworkinfo}}class="tab-pane fade active show" {{else}} class=
-                "tab-pane fade" {{/if}}id = "artwork-info">
+                "tab-pane fade"{{/if}} id = "artwork-info">
                     <div class = card>
                         <div class ="card-header">
-                            <h4 class="card-title mt-2">Edit Your Artwork</h4>
-                            <a href = '/users/profile'>Back to Portfolio Page</a>
+                            <h1 class="card-title mt-2 display-4">Edit Your Artwork</h1>
                         </div>
                         <div class = "card-body">
                             
@@ -28,12 +27,12 @@
                                     <input type="text" class="form-control" id="title" name = "title" value="{{artwork.title}}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="Description">Description</label>
+                                    <label for="description">Description</label>
                                     <textarea class="form-control" id="description" name = "description" rows="3">{{artwork.description}}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="createDate">Creation Date</label>
-                                    <input type="date" class="form-control" id="createDate" name = "createDate" value="{{artwork.createDate}}" required>
+                                    <input type="date" class="form-control" id="createDate" name = "createDate" value="{{dateFormat artwork.createDate "YYYY-MM-DD" true}}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="category">Category</label>
@@ -47,15 +46,16 @@
                         </div>
                     </div>
                 </div>
-                <div {{#if displayArtworkinfo}} class ="tab-pane fade"{{else}} class="tab-pane fade show active" {{/if}}id ="artwork-images">
+                <div {{#if displayArtworkinfo}} class ="tab-pane fade"{{else}} class="tab-pane fade show active" {{/if}} id="artwork-images">
                     <div class = "row">
                         <div class ="col-sm-3">
-                            <div class = "card text-center "style="width: 18rem;">
+                            <div class = "card text-center" style="width: 18rem;">
                                 <div class = "card header">
-                                   <h4 class ="upload-img-p mt-3">Upload more pictures:</h4>
+                                   <h2 class ="upload-img-p mt-3">Upload more pictures:</h2>
                                     <br>
                                     <form class = "form text-center mx-3" action ="/artworks/addimage/{{artwork.id}}" method ="POST" enctype="multipart/form-data">
-                                        <input type="file" name="image" id="image" accept="image/*"multiple/> 
+                                        <label for="image">Choose images to upload</label>
+                                        <input type="file" name="image" id="image" accept="image/*" multiple/> 
                                     <br>
                                     <br>
                                         <button class = "btn btn-primary" type = "submit">Upload</button>
@@ -96,7 +96,7 @@
                                         </div>
                                         <div class="col-sm">
                                         <form action ="/artworks/changeImageTitle/{{_id}}" method = "POST">
-                                            <input type = "text" id ="title" name ="title" value ="{{title}}">
+                                            <input type = "text" name ="title" value ="{{title}}">
                                             <button type = "submit" class ="btn btn-primary">Update image title</button>
                                         </form>
                                         </div>

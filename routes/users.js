@@ -38,6 +38,9 @@ router.get('/profile', async (req, res) => {
 });
 
 router.get('/register', async (req, res) => {
+  if (req.session.user) {
+    res.redirect('/');
+  }
   res.render('users/register');
 });
 
@@ -82,6 +85,9 @@ router.post('/register', async (req, res) => {
 });
 
 router.get('/login', async (req, res) => {
+  if (req.session.user) {
+    res.redirect('/');
+  }
   res.render('users/login');
 });
 

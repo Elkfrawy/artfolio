@@ -37,6 +37,6 @@ module.exports = {
     return +birthDay <= +Date.now();
   },
   isLettersOnly(name) {
-    return this.isNonEmptyString(name) && name.match(/^[A-Za-z]+$/);
+    return this.isNonEmptyString(name) && name.match(/^[A-Za-z ']+$/);
   },
 };

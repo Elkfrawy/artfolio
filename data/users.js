@@ -24,9 +24,9 @@ module.exports = {
     if (!user) throw 'Please provide updated user information';
 
     // make sure the updated information firstName, lastName and email are valid, if provided.
-    if (user.firstName && !validators.isNonEmptyString(user.firstName)) throw 'Updated first name is not valid';
+    if (user.firstName && !validators.isLettersOnly(user.firstName)) throw 'Updated first name is not valid';
 
-    if (user.lastName && !validators.isNonEmptyString(user.lastName)) throw 'Updated last name is not valid';
+    if (user.lastName && !validators.isLettersOnly(user.lastName)) throw 'Updated last name is not valid';
 
     if (user.email) {
       if (!validators.isValidEmail(user.email)) throw 'Updated email is not valid';

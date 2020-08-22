@@ -14,53 +14,69 @@
             <div id ="myTab" class= "tab-content">
                 <div {{#if displayArtworkinfo}}class="tab-pane fade active show" {{else}} class=
                 "tab-pane fade" {{/if}}id = "artwork-info">
-                    <a href = '/users/profile'>Back to Portfolio Page</a>
-                    <form action = "/artworks/{{artwork.id}}" method = "POST">
-                        <input type="hidden" name="_method" value="patch" />
-                        <div class="form-group">
-                            <label for="title">Title</label>
-                            <input type="text" class="form-control" id="title" name = "title" value="{{artwork.title}}" required>
+                    <div class = card>
+                        <div class ="card-header">
+                            <h4 class="card-title mt-2">Edit Your Artwork</h4>
+                            <a href = '/users/profile'>Back to Portfolio Page</a>
                         </div>
-                        <div class="form-group">
-                            <label for="Description">Description</label>
-                            <textarea class="form-control" id="Description" name = "description" rows="3">{{artwork.description}}</textarea>
+                        <div class = "card-body">
+                            
+                            <form id = "editForm" action = "/artworks/{{artwork.id}}" method = "POST">
+                                <input type="hidden" name="_method" value="patch" />
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input type="text" class="form-control" id="title" name = "title" value="{{artwork.title}}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="Description">Description</label>
+                                    <textarea class="form-control" id="description" name = "description" rows="3">{{artwork.description}}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="createDate">Creation Date</label>
+                                    <input type="date" class="form-control" id="createDate" name = "createDate" value="{{artwork.createDate}}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <input type="text" class="form-control" id="category" name = "category" value="{{artwork.category}}" required>
+                                    <small id="title-help" class="form-text text-muted">Click Update when you are done editing your artwork</small>
+                                </div>
+                                <div class="form-group">
+                                <button type="submit" class="btn btn-success">Update</button>
+                                </div>
+                            </form> 
                         </div>
-                        <div class="form-group">
-                            <label for="createDate">Creation Date</label>
-                            <input type="date" class="form-control" id="createDate" name = "createDate" value="{{artwork.createDate}}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="category">Category</label>
-                            <input type="text" class="form-control" id="category" name = "category" value="{{artwork.category}}" required>
-                            <small id="title-help" class="form-text text-muted">Click Update when you are done editing your artwork</small>
-                        </div>
-                        <div class="form-group">
-                        <button type="submit" class="btn btn-success">Update</button>
-                        </div>
-                        </form>
+                    </div>
                 </div>
                 <div {{#if displayArtworkinfo}} class ="tab-pane fade"{{else}} class="tab-pane fade show active" {{/if}}id ="artwork-images">
                     <div class = "row">
                         <div class ="col-sm-3">
                             <br>
-                            <h4 class ="upload-img-p">Upload more pictures:</h4>
-                            <form action ="/artworks/addimage/{{artwork.id}}" method ="POST" enctype="multipart/form-data">
-                                <input type="file" name="image" id="image" accept="image/*"multiple/> 
-                                <br>
-                                <br>
-                                <button class = "btn btn-primary" type = "submit">Upload</button>
-                            </form>
-                            <br>
-                            <form action = '/artworks/{{artwork.id}}' method = "POST">
-                                <input type="hidden" name="_method" value="delete" />
-                                <button class ="btn btn-danger" type = "submit" 
-                                onclick="return confirm('Are you sure you want to delete this artwork?');">DELETE ARTWORK</button>
-                            </form>
+                            <div class = "card text-center "style="width: 18rem;">
+                                <div class = "card body">
+                                   <h4 class ="upload-img-p">Upload more pictures:</h4>
+                                    <br>
+                                    <form class = "form text-center" action ="/artworks/addimage/{{artwork.id}}" method ="POST" enctype="multipart/form-data">
+                                        <input type="file" name="image" id="image" accept="image/*"multiple/> 
+                                    <br>
+                                    <br>
+                                        <button class = "btn btn-primary" type = "submit">Upload</button>
+                                    </form>
+                                    <br>
+                                    <form class ="form" action = '/artworks/{{artwork.id}}' method = "POST">
+                                        <input type="hidden" name="_method" value="delete" />
+                                        <button class ="btn btn-danger" type = "submit" 
+                                        onclick="return confirm('Are you sure you want to delete this artwork?');">DELETE ARTWORK</button>
+                                    </form> 
+                                    <br>
+                                    <br>
+                                </div>
+                            </div>
                         </div>
                         <div class ="col-sm-9">
                             <div class= "artwork-pictures">
                                 {{#if pictures}}
                                     {{#each pictures}}
+                                    <br>
                                     <div>
                                         {{#if title}}
                                         <h3>Title: {{title}}</h3>

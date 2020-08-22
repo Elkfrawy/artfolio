@@ -42,6 +42,7 @@ async function main() {
       biography: 'Interested in color pencil',
       websiteUrl: 'https://www.stevens.edu',
       userPictureId: mirandaPic._id,
+      socialMedia: { LinkedIn: 'https://www.linkedin.com/in/xianqing-miranda-zou-41993958/' },
     };
 
     let jackInfo = {
@@ -65,7 +66,7 @@ async function main() {
     let aymanInfo = {
       firstName: 'Ayman',
       lastName: 'Elkfrawy',
-      email: 'Aelkfraw@stevens.edu',
+      email: 'aelkfraw@stevens.edu',
       gender: 'Male',
       address: {
         streetAddress: '20 15st Stt',

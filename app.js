@@ -24,7 +24,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 const dbConnection = mongooseConnection();
 const static = express.static(path.join(__dirname, 'public'));
 
@@ -39,15 +38,15 @@ app.use(async (req, res, next) => {
   next();
 });
 
-const forbiddenRoutes = (req,res, next)=>{
-  if(!req.session.user){
+const forbiddenRoutes = (req, res, next) => {
+  if (!req.session.user) {
     res.render('home/accessDenied');
-  }else{
+  } else {
     next();
   }
-}
-app.use('/artworks/create',forbiddenRoutes);
-app.use('/artworks/edit/:id',forbiddenRoutes);
+};
+app.use('/artworks/create', forbiddenRoutes);
+app.use('/artworks/edit/:id', forbiddenRoutes);
 
 app.use(function (req, res, next) {
   res.locals.session = req.session;
@@ -71,7 +70,10 @@ const handlebarsInst = ehb.create({
       return new Handlebars.SafeString(JSON.stringify(obj));
     },
     divisibleBy: (num, divideBy) => {
-      return (num + 1) % divideBy == 0;
+      return num > 0 && num % divideBy == 0;
+    },
+    equals: (left, right) => {
+      return left === right;
     },
   },
   partialsDir: ['views/partials/'],

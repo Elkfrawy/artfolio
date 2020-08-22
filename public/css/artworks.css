@@ -100,6 +100,10 @@ body {
     float: right;
     width: 60%;
   }
+  .comment-display{
+      position: relative;
+      top: 800px;
+  }
   
   .image-fluid{
       max-width: 210px;

@@ -4,6 +4,7 @@ const validators = require('./validators');
 const users = require('./users');
 const pics = require('./pictures');
 const { artworks } = require('.');
+const Artwork = require('../models/Artwork');
 
 module.exports = {
   async getArtworkById(id) {
@@ -76,6 +77,7 @@ module.exports = {
   async deleteArtwork(id) {
     if (!validators.isNonEmptyString(id)) throw 'Please provide an id to delete';
     const deletedArtwork = await models.Artwork.findByIdAndDelete(id).exec();
+    await pics.deletePicturesByArtworkId(id);
     return deletedArtwork;
   },
 
@@ -90,6 +92,20 @@ module.exports = {
       ],
     }).exec();
   },
+
+  async increaseLike(id){
+    if (!validators.isNonEmptyString(id)) throw 'Id is not valid';
+    const artWork = await models.Artwork.findById(id).exec();
+    artWork.likeCount += 1;
+    return await saveSafely(artWork);
+  },
+  async decreaseLike(id){
+    if (!validators.isNonEmptyString(id)) throw 'Id is not valid';
+    const artWork = await models.Artwork.findById(id).exec();
+    artWork.likeCount -= 1;
+    return await saveSafely(artWork);
+  },
+
 
   async getArtworksByKeyword(keyword) {
     if (!validators.isNonEmptyString(keyword)) throw 'Please provide a keyword to search by';
@@ -127,11 +143,11 @@ module.exports = {
     if (!validators.isNonEmptyString(commentText)) throw 'Please provide the comment string';
 
     const user = await users.getUserById(userId);
-    const artwork = await getArtworkById(artworkId);
+    const artwork = await this.getArtworkById(artworkId);
 
     let comment = new models.Comment({
       userId,
-      username: user.firstName + ' ' + user.lastName,
+      userName: user.firstName + ' ' + user.lastName,
       comment: commentText,
     });
     artwork.comments.push(comment);
@@ -144,13 +160,21 @@ module.exports = {
     if (!validators.isNonEmptyString(artworkId)) throw 'Please provide artworkId for the comment to delete';
     if (!validators.isNonEmptyString(commentId)) throw 'Please provide the commentId to delete';
 
-    const artwork = getArtworkById(artworkId);
+    const artwork = await this.getArtworkById(artworkId);
     const comment = artwork.comments.id(commentId);
     if (comment) {
       comment.remove();
+      await artwork.save();
     } else {
       throw "Didn't find a comment with the given ID to delete";
     }
+  },
+
+  async recordNewView(artworkId) {
+    if (!validators.isNonEmptyString(artworkId)) throw 'Please provide artworkId for the comment to delete';
+
+    const artwork = await this.getArtworkById(artworkId);
+    await Artwork.findByIdAndUpdate(artworkId, { $inc: { numberOfViews: 1 }, $set: { lastView: Date.now() } });
   },
 };
 

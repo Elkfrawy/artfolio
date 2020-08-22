@@ -53,7 +53,7 @@
 
 @media (min-width: 576px) {
   .gallery-block .transform-on-hover:hover {
-    transform: translateY(-10px) scale(1.02);
+    /* transform: translateY(-10px) scale(1.02); */
     box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15) !important;
   }
 }
@@ -113,31 +113,7 @@
 .edit-profile {
   text-align: center;
 }
-.edit-btn {
-  background-color: dodgerblue;
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-  font-weight: bold;
-}
 
-.edit-btn:hover {
-  background-color: rgb(141, 182, 219);
-}
-
-.pic-edit-btn {
-  background-color: dodgerblue;
-  border: none;
-  color: white;
-  padding: 8px 12px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-}
-
-.pic-edit-btn:hover {
-  background-color: rgb(141, 182, 219);
+.create-new {
+  width: 50%;
 }

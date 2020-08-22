@@ -53,7 +53,25 @@ module.exports = {
     const deletedUser = await models.User.findByIdAndDelete(userId).exec();
     return deletedUser;
   },
+  
+  async appendArtworkToLikes(userId, artworkId){
+      const user = await this.getUserById(userId);
+      user.likedArtworks.push(artworkId); 
+      return saveSafely(user);
+  }, 
+
+  async removeArtworkToLikes(userId, artworkId){
+    const user = await this.getUserById(userId);
+    const index = user.likedArtworks.indexOf(artworkId); 
+    if (index > -1) {
+      user.likedArtworks.splice(index, 1);
+    }
+    return saveSafely(user);
+}
 };
+
+  
+
 
 async function saveSafely(document) {
   try {

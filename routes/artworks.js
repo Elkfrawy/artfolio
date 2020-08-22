@@ -31,8 +31,6 @@ router.get('/search', async (req, res) => {
   }
 });
 
-
-
 //routes problem: cant use /new routes, redirects to /:id rotues for some reason
 //solution: /... will automatically be interpreted as an id, use /.../..
 //put get id route last
@@ -100,7 +98,7 @@ router.post('/create', upload.array('image'), async (req, res) => {
 router.get('/edit/:id', async (req, res) => {
   if (req.session.user) {
     try {
-      const userId = req.session.user._id; 
+      const userId = req.session.user._id;
       const artwork = await artworkData.getArtworkById(req.params.id);
       const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
       res.render('artworks/editSingle', { artwork, pictures, userId, displayArtworkinfo:true });
@@ -171,7 +169,7 @@ router.post('/changeImageTitle/:id', async(req,res)=>{
   const artwork = await artworkData.getArtworkById(artworkId);
   const userId = artwork.userId;
 
-  if (!validators.isNonEmptyString(newTitle)) return res.redirect(`/artworks/edit/${artworkId}`)
+  //if (!validators.isNonEmptyString(newTitle)) return res.redirect(`/artworks/edit/${artworkId}`)
   
   await pictureData.updatePictureTitle(req.params.id, newTitle);
   const pictures = await pictureData.getPicturesByArtworkId(artworkId);
@@ -179,13 +177,37 @@ router.post('/changeImageTitle/:id', async(req,res)=>{
   return res.render('artworks/editSingle', {userId, artwork, pictures, displayArtworkinfo: false}); 
 });
 
+router.post('/likes/:id', async(req,res)=>{
+  if(!req.session.user){
+    //display message, cant like
+  }
+  const userId = req.session.user._id;
+  const user = await userData.getUserById(userId);
+  const artworkId = req.params.id;
+  //const artwork = await artworkData.getArtworkById(artworkId);
+  const likedArtworks = user.likedArtworks;
+
+
+  if(likedArtworks.includes(artworkId)){
+    await userData.removeArtworkToLikes(userId,artworkId);
+    await artworkData.decreaseLike(artworkId); 
+  }else{
+    await userData.appendArtworkToLikes(userId, artworkId);
+    await artworkData.increaseLike(artworkId); 
+    
+  } 
+  return res.redirect(`/artworks/${artworkId}`);
+}); 
 
 router.get('/:id', async (req, res) => {
   try {
     const artwork = await artworkData.getArtworkById(req.params.id);
     const userId = artwork.userId;
     const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
-    res.render('artworks/displaySingle', { artwork, pictures, userId});
+    // Update views
+    await artworkData.recordNewView(req.params.id);
+
+    res.render('artworks/displaySingle', { artwork, pictures, userId });
   } catch (e) {
     res.status(500).send('No Artwork with that ID found');
   }
@@ -240,7 +262,49 @@ router.delete('/:id', async (req, res) => {
     await artworkData.deleteArtwork(req.params.id);
     res.redirect('/users/profile');
   } catch (e) {
-    res.Status(500);
+    res.status(500);
+  }
+});
+
+router.post('/:id/comments/', async (req, res) => {
+  try {
+    const comment = req.body.comment;
+    const artworkId = req.params.id;
+    if (!validators.isNonEmptyString(comment)) {
+      res.status(400).json({ error: 'You must provide a comment text' });
+      return;
+    }
+    if (!req.session.user) {
+      res.status(403).json({ error: 'User is not logged in. Please login to post a comment.' });
+      return;
+    }
+    if (!validators.isNonEmptyString(artworkId)) {
+      res.status(400).json({ error: 'Comment must be associated with an artwork' });
+      return;
+    }
+    const createdComment = await artworkData.createComment(req.session.user._id, artworkId, comment);
+    res.status(200).json({ createdComment, artworkId });
+  } catch (e) {
+    res.status(500).json({ error: e });
+  }
+});
+
+router.delete('/:id/comments/:commentId', async (req, res) => {
+  const artworkId = req.params.id;
+  const commentId = req.params.commentId;
+  try {
+    if (!validators.isNonEmptyString(artworkId)) {
+      res.status(400).json({ error: 'You must provide the artworkId' });
+      return;
+    }
+    if (!validators.isNonEmptyString(commentId)) {
+      res.status(400).json({ error: 'You must provide the commentId' });
+      return;
+    }
+    await artworkData.deleteComment(artworkId, commentId);
+    res.status(200).json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e });
   }
 });
 

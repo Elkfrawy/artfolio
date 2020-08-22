@@ -178,15 +178,11 @@ router.post('/changeImageTitle/:id', async(req,res)=>{
 });
 
 router.post('/likes/:id', async(req,res)=>{
-  if(!req.session.user){
-    //display message, cant like
-  }
+  
+  const artworkId = req.params.id;
   const userId = req.session.user._id;
   const user = await userData.getUserById(userId);
-  const artworkId = req.params.id;
-  //const artwork = await artworkData.getArtworkById(artworkId);
   const likedArtworks = user.likedArtworks;
-
 
   if(likedArtworks.includes(artworkId)){
     await userData.removeArtworkToLikes(userId,artworkId);

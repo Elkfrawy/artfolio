@@ -23,12 +23,15 @@
     <p class="card-text">{{artwork.category}}</p>
   </div>
   <div class ="card-body">
+    {{#if session.user}}
     <h6 class = "card-title">Artwork Likes: {{artwork.likeCount}}</h6>
     <form action ="/artworks/likes/{{artwork._id}}" method = "POST">
       <button id="heart" type = "submit" class="btn btn-light">
       </button>
     </form>
-
+    {{else}}
+    <div class="alert alert-warning my-4gi">Login to be able to like this artwork.</div>
+    {{/if}}
   </div>
 </div>
 <br>

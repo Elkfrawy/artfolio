@@ -19,7 +19,6 @@
                 {{#each artworks}}
                 <div class="col-xs-4">
                         {{> artwork_icon}}
-                            {{!-- <h6><a href="/artworks/{{_id}}">{{title}}</a></h6> --}}
 
                         {{#if ../authenticated}}
                         <div class="control-btns d-flex justify-content-center">
@@ -73,11 +72,9 @@
         </div>
         <div class="user-info">
             <div class="card border-0">
-                {{#if user.userPictureId}}
                 <a>
                     <img src="/pictures/content/{{user.userPictureId}}" alt="Card Image" class="card-img-top">
                 </a>
-                {{/if}}
                 <div class="card-body">
                     <h2>{{ user.firstName }} {{ user.lastName}}</h2>
                     <h6>Bio</h6>
@@ -89,10 +86,7 @@
                     <a class="info-tag">Website: </a>
                     <a href="{{user.websiteUrl}}" class="personal-link" target="_blank">{{user.websiteUrl}}</a><br>
                     {{/if}}
-                    {{!-- {{#if user.socialMedia}}
-                    <a href="#" class="fa fa-facebook"></a>
 
-                    {{/if}} --}}
 
                     {{#if authenticated}}
                     <a class="info-tag">Address </a>

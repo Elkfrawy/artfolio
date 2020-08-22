@@ -2,10 +2,15 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const upload = require('../config/upload');
-var path = require('path');
+const path = require('path');
+const fs = require('fs').promises;
 const validators = require('../data/validators');
 
 router.get('/content/:id', async (req, res) => {
+  if (req.params.id === 'undefined') {
+    res.redirect('/pictures/content');
+    return;
+  }
   if (!validators.isNonEmptyString(req.params.id)) {
     res.status(400, { errors: ['Must provide non-empty string for picture id'] });
     return;
@@ -17,6 +22,10 @@ router.get('/content/:id', async (req, res) => {
   } catch (e) {
     res.status(400).json({ error: e });
   }
+});
+
+router.get('/content/', async (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'img', 'default_profile.jpeg'));
 });
 
 router.get('/user/:id', async (req, res) => {

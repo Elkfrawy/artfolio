@@ -15,76 +15,60 @@
             <br>
             {{/if}}
 
-            <div class="row">
-                {{#if authenticated}}
-                {{#if artworks}}
+            <div id="gallery" class="row mt-5">
                 {{#each artworks}}
-                <div class="col-md-6 col-lg-4">
-                    <div class="card border-0 transform-on-hover">
-                        <a class="lightbox" href="/artworks/{{_id}}">
-                            <img src="{{pictures.[0].pictureUrl}}" alt="Card Image" class="card-img-top">
-                        </a>
-                        <div class="card-body">
-                            <h6><a href="/artworks/{{_id}}">{{title}}</a></h6>
-                            <p class="text-muted card-text">{{description}}</p>
+                <div class="col-xs-4">
+                        {{> artwork_icon}}
+                            {{!-- <h6><a href="/artworks/{{_id}}">{{title}}</a></h6> --}}
 
-                            <button type="button" class="btn btn-danger" data-toggle="modal"
-                                data-target="#deleteArtwork"><i class="fa fa-trash"></i>
-                            </button>
+                        {{#if ../authenticated}}
+                        <div class="control-btns d-flex justify-content-center">
+                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                            data-target="#deleteArtwork"><i class="fa fa-trash"></i>
+                        </button>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="deleteArtwork" tabindex="-1" role="dialog">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLongTitle">Delete Artwork</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Are you sure you want to delete this artwork?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Cancel</button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="deleteArtwork" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Delete Artwork</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete this artwork?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Cancel</button>
 
-                                            <form action="/artworks/{{_id}}" method="POST">
-                                                <input type="hidden" name="_method" value="delete" />
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
-                                        </div>
+                                        <form action="/artworks/{{_id}}" method="POST">
+                                            <input type="hidden" name="_method" value="delete" />
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-
-                            <form action="/artworks/edit/{{_id}}" method="get">
-                                <button type="submit" class="btn btn-primary"><i class="fa fa-edit"></i></button>
-                            </form>
-
                         </div>
-                    </div>
+
+                        <form action="/artworks/edit/{{_id}}" method="get">
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-edit"></i></button>
+                        </form>
+                        </div>
+                        {{/if}}
+
                 </div>
-                {{/each}}
-                {{/if}}
                 {{else}}
-
-                {{#if artworks}}
-                {{#each artworks}}
-                <div class="col-md-6 col-lg-4">
-                    <div class="card border-0 transform-on-hover">
-                        <a class="lightbox" href="/artworks/{{_id}}">
-                            <img src="{{pictures.[0].pictureUrl}}" alt="Card Image" class="card-img-top">
-                        </a>
-                        <div class="card-body">
-                            <h6><a href="/artworks/{{_id}}">{{title}}</a></h6>
-                            <p class="text-muted card-text">{{description}}</p>
+                        <div class="alert alert-warning mx-auto" role="alert">
+                    {{#if authenticated}}
+                        You don't have any artworks yet. Please create some artworks to show on your profile.
+                    {{else}}
+                        This user doesn't have any artworks yet.
+                    {{/if}}
                         </div>
-                    </div>
-                </div>
                 {{/each}}
-                {{/if}}
-                {{/if}}
             </div>
         </div>
         <div class="user-info">

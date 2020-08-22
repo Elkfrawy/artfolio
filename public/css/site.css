@@ -35,3 +35,7 @@ body {
 .error {
   color: #a94442;
 }
+
+.carousel-main-image {
+  max-height: 300px;
+}

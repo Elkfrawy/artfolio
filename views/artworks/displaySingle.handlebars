@@ -23,9 +23,10 @@
     <p class="card-text">{{artwork.category}}</p>
   </div>
   <div class ="card-body">
-    <h4 class = "card-title">Likes: {{artwork.likeCount}}</h4>
+    <h6 class = "card-title">Likes: {{artwork.likeCount}}</h6>
     <form action ="/artworks/likes/{{artwork._id}}" method = "POST">
-      <button type = "submit">Like</button>
+      <button id="heart" type = "submit" class="btn btn-light">
+      </button>
     </form>
 
   </div>

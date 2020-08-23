@@ -19,8 +19,12 @@
                 {{#if artworks}}
                 {{#each artworks}}
                 <div class="col-xs-4">
+<<<<<<< HEAD
                     {{> artwork_icon}}
                     {{!-- <h6><a href="/artworks/{{_id}}">{{title}}</a></h6> --}}
+=======
+                        {{> artwork_icon}}
+>>>>>>> f8ecbe1e52f5a4a09e56d99cf891c72998b98d3d
 
                     {{#if ../authenticated}}
                     <div class="control-btns d-flex justify-content-center">
@@ -73,11 +77,9 @@
         </div>
         <div class="user-info">
             <div class="card border-0">
-                {{#if user.userPictureId}}
                 <a>
                     <img src="/pictures/content/{{user.userPictureId}}" alt="Card Image" class="card-img-top">
                 </a>
-                {{/if}}
                 <div class="card-body">
                     <h2>{{ user.firstName }} {{ user.lastName}}</h2>
                     <h6>Bio</h6>
@@ -89,6 +91,10 @@
                     <a class="info-tag">Website: </a>
                     <a href="{{user.websiteUrl}}" class="personal-link" target="_blank">{{user.websiteUrl}}</a><br>
                     {{/if}}
+<<<<<<< HEAD
+=======
+
+>>>>>>> f8ecbe1e52f5a4a09e56d99cf891c72998b98d3d
 
                     {{#if authenticated}}
                     <a class="info-tag">Address </a>

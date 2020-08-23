@@ -87,10 +87,10 @@
   $('#register').validate({
     rules: {
       firstName: {
-        lettersonly: true,
+        letterswithbasicpunc: true,
       },
       lastName: {
-        lettersonly: true,
+        letterswithbasicpunc: true,
       },
       password: {
         minlength: 8,

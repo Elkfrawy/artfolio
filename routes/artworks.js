@@ -116,7 +116,7 @@ router.get('/edit/:id', async (req, res) => {
           userId,
           displayArtworkinfo: true,
           title: `Editing artwork ${artwork.title}`,
-          notLastPic : false});
+          lastPic : true});
       }else{
         res.render('artworks/editSingle', {
         artwork,
@@ -124,6 +124,7 @@ router.get('/edit/:id', async (req, res) => {
         userId,
         displayArtworkinfo: true,
         title: `Editing artwork ${artwork.title}`,
+        lastPic: false,
       });
       }
     } catch (e) {

@@ -46,7 +46,7 @@ router.get('/register', async (req, res) => {
   if (req.session.user) {
     res.redirect('/');
   }
-  res.render('users/register');
+  res.render('users/register', { title: 'Register' });
 });
 
 router.post('/register', async (req, res) => {
@@ -73,18 +73,20 @@ router.post('/register', async (req, res) => {
   };
 
   if (errors.length > 0) {
-    res.status(400).render('users/register', { errors, user });
+    res.status(400).render('users/register', { errors, user, title: 'Register' });
   } else {
     try {
       const existingUser = await users.getUserByEmail(email.toLowerCase());
       if (existingUser) {
-        res.status(400).render('users/register', { errors: ['This email address is already used.'], user });
+        res
+          .status(400)
+          .render('users/register', { errors: ['This email address is already used.'], user, title: 'Register' });
       } else {
         user = await users.createUser(user);
-        res.render('users/reg_success', { user });
+        res.render('users/reg_success', { user, title: 'Register Success' });
       }
     } catch (e) {
-      res.status(500).render('users/register', { errors: [e], user });
+      res.status(500).render('users/register', { errors: [e], user, title: 'Register' });
     }
   }
 });
@@ -93,7 +95,7 @@ router.get('/login', async (req, res) => {
   if (req.session.user) {
     res.redirect('/');
   }
-  res.render('users/login');
+  res.render('users/login', { title: 'Login' });
 });
 
 router.post('/login', async (req, res) => {
@@ -103,14 +105,14 @@ router.post('/login', async (req, res) => {
   if (!data.validators.isNonEmptyString(password)) errors.push('Password is missing');
 
   if (errors.length > 0) {
-    res.status(400).render('users/login', { errors, email });
+    res.status(400).render('users/login', { errors, email, title: 'Login' });
   } else {
     const user = await users.getUserByEmail(email.toLowerCase());
     if (user && (await bcrypt.compare(password, user.hashedPassword))) {
       req.session.user = { _id: user._id, email: user.email, firstName: user.firstName, lastName: user.lastName };
       res.redirect('/');
     } else {
-      res.status(400).render('users/login', { errors: ['Email or Password is incorrect'], email });
+      res.status(400).render('users/login', { errors: ['Email or Password is incorrect'], email, title: 'Login' });
     }
   }
 });
@@ -124,7 +126,7 @@ router.get('/logout', (req, res) => {
 // private page for user to edit his/her own profile
 router.get('/edit', async (req, res) => {
   if (!req.session.user) {
-    res.render('home/access_denied');
+    res.render('home/access_denied', { title: 'Access Denied' });
     return;
   }
   validators.isNonEmptyString(req.session.user._id);
@@ -140,7 +142,7 @@ router.get('/edit', async (req, res) => {
 // Validated user to update information
 router.patch('/updateprofile', async (req, res) => {
   if (!req.session.user) {
-    res.render('home/access_denied');
+    res.render('home/access_denied', { title: 'Access Denied' });
     return;
   }
   validators.isValidUserId(req.session.user._id);
@@ -207,9 +209,14 @@ router.patch('/updateprofile', async (req, res) => {
         firstName: updatedUser.firstName,
         lastName: updatedUser.lastName,
       };
-      res.render('users/update_success', { content: 'profile' });
+      res.render('users/update_success', { content: 'profile', title: 'Profile Update Success' });
     } catch (e) {
-      res.sendStatus(500);
+      res.status(500).render('users/edit_profile', {
+        user: currentUser,
+        displayProfile: true,
+        profileErrors: [e],
+        title: 'Edit Profile',
+      });
     }
   }
 });
@@ -242,7 +249,7 @@ router.get('/portfolio/:id', async (req, res) => {
       title: 'Artfolio',
     });
   } catch (e) {
-    res.status(404);
+    res.status(404).json({ error: 'Portfolio not found' });
   }
 });
 
@@ -262,7 +269,7 @@ router.post('/changeuserpic', upload.single('image'), async (req, res) => {
         await users.updateUser(currentUserId, { userPictureId: image._id });
         res.redirect('/users/edit');
       } catch (e) {
-        res.status(500);
+        res.status(500).json({ error: 'Fail to update photo' });
       }
     }
   }
@@ -291,7 +298,7 @@ router.patch('/updatepassword', async (req, res) => {
     if (user && (await bcrypt.compare(currentPassword, user.hashedPassword))) {
       const newHashedPassword = await bcrypt.hash(newPassword, 10);
       await users.updateUser(user._id, { hashedPassword: newHashedPassword });
-      res.render('users/update_success', { content: 'password' });
+      res.render('users/update_success', { content: 'password', title: 'Profile Update Success' });
     } else {
       res.status(400).render('users/edit_profile', {
         user: user,

@@ -87,9 +87,14 @@ router.post('/create', upload.array('image'), async (req, res) => {
           pictures.push(pic);
         }
       }
-      return res.render('artworks/DisplaySingle', { artwork: newArtwork, pictures: pictures });
+      return res.render('artworks/displaySingle', {
+        userId: userId,
+        artwork: newArtwork,
+        pictures: pictures,
+        title: `Artwork ${newArtwork.title}`,
+      });
     } catch (e) {
-      res.status(500).render('artworks/CreateSingle', { errors: [e] });
+      res.status(500).render('artworks/createSingle', { errors: [e], title: 'Creating new artwork' });
     }
   }
 });
@@ -139,7 +144,13 @@ router.post('/addimage/:id', upload.array('image'), async (req, res) => {
     const userId = artwork.userId;
     const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
     //res.redirect(`/artworks/edit/${req.params.id}`);
-    return res.render('artworks/editSingle', { userId, artwork, pictures, displayArtworkinfo: false });
+    return res.render('artworks/editSingle', {
+      userId,
+      artwork,
+      pictures,
+      displayArtworkinfo: false,
+      title: `Editing artwork ${artwork.title}`,
+    });
   } catch (e) {
     res.status(500);
   }
@@ -159,7 +170,13 @@ router.post('/deleteimage/:id', async (req, res) => {
     await pictureData.deletePicture(req.params.id);
     const pictures = await pictureData.getPicturesByArtworkId(artworkId);
     //return res.redirect(`/artworks/edit/${artworkId}`);
-    return res.render('artworks/editSingle', { userId, artwork, pictures, displayArtworkinfo: false });
+    return res.render('artworks/editSingle', {
+      userId,
+      artwork,
+      pictures,
+      displayArtworkinfo: false,
+      title: `Editing artwork ${artwork.title}`,
+    });
   } catch (e) {
     res.send('error deleting picture');
   }
@@ -181,7 +198,13 @@ router.post('/changeImageTitle/:id', async (req, res) => {
   await pictureData.updatePictureTitle(req.params.id, newTitle);
   const pictures = await pictureData.getPicturesByArtworkId(artworkId);
   //return res.redirect(`/artworks/edit/${artworkId}`);
-  return res.render('artworks/editSingle', { userId, artwork, pictures, displayArtworkinfo: false });
+  return res.render('artworks/editSingle', {
+    userId,
+    artwork,
+    pictures,
+    displayArtworkinfo: false,
+    title: `Editing artwork ${artwork.title}`,
+  });
 });
 
 router.post('/likes/:id', async (req, res) => {
@@ -212,7 +235,7 @@ router.get('/:id', async (req, res) => {
     // Update views
     await artworkData.recordNewView(req.params.id);
 
-    res.render('artworks/displaySingle', { artwork, pictures, userId });
+    res.render('artworks/displaySingle', { artwork, pictures, userId, title: `Artwork ${artwork.title}` });
   } catch (e) {
     res.status(500).send('No Artwork with that ID found');
   }

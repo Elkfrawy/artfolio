@@ -92,6 +92,9 @@ handlebarsInst.handlebars.registerHelper('checkGender', function (value, inputVa
   }
 });
 handlebarsInst.handlebars.registerHelper('select', function (selected, options) {
+  if (!selected) {
+    selected = 'United States';
+  }
   return options.fn(this).replace(new RegExp(' value="' + selected + '"'), '$& selected="selected"');
 });
 

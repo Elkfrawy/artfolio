@@ -64,7 +64,7 @@
 
                 {{else}}
                 <div class="alert alert-warning mx-auto" role="alert">
-                    {{#if ../authenticated}}
+                    {{#if authenticated}}
                     You don't have any artworks yet. Please create some artworks to show on your profile.
                     {{else}}
                     This user doesn't have any artworks yet.
@@ -92,10 +92,21 @@
                         {{#if authenticated}}
                         <span class="info-tag">Address </span>
                         <ul class="info-addr">
+                            {{#if user.address.streetAddress}}
                             <li>Street Address: {{user.address.streetAddress}}</li>
+                            {{/if}}
+                            {{#if user.address.city}}
                             <li>City: {{user.address.city}}</li>
+                            {{/if}}
+                            {{#if user.address.state}}
                             <li>State: {{user.address.state}}</li>
+                            {{/if}}
+                            {{#if user.address.zipCode}}
                             <li>Zip Code: {{user.address.zipCode}}</li>
+                            {{/if}}
+                            {{#if user.address.country}}
+                            <li>Country: {{user.address.country}}</li>
+                            {{/if}}
                         </ul>
                         <span class="info-tag">Birthday: </span>{{dateFormat user.birthday "YYYY-MM-DD" true}}
                         {{/if}}

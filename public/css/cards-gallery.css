@@ -123,6 +123,8 @@
 .social-icons {
   text-align: center;
   box-shadow: none;
+  display: flex;
+  justify-content: center;
 }
 .social-icons li {
   display: inline-block;

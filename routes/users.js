@@ -12,26 +12,31 @@ const { response } = require('express');
 const xss = require('xss');
 
 // public page
-router.get('/', async (req, res) => {
-  try {
-    const userList = await users.getAllUsers();
-    res.render('users/all', { users: userList });
-  } catch (e) {
-    res.status(500).send();
-  }
-});
+// router.get('/', async (req, res) => {
+//   try {
+//     const userList = await users.getAllUsers();
+//     res.render('users/all', { users: userList });
+//   } catch (e) {
+//     res.status(500).send();
+//   }
+// });
 
 // private page for user to see his/her own profile
 router.get('/profile', async (req, res) => {
   if (!req.session.user) {
-    res.redirect('/users/login');
+    res.render('home/access_denied');
     return;
   }
   try {
     validators.isNonEmptyString(req.session.user._id);
     const singleUser = await users.getUserById(req.session.user._id);
     const artworksByUserId = await artworks.getArtWorksByUserId(req.session.user._id);
-    res.render('portfolios/portfolio', { user: singleUser, artworks: artworksByUserId, authenticated: true });
+    res.render('portfolios/portfolio', {
+      user: singleUser,
+      artworks: artworksByUserId,
+      authenticated: true,
+      title: 'Profile',
+    });
   } catch (e) {
     res.status(500).send();
   }
@@ -119,41 +124,82 @@ router.get('/logout', (req, res) => {
 // private page for user to edit his/her own profile
 router.get('/edit', async (req, res) => {
   if (!req.session.user) {
-    res.redirect('/users/login');
+    res.render('home/access_denied');
     return;
   }
   validators.isNonEmptyString(req.session.user._id);
   const singleUser = await users.getUserById(req.session.user._id);
-  res.render('users/edit_profile', { user: singleUser, displayProfile: true, today: Date.now() });
+  res.render('users/edit_profile', {
+    user: singleUser,
+    displayProfile: true,
+    today: Date.now(),
+    title: 'Edit Profile',
+  });
 });
 
 // Validated user to update information
 router.patch('/updateprofile', async (req, res) => {
   if (!req.session.user) {
-    res.redirect('users/login');
+    res.render('home/access_denied');
     return;
   }
   validators.isValidUserId(req.session.user._id);
-  const currentUser = await users.getUserById(xss(req.session.user._id));
+  const currentUser = await users.getUserById(req.session.user._id);
 
-  let userInfo = req.body;
+  const { firstName, lastName, address, gender, birthday, websiteUrl, socialMedia, biography } = req.body;
+  let birthday_date;
+  if (birthday) {
+    birthday_date = new Date(xss(birthday));
+  } // convert string to date
 
   const errors = [];
-  userInfo.firstName = xss(userInfo.firstName);
-  userInfo.lastName = xss(userInfo.lastName);
-
-  if (userInfo.birthday) {
-    userInfo.birthday = new Date(xss(userInfo.birthday));
-  }
   // first name and last name are required
-  if (!validators.isNonEmptyString(userInfo.firstName)) errors.push('First name is missing');
-  if (!validators.isNonEmptyString(userInfo.lastName)) errors.push('Last name is missing');
-  if (!validators.isValidBirthday(userInfo.birthday)) errors.push('Birthday cannot be later than today');
+  if (!validators.isLettersOnly(firstName)) errors.push('First name is not valid');
+  if (!validators.isLettersOnly(lastName)) errors.push('Last name is not valid');
+  if (birthday_date && !validators.isValidBirthday(birthday_date)) errors.push('Birthday cannot be later than today');
+  if (gender && !validators.validateGender(gender)) errors.push('Please choose a gender in the given category');
+  if (websiteUrl && !validators.isValidURL(websiteUrl)) errors.push('The provided personal website is not valid');
+  if (socialMedia) {
+    if (socialMedia.instagram && !validators.isValidURL(socialMedia.instagram))
+      errors.push('Instagram Link is not valid');
+    if (socialMedia.twitter && !validators.isValidURL(socialMedia.twitter)) errors.push('Twitter Link is not valid');
+    if (socialMedia.linkedIn && !validators.isValidURL(socialMedia.linkedIn)) errors.push('LinkedIn Link is not valid');
+    if (socialMedia.facebook && !validators.isValidURL(socialMedia.facebook)) errors.push('Facebook Link is not valid');
+  }
 
   if (errors.length > 0) {
-    res.status(400).render('users/edit_profile', { user: currentUser, displayProfile: true, profileErrors: errors });
+    res.status(400).render('users/edit_profile', {
+      user: currentUser,
+      displayProfile: true,
+      profileErrors: errors,
+      title: 'Edit Profile',
+    });
   } else {
     try {
+      let newAddress = {};
+      if (address.streetAddress) newAddress.streetAddress = xss(address.streetAddress);
+      if (address.city) newAddress.city = xss(address.city);
+      if (address.state) newAddress.state = xss(address.state);
+      if (address.zipCode) newAddress.zipCode = xss(address.zipCode);
+      if (address.country) newAddress.country = xss(address.country);
+
+      let newSocialMedia = {};
+      if (socialMedia.instagram) newSocialMedia.instagram = xss(socialMedia.instagram);
+      if (socialMedia.twitter) newSocialMedia.twitter = xss(socialMedia.twitter);
+      if (socialMedia.linkedIn) newSocialMedia.linkedIn = xss(socialMedia.linkedIn);
+      if (socialMedia.facebook) newSocialMedia.facebook = xss(socialMedia.facebook);
+
+      let userInfo = {
+        firstName: xss(firstName),
+        lastName: xss(lastName),
+        gender: xss(gender),
+        websiteUrl: xss(websiteUrl),
+        biography: xss(biography),
+        birthday: birthday_date,
+        address: newAddress,
+        socialMedia: newSocialMedia,
+      };
+
       const updatedUser = await users.updateUser(req.session.user._id, userInfo);
       req.session.user = {
         _id: updatedUser._id,
@@ -161,7 +207,7 @@ router.patch('/updateprofile', async (req, res) => {
         firstName: updatedUser.firstName,
         lastName: updatedUser.lastName,
       };
-      res.render('users/update_success');
+      res.render('users/update_success', { content: 'profile' });
     } catch (e) {
       res.sendStatus(500);
     }
@@ -189,7 +235,12 @@ router.get('/portfolio/:id', async (req, res) => {
     validators.isValidUserId(req.params.id);
     const user = await users.getUserById(req.params.id);
     const artworksByUserId = await artworks.getArtWorksByUserId(req.params.id);
-    res.render('portfolios/portfolio', { artworks: artworksByUserId, user: user, authenticated: false });
+    res.render('portfolios/portfolio', {
+      artworks: artworksByUserId,
+      user: user,
+      authenticated: false,
+      title: 'Artfolio',
+    });
   } catch (e) {
     res.status(404);
   }
@@ -197,7 +248,7 @@ router.get('/portfolio/:id', async (req, res) => {
 
 router.post('/changeuserpic', upload.single('image'), async (req, res) => {
   if (!req.session.user) {
-    res.redirect('users/login');
+    res.render('home/access_denied');
   } else {
     let image;
     if (req.file) {
@@ -219,7 +270,7 @@ router.post('/changeuserpic', upload.single('image'), async (req, res) => {
 
 router.patch('/updatepassword', async (req, res) => {
   if (!req.session.user) {
-    res.redirect('users/login');
+    res.render('home/access_denied');
     return;
   }
   validators.isValidUserId(req.session.user._id);
@@ -240,12 +291,13 @@ router.patch('/updatepassword', async (req, res) => {
     if (user && (await bcrypt.compare(currentPassword, user.hashedPassword))) {
       const newHashedPassword = await bcrypt.hash(newPassword, 10);
       await users.updateUser(user._id, { hashedPassword: newHashedPassword });
-      res.render('users/update_success');
+      res.render('users/update_success', { content: 'password' });
     } else {
       res.status(400).render('users/edit_profile', {
         user: user,
         displayProfile: false,
         passwordErrors: ['Current Password is not correct'],
+        title: 'Edit Profile',
       });
     }
   }

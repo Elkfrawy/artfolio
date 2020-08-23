@@ -48,8 +48,12 @@ router.get('/create', async (req, res) => {
 });
 
 router.post('/create', upload.array('image'), async (req, res) => {
-  const { title, description, createDate, category } = req.body;
+  var { title, description, createDate, category } = req.body;
 
+  title = xss(title);
+  description = xss(description);
+  category = xss(category);
+  
   const errors = [];
   if (!validators.isNonEmptyString(title)) {
     errors.push('Missing artwork title');
@@ -94,8 +98,6 @@ router.post('/create', upload.array('image'), async (req, res) => {
   }
 });
 
-//678287e1-5bd4-4e80-81bd-57530ce41949
-
 router.get('/edit/:id', async (req, res) => {
   if (req.session.user) {
     try {
@@ -118,10 +120,11 @@ router.post('/addimage/:id', upload.array('image'), async (req, res) => {
 
   let pictures = [];
   if (req.files) {
+    ;
     for (let i = 0; i < req.files.length; i++) {
       let file = req.files[i];
       let pic = await pictureData.createPicture(
-        (picData = await fs.readFile(path.join(__dirname, '..', 'uploads', file.filename))),
+        (picData = await fs.readFile(path.join(__dirname, '..', 'uploads',  xss(file.filename)))),
         (contentType = file.mimetype),
         (artworkId = req.params.id)
       );
@@ -165,12 +168,9 @@ router.post('/changeImageTitle/:id', async(req,res)=>{
   }
   const pic = await pictureData.getPictureById(req.params.id);
   const artworkId = pic.artworkId;
-  const newTitle = req.body.title; 
-  
+  const newTitle = xss(req.body.title); 
   const artwork = await artworkData.getArtworkById(artworkId);
   const userId = artwork.userId;
-
-  //if (!validators.isNonEmptyString(newTitle)) return res.redirect(`/artworks/edit/${artworkId}`)
   
   await pictureData.updatePictureTitle(req.params.id, newTitle);
   const pictures = await pictureData.getPicturesByArtworkId(artworkId);
@@ -216,13 +216,14 @@ router.patch('/:id', async (req, res) => {
   try {
     const oldArtwork = await artworkData.getArtworkById(req.params.id);
 
-    if (requestBody.title && requestBody.title !== oldArtwork.title) updatedObject.title = requestBody.title;
+    if (requestBody.title && requestBody.title !== oldArtwork.title) 
+      updatedObject.title = xss(requestBody.title);
 
     if (requestBody.description && requestBody.description !== oldArtwork.description)
-      updatedObject.description = requestBody.description;
+      updatedObject.description = xss(requestBody.description);
 
     if (requestBody.category && requestBody.category !== oldArtwork.category)
-      updatedObject.category = requestBody.category;
+      updatedObject.category = xss(requestBody.category);
 
     if (requestBody.createDate && requestBody.createDate !== oldArtwork.createDate)
       updatedObject.createDate = requestBody.createDate;

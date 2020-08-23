@@ -1,14 +1,4 @@
-body {
-  display: grid;
-  grid-template-rows: 100px 5rem auto 30%;
-}
 
-.DisplaySingle-artwork {
-  margin: 0px auto;
-}
-.link-buttons {
-  margin-left: 60em;
-}
 .artwork-pictures {
   border: 5px solid #7aaedf;
   padding: 5em;
@@ -21,67 +11,6 @@ body {
 
 .create-form {
   margin-left: auto;
-}
-.submit-b {
-  background-color: #4caf50; /* Green */
-  border-radius: 4px;
-  border: none;
-  color: white;
-  padding: 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 2px 2px;
-  cursor: pointer;
-}
-.submit-b:hover {
-  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
-}
-
-.upload-b {
-  border: none;
-
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  transition-duration: 0.4s;
-  cursor: pointer;
-}
-.delete-b {
-  background-color: #d82727; /* Green */
-  border-radius: 4px;
-  border: none;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 2px 2px;
-  cursor: pointer;
-  border-radius: 50%;
-}
-.delete-b:hover {
-  box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
-}
-
-.delete-artwork-b {
-  background-color: #d82727; /* Green */
-  border-radius: 4px;
-  border: none;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 2px 2px;
-  cursor: pointer;
-  border-radius: 8px;
 }
 
 .total-display {

@@ -16,23 +16,23 @@
             {{/if}}
 
             <div id="gallery" class="row mt-5">
+                {{#if artworks}}
                 {{#each artworks}}
                 <div class="col-xs-4">
-                        {{> artwork_icon}}
-                            {{!-- <h6><a href="/artworks/{{_id}}">{{title}}</a></h6> --}}
+                    {{> artwork_icon}}
+                    {{!-- <h6><a href="/artworks/{{_id}}">{{title}}</a></h6> --}}
 
-                        {{#if ../authenticated}}
-                        <div class="control-btns d-flex justify-content-center">
+                    {{#if ../authenticated}}
+                    <div class="control-btns d-flex justify-content-center">
                         <button type="button" class="btn btn-danger mr-2" data-toggle="modal"
-                            data-target="#deleteArtwork"><i class="fa fa-trash"></i>
+                            data-target="#artwork{{@index}}"><i class="fa fa-trash"></i>
                         </button>
-
                         <!-- Modal -->
-                        <div class="modal fade" id="deleteArtwork" tabindex="-1" role="dialog">
+                        <div class="modal fade" id="artwork{{@index}}" tabindex="-1" role="dialog">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Delete Artwork</h5>
+                                        <h5 class="modal-title">Delete Artwork</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -43,7 +43,6 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-dismiss="modal">Cancel</button>
-
                                         <form action="/artworks/{{_id}}" method="POST">
                                             <input type="hidden" name="_method" value="delete" />
                                             <button type="submit" class="btn btn-danger">Delete</button>
@@ -56,19 +55,20 @@
                         <form action="/artworks/edit/{{_id}}" method="get">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-edit"></i></button>
                         </form>
-                        </div>
-                        {{/if}}
-
-                </div>
-                {{else}}
-                        <div class="alert alert-warning mx-auto" role="alert">
-                    {{#if authenticated}}
-                        You don't have any artworks yet. Please create some artworks to show on your profile.
-                    {{else}}
-                        This user doesn't have any artworks yet.
+                    </div>
                     {{/if}}
-                        </div>
+                </div>
                 {{/each}}
+
+                {{else}}
+                <div class="alert alert-warning mx-auto" role="alert">
+                    {{#if ../authenticated}}
+                    You don't have any artworks yet. Please create some artworks to show on your profile.
+                    {{else}}
+                    This user doesn't have any artworks yet.
+                    {{/if}}
+                </div>
+                {{/if}}
             </div>
         </div>
         <div class="user-info">
@@ -89,10 +89,6 @@
                     <a class="info-tag">Website: </a>
                     <a href="{{user.websiteUrl}}" class="personal-link" target="_blank">{{user.websiteUrl}}</a><br>
                     {{/if}}
-                    {{!-- {{#if user.socialMedia}}
-                    <a href="#" class="fa fa-facebook"></a>
-
-                    {{/if}} --}}
 
                     {{#if authenticated}}
                     <a class="info-tag">Address </a>
@@ -110,22 +106,22 @@
                             {{#if user.socialMedia}}
                             {{#if user.socialMedia.facebook}}
                             <li><a href="{{user.socialMedia.facebook}}" target="_blank"><img
-                                        src="/public/social_media_icon/Facebook.png" /></a>
+                                        src="/public/social_media_icon/Facebook.png" alt="facebook" /></a>
                             </li>
                             {{/if}}
                             {{#if user.socialMedia.twitter}}
                             <li><a href="{{user.socialMedia.twitter}}" target="_blank"><img
-                                        src="/public/social_media_icon/Twitter.png" /></a>
+                                        src="/public/social_media_icon/Twitter.png" alt="twitter" /></a>
                             </li>
                             {{/if}}
                             {{#if user.socialMedia.instagram}}
                             <li><a href="{{user.socialMedia.instagram}}" target="_blank"><img
-                                        src="/public/social_media_icon/Instagram.png" /></a>
+                                        src="/public/social_media_icon/Instagram.png" alt="instagram" /></a>
                             </li>
                             {{/if}}
                             {{#if user.socialMedia.linkedIn}}
                             <li><a href="{{user.socialMedia.linkedIn}}" target="_blank"><img
-                                        src="/public/social_media_icon/Linkedin.png" /></a>
+                                        src="/public/social_media_icon/Linkedin.png" alt="instagram" /></a>
                             </li>
                             {{/if}}
                             {{/if}}

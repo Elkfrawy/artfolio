@@ -148,7 +148,10 @@
                                         </div>
                                         <div class="col-sm">
                                             <form action="/artworks/changeImageTitle/{{_id}}" method="POST">
-                                                <input type="text" name="title" value="{{title}}">
+                                                <label for="updatetitle-{{@index}}"
+                                                    class="visuallyhidden">EditTitle</label>
+                                                <input id="updatetitle-{{@index}}" type="text" name="title"
+                                                    value="{{title}}">
                                                 <button type="submit" class="btn btn-primary">Update image
                                                     title</button>
                                             </form>

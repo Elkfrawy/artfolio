@@ -2,7 +2,7 @@
     <div class="total-display">
         <div class="artfolio-display">
             <div class="heading">
-                <h2>{{user.firstName}}'s Artfolio</h2>
+                <h1>{{user.firstName}}'s Artfolio</h1>
             </div>
 
             {{#if authenticated}}
@@ -23,7 +23,8 @@
 
                     {{#if ../authenticated}}
                     <div class="control-btns d-flex justify-content-center">
-                        <button type="button" class="btn btn-danger mr-2" data-toggle="modal"
+                        <label for="del-{{@index}}" class="visuallyhidden">Open Modal</label>
+                        <button id="del-{{@index}}" type="button" class="btn btn-danger mr-2" data-toggle="modal"
                             data-target="#artwork{{@index}}"><i class="fa fa-trash"></i>
                         </button>
                         <!-- Modal -->
@@ -31,7 +32,7 @@
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Delete Artwork</h5>
+                                        <h2 class="modal-title">Delete Artwork</h2>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -52,7 +53,9 @@
                         </div>
 
                         <form action="/artworks/edit/{{_id}}" method="get">
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-edit"></i></button>
+                            <label for="edit-artwork-{{@index}}" class="visuallyhidden">Edit Artwork</label>
+                            <button id="edit-artwork-{{@index}}" type="submit" class="btn btn-primary"><i
+                                    class="fa fa-edit"></i></button>
                         </form>
                     </div>
                     {{/if}}
@@ -77,28 +80,27 @@
                 </a>
                 <div class="card-body">
                     <h2>{{ user.firstName }} {{ user.lastName}}</h2>
-                    <h6>Bio</h6>
-                    <p>{{user.biography}}</p>
-                    <a class="info-tag">Gender: </a>
-                    <a>{{ user.gender }}</a><br>
-                    <a class="info-tag">Email: </a> <a>{{ user.email }}</a><br>
-                    {{#if user.websiteUrl}}
-                    <a class="info-tag">Website: </a>
-                    <a href="{{user.websiteUrl}}" class="personal-link" target="_blank">{{user.websiteUrl}}</a><br>
-                    {{/if}}
-
-                    {{#if authenticated}}
-                    <a class="info-tag">Address </a>
-                    <ul class="info-addr">
-                        <li>Street Address: {{user.address.streetAddress}}</li>
-                        <li>City: {{user.address.city}}</li>
-                        <li>State: {{user.address.state}}</li>
-                        <li>Zip Code: {{user.address.zipCode}}</li>
-                    </ul>
-                    <a class="info-tag">Birthday: </a> <a>{{dateFormat user.birthday "YYYY-MM-DD" true}}</a><br>
-                    {{/if}}
-                    <br>
                     <div>
+                        <h3>Bio</h3>
+                        <p>{{user.biography}}</p>
+                    </div>
+                    <div class="mt-1">
+                        <span class="info-tag">Gender: </span>{{ user.gender }}<br>
+                        <span class="info-tag">Email: </span> {{ user.email }}<br>
+                        {{#if user.websiteUrl}}<span class="info-tag">Website: </span><a href="{{user.websiteUrl}}"
+                            class="personal-link" target="_blank">{{user.websiteUrl}}</a><br>{{/if}}
+                        {{#if authenticated}}
+                        <span class="info-tag">Address </span>
+                        <ul class="info-addr">
+                            <li>Street Address: {{user.address.streetAddress}}</li>
+                            <li>City: {{user.address.city}}</li>
+                            <li>State: {{user.address.state}}</li>
+                            <li>Zip Code: {{user.address.zipCode}}</li>
+                        </ul>
+                        <span class="info-tag">Birthday: </span>{{dateFormat user.birthday "YYYY-MM-DD" true}}
+                        {{/if}}
+                    </div>
+                    <div class="mt-3">
                         <ul class="social-icons">
                             {{#if user.socialMedia}}
                             {{#if user.socialMedia.facebook}}

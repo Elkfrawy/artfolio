@@ -1,100 +1,101 @@
-<div class ="total-display row">
-<div class ="artinfo-display col-4">
-<div class="card">
-    <div class="card-header">
-      <a href="/users/portfolio/{{userId}}" data-size="1600x1067">
-     <div class="card-title h4">Artist: {{artwork.username}}</div>
-      </a>
+<div class="total-display row">
+  <div class="artinfo-display col-4">
+    <div class="card">
+      <div class="card-header">
+        <a href="/users/portfolio/{{userId}}" data-size="1600x1067">
+          <div class="card-title h4">Artist: {{artwork.username}}</div>
+        </a>
+      </div>
+      <div class="card-body">
+        <div class="card-title h5">Title</div>
+        <p class="card-text">{{artwork.title}}</p>
+      </div>
+      <div class="card-body">
+        <div class="card-title h5">Description</div>
+        <p class="card-text">{{artwork.description}}</p>
+      </div>
+      <div class="card-body">
+        <div class="card-title h5">Creation Date</div>
+        <p class="card-text">{{dateFormat artwork.createDate "YYYY-MM-DD" true}}</p>
+      </div>
+      <div class="card-body">
+        <div class="card-title h5">Category</div>
+        <p class="card-text">{{artwork.category}}</p>
+      </div>
+      <div class="card-body">
+        <div class="card-title h5">Artwork Likes: {{artwork.likeCount}}</div>
+        <form action="/artworks/likes/{{artwork._id}}" method="POST">
+          <label for="heart" hidden>Like this artwork</label>
+          <button id="heart" type="submit" class="btn btn-light">
+          </button>
+        </form>
+
+      </div>
     </div>
-  <div class="card-body">
-    <div class="card-title h5">Title</div>
-    <p class="card-text">{{artwork.title}}</p>
+    <br>
+    <br>
   </div>
-  <div class="card-body">
-    <div class="card-title h5">Description</div>
-    <p class="card-text">{{artwork.description}}</p>
-  </div>
-  <div class="card-body">
-    <div class="card-title h5">Creation Date</div>
-    <p class="card-text">{{dateFormat artwork.createDate "YYYY-MM-DD" true}}</p>
-  </div>
-  <div class="card-body">
-    <div class="card-title h5">Category</div>
-    <p class="card-text">{{artwork.category}}</p>
-  </div>
-  <div class ="card-body">
-    <div class = "card-title h5">Artwork Likes: {{artwork.likeCount}}</div>
-    <form action ="/artworks/likes/{{artwork._id}}" method = "POST">
-    <label for="heart" hidden>Like this artwork</label>
-      <button id="heart" type = "submit" class="btn btn-light">
-      </button>
-    </form>
 
-  </div>
-</div>
-<br>
-<br>
-</div>
+  <div class="picture-display col">
+    <div class="row">
+      {{#if pictures}}
+      {{#each pictures}}
+      <div class="col-md-6 col-lg-4">
+        <div class="text-center my-3 h4">{{title}}</div>
+        {{!-- data-size="1600x1067" --}}
+        <a href="{{pictureUrl}}">
+          <img alt="picture" src={{pictureUrl}} class="image-fluid rounded img-thumbnail mx-2">
+        </a>
 
-<div class = "picture-display col">
-   <div class = "row">
-        {{#if pictures}}
-        {{#each pictures}}
-        <div class="col-md-6 col-lg-4"> 
-            <div class="text-center my-3 h4">{{title}}</div>
-             {{!-- data-size="1600x1067" --}}
-            <a href="{{pictureUrl}}">   
-                <img alt="picture" src={{pictureUrl}} class="image-fluid rounded img-thumbnail mx-2">
-            </a>
-            
-        </div>
-        {{/each}}
-        {{/if}}
+      </div>
+      {{/each}}
+      {{/if}}
     </div>
-</div>
+  </div>
 </div>
 </div>
 
-<div class = "row">
-<div class = "col">
+<div class="row">
+  <div class="col">
     <!-- Comments Form -->
-    <div class = "comment-display">
-    {{#if session.user}}
-    <div class="card my-4">
+    <div class="comment-display">
+      {{#if session.user}}
+      <div class="card my-4">
         <div class="card-header h4">Leave a Comment:</div>
         <div class="card-body">
-        <form action="/artworks/{{artwork._id}}/comments" method="post" id="commentForm">
+          <form action="/artworks/{{artwork._id}}/comments" method="post" id="commentForm">
             <div class="form-group">
               <label for="comment" hidden>Write a comment about his artwork</label>
-            <textarea name="comment" id="comment" class="form-control" rows="3"></textarea>
+              <textarea name="comment" id="comment" class="form-control" rows="3"></textarea>
             </div>
             <button type="submit" id="submitComment" class="btn btn-primary">Submit</button>
-        </form>
+          </form>
         </div>
-    </div>
-    <ul class="text-danger" id='error-messages'></ul>
-    {{else}}
-    <div class="alert alert-warning my-4gi">Login to be able to comment about this artwork.</div>
-    {{/if}}
+      </div>
+      <ul class="text-danger" id='error-messages'></ul>
+      {{else}}
+      <div class="alert alert-warning my-4gi">Login to be able to comment about this artwork.</div>
+      {{/if}}
 
-    <!-- Single Comment -->
-    <div id="commentsContainer">
-    {{#if artwork.comments}}
+      <!-- Single Comment -->
+      <div id="commentsContainer">
+        {{#if artwork.comments}}
         {{#each artwork.comments}}
-    <div class="media my-4">
-        <img class="d-flex mr-3 rounded-circle avatar-lg" src="/pictures/user/{{userId}}" alt="">
-        <div class="media-body">
-        <div class="mt-0 h5"><a href="/users/portfolio/{{userId}}">{{userName}}</a></div>
-        {{comment}} 
-        {{#if (equals userId ../session.user._id) }}
+        <div class="media my-4">
+          <img class="d-flex mr-3 rounded-circle avatar-lg" src="/pictures/user/{{userId}}" alt="">
+          <div class="media-body">
+            <div class="mt-0 h5"><a href="/users/portfolio/{{userId}}" class="username-link">{{userName}}</a></div>
+            {{comment}}
+            {{#if (equals userId ../session.user._id) }}
             <br>
-            <a href="/artworks/{{../artwork._id}}/comments/{{_id}}" class="deleteComment btn btn-danger btn-sm my-2">Delete</a>
-        {{/if}}
+            <a href="/artworks/{{../artwork._id}}/comments/{{_id}}"
+              class="deleteComment btn btn-danger btn-sm my-2">Delete</a>
+            {{/if}}
+          </div>
         </div>
-    </div>
         {{/each}}
-    {{/if}}
+        {{/if}}
+      </div>
     </div>
-    </div> 
-</div>
+  </div>
 </div>

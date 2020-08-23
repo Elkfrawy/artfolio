@@ -15,3 +15,7 @@
 .nav.nav-tabs {
   font-weight: bold;
 }
+
+.text-muted {
+  color: #68727a !important;
+}

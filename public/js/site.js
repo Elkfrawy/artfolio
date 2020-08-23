@@ -185,6 +185,7 @@
       rules: {
         title: 'required',
         description: 'required',
+        image: 'required',
         category: {
           required: true,
           letterswithbasicpunc: true,
@@ -197,6 +198,7 @@
       messages: {
         title: 'Please enter a title',
         description: 'Please provide a description',
+        image: "Please select at least one image",
         category: {
           required: 'Please enter a category',
           letterswithbasicpunc: 'Please enter a letters only category',

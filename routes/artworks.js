@@ -104,7 +104,11 @@ router.get('/edit/:id', async (req, res) => {
       const userId = req.session.user._id;
       const artwork = await artworkData.getArtworkById(req.params.id);
       const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
-      res.render('artworks/editSingle', { artwork, pictures, userId, displayArtworkinfo:true });
+      if(pictures.length == 1){
+        return res.render('artworks/editSingle', { artwork, pictures, userId, displayArtworkinfo:true, lastPic:true});
+      }else{
+        res.render('artworks/editSingle', { artwork, pictures, userId, displayArtworkinfo:true, lastPic:false});
+      }
     } catch (e) {
       res.status(500).send('No Artwork with that ID exists for editing');
     }

@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true },
-  gender: { type: String },
+  gender: { type: String, default: 'Other' },
   address: addressSchema.schema,
   birthday: { type: Date },
   biography: { type: String, default: '' },
@@ -15,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   userPictureId: { type: String },
   socialMedia: { type: Object, default: {} },
   _id: { type: String, default: uuidv4 },
-  likedArtworks:{type: Array, default: []}
+  likedArtworks: { type: Array, default: [] },
 });
 
 module.exports = mongoose.model('user', UserSchema);

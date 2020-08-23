@@ -143,7 +143,7 @@
         },
       },
 
-      birthday: {},
+      birthday: { pastDateOnly: true },
       websiteUrl: {
         url: true,
       },

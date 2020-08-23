@@ -93,19 +93,18 @@ module.exports = {
     }).exec();
   },
 
-  async increaseLike(id){
+  async increaseLike(id) {
     if (!validators.isNonEmptyString(id)) throw 'Id is not valid';
     const artWork = await models.Artwork.findById(id).exec();
     artWork.likeCount += 1;
     return await saveSafely(artWork);
   },
-  async decreaseLike(id){
+  async decreaseLike(id) {
     if (!validators.isNonEmptyString(id)) throw 'Id is not valid';
     const artWork = await models.Artwork.findById(id).exec();
     artWork.likeCount -= 1;
     return await saveSafely(artWork);
   },
-
 
   async getArtworksByKeyword(keyword) {
     if (!validators.isNonEmptyString(keyword)) throw 'Please provide a keyword to search by';
@@ -135,6 +134,10 @@ module.exports = {
 
   async getRecentlyAddedArtworks(skips = 0, count = 0) {
     return await genericGetWithSort(skips, count, { postDate: -1 });
+  },
+
+  async getMostLikedArtworks(skips = 0, count = 0) {
+    return await genericGetWithSort(skips, count, { likeCount: -1 });
   },
 
   async createComment(userId, artworkId, commentText) {

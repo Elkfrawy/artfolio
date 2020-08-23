@@ -25,12 +25,23 @@ module.exports = {
 
     // make sure the updated information firstName, lastName and email are valid, if provided.
     if (user.firstName && !validators.isLettersOnly(user.firstName)) throw 'Updated first name is not valid';
-
     if (user.lastName && !validators.isLettersOnly(user.lastName)) throw 'Updated last name is not valid';
-
     if (user.email) {
       if (!validators.isValidEmail(user.email)) throw 'Updated email is not valid';
       user.email = user.email.toLowerCase();
+    }
+
+    if (user.gender && !validators.validateGender(user.gender)) throw 'Gender not valid';
+    if (user.birthday && !validators.isValidBirthday(user.birthday)) throw 'Birthday is not valid';
+    if (user.socialMedia) {
+      if (user.socialMedia.instagram && !validators.isValidURL(user.socialMedia.instagram))
+        throw 'Instagram link is not valid';
+      if (user.socialMedia.twitter && !validators.isValidURL(user.socialMedia.twitter))
+        throw 'Twitter link is not valid';
+      if (user.socialMedia.linkedIn && !validators.isValidURL(user.socialMedia.linkedIn))
+        throw 'LinkedIn link is not valid';
+      if (user.socialMedia.facebook && !validators.isValidURL(user.socialMedia.facebook))
+        throw 'Facebook link is not valid';
     }
 
     const updatedUser = await models.User.findByIdAndUpdate(id, user, {
@@ -38,7 +49,6 @@ module.exports = {
     }).exec();
 
     const updatedUsername = updatedUser.firstName + ' ' + updatedUser.lastName;
-
     const artworkList = await models.Artwork.find({ userId: id }).exec();
     for (i = 0; i < artworkList.length; i++) {
       const currentArtwork = artworkList[i];
@@ -57,13 +67,14 @@ module.exports = {
       }
       await models.Artwork.findByIdAndUpdate(currentCommentedArtwork._id, { comments: commentList }).exec();
     }
-
     return updatedUser;
   },
 
   async createUser(user) {
-    if (!validators.isLettersOnly(user.firstName)) throw 'First name must be  provided and contains only letters';
-    if (!validators.isLettersOnly(user.lastName)) throw 'Last name must be  provided and contains only letters';
+    if (!validators.isLettersOnly(user.firstName))
+      throw 'First name must be provided and contains only letters (punctuation allowed)';
+    if (!validators.isLettersOnly(user.lastName))
+      throw 'Last name must be provided and contains only letters (punctuation allowed)';
     if (!validators.isValidEmail(user.email)) throw 'Email is not valid';
     if (!validators.isNonEmptyString(user.hashedPassword)) throw 'Please provide a password';
     const newUser = new models.User(user);
@@ -76,25 +87,22 @@ module.exports = {
     const deletedUser = await models.User.findByIdAndDelete(userId).exec();
     return deletedUser;
   },
-  
-  async appendArtworkToLikes(userId, artworkId){
-      const user = await this.getUserById(userId);
-      user.likedArtworks.push(artworkId); 
-      return saveSafely(user);
-  }, 
 
-  async removeArtworkToLikes(userId, artworkId){
+  async appendArtworkToLikes(userId, artworkId) {
     const user = await this.getUserById(userId);
-    const index = user.likedArtworks.indexOf(artworkId); 
+    user.likedArtworks.push(artworkId);
+    return saveSafely(user);
+  },
+
+  async removeArtworkToLikes(userId, artworkId) {
+    const user = await this.getUserById(userId);
+    const index = user.likedArtworks.indexOf(artworkId);
     if (index > -1) {
       user.likedArtworks.splice(index, 1);
     }
     return saveSafely(user);
-}
+  },
 };
-
-  
-
 
 async function saveSafely(document) {
   try {

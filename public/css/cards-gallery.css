@@ -8,12 +8,16 @@
   text-align: center;
 }
 
+.gallery-block .heading h1 {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
 .gallery-block .heading h2 {
   font-weight: bold;
-  font-size: 1.6rem;
+  font-size: 1.2rem;
 }
 
-.gallery-block.cards-gallery h6 {
+.gallery-block.cards-gallery h3 {
   font-size: 17px;
   font-weight: bold;
 }
@@ -68,6 +72,12 @@
   font-size: 1.6rem;
 }
 
+.user-info h3 {
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
 .user-info .info-tag {
   font-weight: bold;
 }
@@ -113,6 +123,8 @@
 .social-icons {
   text-align: center;
   box-shadow: none;
+  display: flex;
+  justify-content: center;
 }
 .social-icons li {
   display: inline-block;

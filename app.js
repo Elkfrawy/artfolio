@@ -41,13 +41,15 @@ app.use(async (req, res, next) => {
 
 const forbiddenRoutes = (req, res, next) => {
   if (!req.session.user) {
-    res.render('home/accessDenied');
+    res.render('home/access_denied');
   } else {
     next();
   }
 };
 app.use('/artworks/create', forbiddenRoutes);
 app.use('/artworks/edit/:id', forbiddenRoutes);
+app.use('users/edit', forbiddenRoutes);
+app.use('users/profile', forbiddenRoutes);
 
 app.use(function (req, res, next) {
   res.locals.session = req.session;
@@ -90,6 +92,9 @@ handlebarsInst.handlebars.registerHelper('checkGender', function (value, inputVa
   }
 });
 handlebarsInst.handlebars.registerHelper('select', function (selected, options) {
+  if (!selected) {
+    selected = 'United States';
+  }
   return options.fn(this).replace(new RegExp(' value="' + selected + '"'), '$& selected="selected"');
 });
 

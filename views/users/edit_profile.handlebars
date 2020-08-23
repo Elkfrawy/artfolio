@@ -49,23 +49,33 @@
                                 value={{user.email}}>
                             <small class="form-text text-muted">Email address cannot be changed</small>
                         </div>
-                        <div class="form-group">
-                            <label>Street Address
-                                <input type="text" name="address[streetAddress]" placeholder="street address"
-                                    value="{{user.address.streetAddress}}" class="form-control">
-                            </label>
-                            <label>City
-                                <input type="text" name="address[city]" placeholder="city" value="{{user.address.city}}"
-                                    class="form-control" />
-                            </label>
-                            <label>State
-                                <input type="text" name="address[state]" placeholder="state"
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label for="streetAddress">Street Address</label>
+                                <input id="streetAddress" type="text" name="address[streetAddress]"
+                                    placeholder="street address" value="{{user.address.streetAddress}}"
+                                    class="form-control">
+                            </div>
+                            <div class="col form-group">
+                                <label for="city">City</label>
+                                <input id="city" type="text" name="address[city]" placeholder="city"
+                                    value="{{user.address.city}}" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label for="state">State</label>
+                                <input id="state" type="text" name="address[state]" placeholder="state"
                                     value="{{user.address.state}}" class="form-control" />
-                            </label>
-                            <label>Zip Code
-                                <input type="text" name="address[zipCode]" placeholder="zip code"
+
+                            </div>
+                            <div class="col form-group">
+                                <label for="zipCode">Zip Code</label>
+                                <input id="zipCode" type="text" name="address[zipCode]" placeholder="zip code"
                                     value="{{user.address.zipCode}}" class="form-control" />
-                            </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label>Country
                                 {{!-- <input type="text" name="address[country]" placeholder="country"
                                     value="{{user.address.country}}" class="form-control" /> --}}
@@ -192,7 +202,7 @@
                                     <option value="Kyrgyzstan">Kyrgyzstan</option>
                                     <option value="Lao">Lao People's Democratic Republic</option>
                                     <option value="Latvia">Latvia</option>
-                                    <option value="Lebanon" selected>Lebanon</option>
+                                    <option value="Lebanon">Lebanon</option>
                                     <option value="Lesotho">Lesotho</option>
                                     <option value="Liberia">Liberia</option>
                                     <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option>
@@ -405,7 +415,7 @@
                         </div>
                         <div class="form-group">
                             <label for="confirmPassword">Confirm New Password</label>
-                            <input type="password" id="comfirmPassword" name="confirmPassword" class="form-control"
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
                                 placeholder="Confirm your new password" required>
                         </div>
                         {{#if passwordErrors}}

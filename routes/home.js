@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
+const artworks = require('../data/artworks');
 const artworksData = data.artworks;
 
 router.get('/', async (req, res) => {
@@ -10,7 +11,11 @@ router.get('/', async (req, res) => {
       artworks: await artworksData.getRecentlyAddedArtworks(),
     },
     {
-      title: 'Popular artworks',
+      title: 'Most liked artworks',
+      artworks: await artworksData.getMostLikedArtworks(),
+    },
+    {
+      title: 'Most viewed artworks',
       artworks: await artworksData.getArtworksByViews(),
     },
     {

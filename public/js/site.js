@@ -39,7 +39,7 @@
         <div class="media my-4">
           <img class="d-flex mr-3 rounded-circle avatar-lg" src="/pictures/user/${userId}" alt="">
           <div class="media-body">
-            <h5 class="mt-0"> <a href="/users/portfolio/${userId}">${userName}</a></h5>
+            <div class="mt-0 h5"> <a href="/users/portfolio/${userId}" class="username-link">${userName}</a></div>
             ${comment}
             <br>
             <a href="/artworks/${artworkId}/comments/${_id}" class="deleteComment btn btn-danger btn-sm my-2">Delete</a>
@@ -198,7 +198,7 @@
       messages: {
         title: 'Please enter a title',
         description: 'Please provide a description',
-        image: "Please select at least one image",
+        image: 'Please select at least one image',
         category: {
           required: 'Please enter a category',
           letterswithbasicpunc: 'Please enter a letters only category',

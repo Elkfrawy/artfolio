@@ -117,11 +117,11 @@
                                         <img class="image" alt="picture" src={{pictureUrl}}>
                                     </a>
                                     <div class="row my-2">
-                                        <label for="del-{{@index}}" class="visuallyhidden">Open Modal</label>
-
-                                        {{#if lastPic}}
-                                        <P>Can't delete</P>
+                                        
+                                        {{#if ../lastPic}}
+                                        
                                         {{else}}
+                                        <label for="del-{{@index}}" class="visuallyhidden">Open Modal</label>
                                         <button id="del-{{@index}}" type="button" class="btn btn-danger mr-2"
                                             data-toggle="modal" data-target="#image{{@index}}"><i
                                                 class="fa fa-trash"></i>

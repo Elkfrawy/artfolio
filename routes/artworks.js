@@ -109,7 +109,7 @@ router.get('/edit/:id', async (req, res) => {
       const userId = req.session.user._id;
       const artwork = await artworkData.getArtworkById(req.params.id);
       const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
-      if(pictures.length == 1){
+      if(pictures.length <= 1){
         res.render('artworks/editSingle', {
           artwork,
           pictures,
@@ -183,14 +183,24 @@ router.post('/deleteimage/:id', async (req, res) => {
   try {
     await pictureData.deletePicture(req.params.id);
     const pictures = await pictureData.getPicturesByArtworkId(artworkId);
-    //return res.redirect(`/artworks/edit/${artworkId}`);
-    return res.render('artworks/editSingle', {
-      userId,
-      artwork,
-      pictures,
-      displayArtworkinfo: false,
-      title: `Editing artwork ${artwork.title}`,
-    });
+    if(pictures.length <= 1){
+      res.render('artworks/editSingle', {
+            artwork,
+            pictures,
+            userId,
+            displayArtworkinfo: true,
+            title: `Editing artwork ${artwork.title}`,
+            lastPic : true});
+    }else{
+      res.render('artworks/editSingle', {
+            userId,
+            artwork,
+            pictures,
+            displayArtworkinfo: false,
+            title: `Editing artwork ${artwork.title}`,
+          });
+      }
+      
   } catch (e) {
     res.send('error deleting picture');
   }

@@ -6,15 +6,15 @@
           <div class="card-title h4">Artist: {{artwork.username}}</div>
         </a>
       </div>
-          <div class="card-body">
+      <div class="card-body">
           <h5 class="card-title">Creation Date</h5>
           <p class="card-text">{{dateFormat artwork.createDate "YYYY-MM-DD" true}}</p>
-        </div>
-        <div class="card-body">
+      </div>
+      <div class="card-body">
           <h5 class="card-title">Category</h5>
           <p class="card-text">{{artwork.category}}</p>
-        </div>
-        <div class ="card-body">
+      </div>
+      <div class ="card-body">
           {{#if session.user}}
           <h6 class = "card-title">Artwork Likes: {{artwork.likeCount}}</h6>
           <form action ="/artworks/likes/{{artwork._id}}" method = "POST">
@@ -24,24 +24,21 @@
           {{else}}
           <div class="alert alert-warning my-4gi">Login to be able to like this artwork.</div>
           {{/if}}
-        </div>
+      </div>
     </div>
     <br>
     <br>
   </div>
-  
-</div>
-<br>
-<br>
-</div>
-
   <div class="picture-display col">
     <div class="row">
       {{#if pictures}}
       {{#each pictures}}
       <div class="col-md-6 col-lg-4">
+        {{#if title}}
         <div class="text-center my-3 h4">{{title}}</div>
-        {{!-- data-size="1600x1067" --}}
+        {{else}}
+        <div class="text-center my-3 h4">No title</div>
+        {{/if}}
         <a href="{{pictureUrl}}">
           <img alt="picture" src={{pictureUrl}} class="image-fluid rounded img-thumbnail mx-2">
         </a>
@@ -52,6 +49,8 @@
     </div>
   </div>
 </div>
+<br>
+<br>
 
 <div class="row">
   <div class="col">

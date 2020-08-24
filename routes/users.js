@@ -8,13 +8,12 @@ const upload = require('../config/upload');
 const path = require('path');
 const fs = require('fs').promises;
 const bcrypt = require('bcrypt');
-const { response } = require('express');
 const xss = require('xss');
 
 // private page for user to see his/her own profile
 router.get('/profile', async (req, res) => {
   if (!req.session.user) {
-    res.render('home/access_denied');
+    res.render('home/access_denied', { title: 'Access Denied' });
     return;
   }
   try {
@@ -28,7 +27,7 @@ router.get('/profile', async (req, res) => {
       title: 'Profile',
     });
   } catch (e) {
-    res.status(500).send();
+    res.status(500).json({ error: 'Fail to retrieve profile' });
   }
 });
 
@@ -267,7 +266,7 @@ router.post('/changeuserpic', upload.single('image'), async (req, res) => {
 
 router.patch('/updatepassword', async (req, res) => {
   if (!req.session.user) {
-    res.render('home/access_denied');
+    res.render('home/access_denied', { title: 'Access Denied' });
     return;
   }
   validators.isValidUserId(req.session.user._id);
@@ -283,7 +282,7 @@ router.patch('/updatepassword', async (req, res) => {
   if (newPassword !== confirmPassword) errors.push('New Password and confirmation do not match');
 
   if (errors.length > 0) {
-    res.status(400).render('users/edit_profile', { user: user, passwordErrors: errors });
+    res.status(400).render('users/edit_profile', { user: user, passwordErrors: errors, title: 'Edit Profile' });
   } else {
     if (user && (await bcrypt.compare(currentPassword, user.hashedPassword))) {
       const newHashedPassword = await bcrypt.hash(newPassword, 10);

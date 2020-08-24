@@ -98,3 +98,11 @@ body {
 .card-header h1 {
   font-size: 1.5em;
 }
+
+.login-success-link {
+  color: #0064d2;
+}
+
+.error-page-link {
+  color: #005fc8;
+}

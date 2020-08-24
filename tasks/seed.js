@@ -31,7 +31,7 @@ async function main() {
       email: 'xzou3@stevens.edu',
       gender: 'Female',
       address: {
-        streetAddress: '20 1st Stt',
+        streetAddress: '20 1st St',
         city: 'Hoboken',
         state: 'NJ',
         zipCode: '07030',
@@ -55,7 +55,7 @@ async function main() {
       email: 'yyang105@stevens.edu',
       gender: 'Male',
       address: {
-        streetAddress: '20 10st Stt',
+        streetAddress: '20 10st St',
         city: 'Hoboken',
         state: 'NJ',
         zipCode: '07030',
@@ -73,7 +73,7 @@ async function main() {
       email: 'aelkfraw@stevens.edu',
       gender: 'Male',
       address: {
-        streetAddress: '20 15st Stt',
+        streetAddress: '20 15st St',
         city: 'Hoboken',
         state: 'NJ',
         zipCode: '07030',
@@ -154,7 +154,7 @@ async function main() {
     //upload scenary
     let artworkScenary = await artworks.createArtwork({
       title: 'Scenary',
-      description: 'Beatiful places',
+      description: 'Beautiful places',
       category: 'Acrylic',
       createDate: new Date('08/10/2020'),
       userId: ayman._id,

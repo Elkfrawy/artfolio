@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
-const upload = require('../config/upload');
 const path = require('path');
-const fs = require('fs').promises;
 const validators = require('../data/validators');
 
 router.get('/content/:id', async (req, res) => {

@@ -3,7 +3,6 @@ const models = require('../models');
 const validators = require('./validators');
 const users = require('./users');
 const pics = require('./pictures');
-const { artworks } = require('.');
 const Artwork = require('../models/Artwork');
 
 module.exports = {

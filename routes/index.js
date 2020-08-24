@@ -1,7 +1,6 @@
 const usersRoute = require('./users');
 const homeRoute = require('./home');
 const artworkRoute = require('./artworks');
-const playground = require('./playground');
 const pictureRoute = require('./pictures');
 
 const routesSetup = (app) => {
@@ -9,7 +8,6 @@ const routesSetup = (app) => {
   app.use('/', homeRoute);
   app.use('/users', usersRoute);
   app.use('/artworks', artworkRoute);
-  // app.use('/playground', playground);
   app.use('/pictures', pictureRoute);
 
   app.use('*', (req, res) => {

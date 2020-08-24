@@ -1,6 +1,5 @@
 const models = require('../models');
 const validators = require('./validators');
-const artworks = require('./artworks');
 
 module.exports = {
   async getAllUsers() {

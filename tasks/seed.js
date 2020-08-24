@@ -154,7 +154,7 @@ async function main() {
     //upload scenary
     let artworkScenary = await artworks.createArtwork({
       title: 'Scenary',
-      description: 'Beatiful places',
+      description: 'Beautiful places',
       category: 'Acrylic',
       createDate: new Date('08/10/2020'),
       userId: ayman._id,

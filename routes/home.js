@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const data = require('../data');
-const artworks = require('../data/artworks');
 const artworksData = data.artworks;
 
 router.get('/', async (req, res) => {

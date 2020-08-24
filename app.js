@@ -6,7 +6,6 @@ const ehb = require('express-handlebars');
 const Handlebars = require('handlebars');
 const mongooseConnection = require('./config/mongoConnection');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
-const { options } = require('./routes/home');
 
 const app = express();
 

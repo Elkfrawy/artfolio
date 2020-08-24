@@ -1,14 +1,4 @@
-body {
-  display: grid;
-  grid-template-rows: 100px 5rem auto 30%;
-}
 
-.DisplaySingle-artwork {
-  margin: 0px auto;
-}
-.link-buttons {
-  margin-left: 60em;
-}
 .artwork-pictures {
   border: 5px solid #7aaedf;
   padding: 5em;
@@ -22,6 +12,8 @@ body {
 .create-form {
   margin-left: auto;
 }
+<<<<<<< HEAD
+=======
 
 .upload-img-p {
   font-size: 1.5em;
@@ -88,6 +80,7 @@ body {
   cursor: pointer;
   border-radius: 8px;
 }
+>>>>>>> 76dd01c960dd1e62fe3ad8aa257fe5b3de34615b
 
 .total-display {
   width: 100%;

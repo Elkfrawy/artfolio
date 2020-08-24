@@ -9,11 +9,11 @@ const routesSetup = (app) => {
   app.use('/', homeRoute);
   app.use('/users', usersRoute);
   app.use('/artworks', artworkRoute);
-  app.use('/playground', playground);
+  // app.use('/playground', playground);
   app.use('/pictures', pictureRoute);
 
   app.use('*', (req, res) => {
-    res.sendStatus(404); // FIXME we need to redirect to error page
+    res.status(404).render('home/404', { title: 'Page not found!' });
   });
 };
 

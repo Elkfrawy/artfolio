@@ -7,17 +7,26 @@
         </a>
       </div>
       <div class="card-body">
-          <h5 class="card-title">Creation Date</h5>
+          <div class="card-title h5">Title</div>
+          <p class="card-text">{{artwork.title}}</p>
+      </div>
+      <div class="card-body">
+          <div class="card-title h5">Description</div>
+          <p class="card-text">{{artwork.description}}</p>
+      </div>
+      <div class="card-body">
+          <div class="card-title h5">Creation Date</div>
           <p class="card-text">{{dateFormat artwork.createDate "YYYY-MM-DD" true}}</p>
       </div>
       <div class="card-body">
-          <h5 class="card-title">Category</h5>
+          <div class="card-title h5">Category</div>
           <p class="card-text">{{artwork.category}}</p>
       </div>
       <div class ="card-body">
           {{#if session.user}}
-          <h6 class = "card-title">Artwork Likes: {{artwork.likeCount}}</h6>
+          <div class = "card-title h6">Artwork Likes: {{artwork.likeCount}}</div>
           <form action ="/artworks/likes/{{artwork._id}}" method = "POST">
+            <label for="heart" hidden>Like artwork</label>
             <button id="heart" type = "submit" class="btn btn-light">
             </button>
           </form>

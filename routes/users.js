@@ -11,16 +11,6 @@ const bcrypt = require('bcrypt');
 const { response } = require('express');
 const xss = require('xss');
 
-// public page
-// router.get('/', async (req, res) => {
-//   try {
-//     const userList = await users.getAllUsers();
-//     res.render('users/all', { users: userList });
-//   } catch (e) {
-//     res.status(500).send();
-//   }
-// });
-
 // private page for user to see his/her own profile
 router.get('/profile', async (req, res) => {
   if (!req.session.user) {

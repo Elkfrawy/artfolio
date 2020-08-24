@@ -10,22 +10,18 @@ const fs = require('fs').promises;
 const validators = require('../data/validators');
 const xss = require('xss');
 
-router.get('/', async (req, res) => {
-  try {
-    const artworksList = await artworkData.getAllArtWorks();
-    res.render('artworks/all', { artworks: artworksList });
-  } catch (e) {
-    res.status(500).send();
-  }
-});
-
 router.get('/search', async (req, res) => {
   try {
-    if (!validators.isNonEmptyString(req.query.query)) {
+    const query = xss(req.query.query);
+    if (!validators.isNonEmptyString(query)) {
       res.status(400).render('home/search', { error: 'You must provide a query to search with' });
     } else {
-      const artworks = await artworkData.getArtworksByAny(req.query.query);
-      res.render('home/search', { artworks, emptyMessage: "Couldn't find any artworks for the given keyword!" });
+      const artworks = await artworkData.getArtworksByAny(query);
+      res.render('home/search', {
+        artworks,
+        emptyMessage: "Couldn't find any artworks for the given keyword!",
+        title: `Search results for ${query}`,
+      });
     }
   } catch (e) {
     res.status(500).send({ error: e });
@@ -53,7 +49,7 @@ router.post('/create', upload.array('image'), async (req, res) => {
   title = xss(title);
   description = xss(description);
   category = xss(category);
-  
+
   const errors = [];
   if (!validators.isNonEmptyString(title)) {
     errors.push('Missing artwork title');
@@ -74,7 +70,7 @@ router.post('/create', upload.array('image'), async (req, res) => {
   let newArtwork = { title, description, category, createDate, userId: userId };
 
   if (errors.length > 0) {
-    res.status(400).render('artworks/createSingle', { errors, artwork: newArtwork });
+    res.status(400).render('artworks/createSingle', { errors, artwork: newArtwork, title: 'Creating new artwork' });
   } else {
     try {
       newArtwork = await artworkData.createArtwork(newArtwork);
@@ -109,23 +105,24 @@ router.get('/edit/:id', async (req, res) => {
       const userId = req.session.user._id;
       const artwork = await artworkData.getArtworkById(req.params.id);
       const pictures = await pictureData.getPicturesByArtworkId(req.params.id);
-      if(pictures.length <= 1){
+      if (pictures.length <= 1) {
         res.render('artworks/editSingle', {
           artwork,
           pictures,
           userId,
           displayArtworkinfo: true,
           title: `Editing artwork ${artwork.title}`,
-          lastPic : true});
-      }else{
+          lastPic: true,
+        });
+      } else {
         res.render('artworks/editSingle', {
-        artwork,
-        pictures,
-        userId,
-        displayArtworkinfo: true,
-        title: `Editing artwork ${artwork.title}`,
-        lastPic: false,
-      });
+          artwork,
+          pictures,
+          userId,
+          displayArtworkinfo: true,
+          title: `Editing artwork ${artwork.title}`,
+          lastPic: false,
+        });
       }
     } catch (e) {
       res.status(500).send('No Artwork with that ID exists for editing');
@@ -142,11 +139,10 @@ router.post('/addimage/:id', upload.array('image'), async (req, res) => {
 
   let pictures = [];
   if (req.files) {
-    ;
     for (let i = 0; i < req.files.length; i++) {
       let file = req.files[i];
       let pic = await pictureData.createPicture(
-        (picData = await fs.readFile(path.join(__dirname, '..', 'uploads',  xss(file.filename)))),
+        (picData = await fs.readFile(path.join(__dirname, '..', 'uploads', xss(file.filename)))),
         (contentType = file.mimetype),
         (artworkId = req.params.id)
       );
@@ -183,24 +179,24 @@ router.post('/deleteimage/:id', async (req, res) => {
   try {
     await pictureData.deletePicture(req.params.id);
     const pictures = await pictureData.getPicturesByArtworkId(artworkId);
-    if(pictures.length <= 1){
+    if (pictures.length <= 1) {
       res.render('artworks/editSingle', {
-            artwork,
-            pictures,
-            userId,
-            displayArtworkinfo: true,
-            title: `Editing artwork ${artwork.title}`,
-            lastPic : true});
-    }else{
+        artwork,
+        pictures,
+        userId,
+        displayArtworkinfo: true,
+        title: `Editing artwork ${artwork.title}`,
+        lastPic: true,
+      });
+    } else {
       res.render('artworks/editSingle', {
-            userId,
-            artwork,
-            pictures,
-            displayArtworkinfo: false,
-            title: `Editing artwork ${artwork.title}`,
-          });
-      }
-      
+        userId,
+        artwork,
+        pictures,
+        displayArtworkinfo: false,
+        title: `Editing artwork ${artwork.title}`,
+      });
+    }
   } catch (e) {
     res.send('error deleting picture');
   }
@@ -212,10 +208,10 @@ router.post('/changeImageTitle/:id', async (req, res) => {
   }
   const pic = await pictureData.getPictureById(req.params.id);
   const artworkId = pic.artworkId;
-  const newTitle = xss(req.body.title); 
+  const newTitle = xss(req.body.title);
   const artwork = await artworkData.getArtworkById(artworkId);
   const userId = artwork.userId;
-  
+
   await pictureData.updatePictureTitle(req.params.id, newTitle);
   const pictures = await pictureData.getPicturesByArtworkId(artworkId);
   //return res.redirect(`/artworks/edit/${artworkId}`);
@@ -228,17 +224,16 @@ router.post('/changeImageTitle/:id', async (req, res) => {
   });
 });
 
-router.post('/likes/:id', async(req,res)=>{
-  
+router.post('/likes/:id', async (req, res) => {
   const artworkId = req.params.id;
   const userId = req.session.user._id;
   const user = await userData.getUserById(userId);
   const likedArtworks = user.likedArtworks;
 
-  if(likedArtworks.includes(artworkId)){
-    await userData.removeArtworkToLikes(userId,artworkId);
-    await artworkData.decreaseLike(artworkId); 
-  }else{
+  if (likedArtworks.includes(artworkId)) {
+    await userData.removeArtworkToLikes(userId, artworkId);
+    await artworkData.decreaseLike(artworkId);
+  } else {
     await userData.appendArtworkToLikes(userId, artworkId);
     await artworkData.increaseLike(artworkId);
   }
@@ -265,8 +260,7 @@ router.patch('/:id', async (req, res) => {
   try {
     const oldArtwork = await artworkData.getArtworkById(req.params.id);
 
-    if (requestBody.title && requestBody.title !== oldArtwork.title) 
-      updatedObject.title = xss(requestBody.title);
+    if (requestBody.title && requestBody.title !== oldArtwork.title) updatedObject.title = xss(requestBody.title);
 
     if (requestBody.description && requestBody.description !== oldArtwork.description)
       updatedObject.description = xss(requestBody.description);

@@ -92,7 +92,7 @@ body {
 }
 
 .username-link {
-  color: #004ca2;
+  color: #004ca2 !important;
 }
 
 .card-header h1 {

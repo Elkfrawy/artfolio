@@ -31,7 +31,7 @@ async function main() {
       email: 'xzou3@stevens.edu',
       gender: 'Female',
       address: {
-        streetAddress: '20 1st Stt',
+        streetAddress: '20 1st St',
         city: 'Hoboken',
         state: 'NJ',
         zipCode: '07030',
@@ -55,7 +55,7 @@ async function main() {
       email: 'yyang105@stevens.edu',
       gender: 'Male',
       address: {
-        streetAddress: '20 10st Stt',
+        streetAddress: '20 10st St',
         city: 'Hoboken',
         state: 'NJ',
         zipCode: '07030',
@@ -73,7 +73,7 @@ async function main() {
       email: 'aelkfraw@stevens.edu',
       gender: 'Male',
       address: {
-        streetAddress: '20 15st Stt',
+        streetAddress: '20 15st St',
         city: 'Hoboken',
         state: 'NJ',
         zipCode: '07030',

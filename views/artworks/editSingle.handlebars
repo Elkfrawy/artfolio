@@ -73,7 +73,7 @@
                                     <label for="del-artwork" class="visuallyhidden">Open Modal</label>
                                     <div class="my-3">
                                         <button id="del-artwork" type="button" class="btn btn-danger mr-2"
-                                            data-toggle="modal" data-target="#this-artwork">DELETE ARTWORK</i>
+                                            data-toggle="modal" data-target="#this-artwork">DELETE ARTWORK
                                         </button>
                                     </div>
                                     <!-- Modal -->
@@ -117,16 +117,16 @@
                                         <img class="image" alt="picture" src={{pictureUrl}}>
                                     </a>
                                     <div class="row my-2">
-                                        
+
                                         {{#if ../lastPic}}
-                                        
+
                                         {{else}}
                                         <label for="del-{{@index}}" class="visuallyhidden">Open Modal</label>
                                         <button id="del-{{@index}}" type="button" class="btn btn-danger mr-2"
                                             data-toggle="modal" data-target="#image{{@index}}"><i
                                                 class="fa fa-trash"></i>
                                         </button>
-                                        
+
                                         <!-- Modal -->
                                         <div class="modal fade" id="image{{@index}}" tabindex="-1" role="dialog">
                                             <div class="modal-dialog modal-dialog-centered" role="document">

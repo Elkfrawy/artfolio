@@ -102,6 +102,11 @@ app.set('view engine', 'handlebars');
 
 configRoutes(app);
 
-app.listen(3000, () => {
-  console.log('Server is running at http://localhost:3000');
+let port = process.env.PORT
+if (typeof port === 'undefined') {
+  console.warn('PORT env var unset, defaulting to 3000.');
+  port = '3000';
+}
+app.listen(port, () => {
+  console.log('Server is running' + String(port));
 });

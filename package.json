@@ -30,7 +30,7 @@
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "express-session": "^1.17.1",
-    "handlebars": "^4.7.6",
+    "handlebars": "^4.7.7",
     "handlebars-dateformat": "^1.1.1",
     "jquery-validation": "^1.19.2",
     "mongodb": "^3.5.9",

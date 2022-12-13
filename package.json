@@ -27,7 +27,7 @@
     "bcrypt": "^5.0.0",
     "bluebird": "^3.7.2",
     "bootstrap-icons": "^1.0.0-alpha5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-handlebars": "^5.1.0",
     "express-session": "^1.17.1",
     "handlebars": "^4.7.6",
